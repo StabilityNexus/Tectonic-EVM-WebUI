@@ -1,25 +1,9 @@
-"use client";
-
 import Image from 'next/image';
-import { useEffect } from 'react';
+import type { CSSProperties } from 'react';
 
 const tectonicLetters = 'TECTONIC'.split('');
 
 export default function Home() {
-  useEffect(() => {
-    const container = document.querySelector('.animated-word.hero-word-inline');
-    if (!container) return;
-    const letters = container.querySelectorAll('.hero-letter');
-    if (!letters.length) return;
-    const last = letters[letters.length - 1];
-    const onEnd = () => {
-      letters.forEach((l) => l.classList.add('loop'));
-      last.removeEventListener('animationend', onEnd);
-    };
-    last.addEventListener('animationend', onEnd);
-    return () => last.removeEventListener('animationend', onEnd);
-  }, []);
-
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-hidden pt-0">
       {/* Navigation */}
@@ -39,7 +23,7 @@ export default function Home() {
               ))}
             </span>
           </div>
-          <div className="flex gap-8 items-center">
+          <div className="hidden sm:flex gap-8 items-center">
             <a href="#learn" className="text-gray-700 hover:text-yellow-500 transition">LEARN</a>
             <a href="#build" className="text-gray-700 hover:text-yellow-500 transition">BUILD</a>
             <a href="#explore" className="text-gray-700 hover:text-yellow-500 transition">EXPLORE</a>
@@ -56,11 +40,6 @@ export default function Home() {
           <div className="glow-orb glow-orb-2"></div>
           <div className="glow-orb glow-orb-3"></div>
           
-          <div className="glow-rings">
-            <div className="ring ring-1"></div>
-            <div className="ring ring-2"></div>
-            <div className="ring ring-3"></div>
-          </div>
         </div>
 
         <div className="z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_0.95fr]">
@@ -78,7 +57,7 @@ export default function Home() {
                     <span
                       key={`hero-${letter}-${index}`}
                       className="hero-letter"
-                      style={{ animationDelay: `${index * 0.35}s` }}
+                      style={{ '--letter-delay': `${index * 0.35}s` } as CSSProperties}
                     >
                       {letter}
                     </span>

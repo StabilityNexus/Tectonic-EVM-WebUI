@@ -11,7 +11,7 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 @keyframes float {
@@ -648,7 +648,10 @@ body {
   color: #fbbf24;
   text-shadow: 0 0 8px rgba(251, 191, 36, 0.28);
   /* initial, slower one-time entrance */
-  animation: letter-slide-up-initial 4.5s cubic-bezier(0.22, 1, 0.36, 1) 1 both;
+  animation:
+    letter-slide-up-initial 4.5s cubic-bezier(0.22, 1, 0.36, 1) var(--letter-delay, 0s) 1 both,
+    letter-breathe-down 8s ease-in-out calc(var(--letter-delay, 0s) + 4.5s) infinite,
+    letter-blur-pulse 8s ease-in-out calc(var(--letter-delay, 0s) + 4.5s) infinite;
   will-change: transform, opacity, filter;
   font-weight: inherit;
 }
@@ -671,11 +674,6 @@ body {
   }
 }
 
-/* After the initial animation completes, add .loop to begin a subtle downward breathe animation (never moves above center) */
-.hero-letter.loop {
-  animation: letter-breathe-down 8s ease-in-out infinite, letter-blur-pulse 8s ease-in-out infinite;
-}
-
 @keyframes letter-breathe-down {
   0% { transform: translateY(0px); }
   50% { transform: translateY(4px); }
@@ -692,16 +690,10 @@ body {
 /* Restore hero heading animations: keep initial entrance and looping breathe+blur on letters */
 /* Hero title parent elements: animations defined on their individual classes above */
 
-/* When loop class is applied, run breathe + blur pulse */
-.hero-letter.loop {
-  animation: letter-breathe-down 8s ease-in-out infinite, letter-blur-pulse 8s ease-in-out infinite;
-}
-
 /* Disable line/container-level vertical animations so heading text doesn't shift up/down */
 .hero-kicker,
 .hero-title-line,
 .hero-title-accent {
-  animation: none !important;
   transform: none !important;
 }
 
