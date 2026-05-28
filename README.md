@@ -4,7 +4,7 @@
 <!-- Organization Logo -->
 <div align="center" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
    <img alt="Stability Nexus" src="public/stability.svg" width="175">
-   <img alt="Tectonic hero" src="public/tectonic-hero.png" width="175" />
+   <img alt="Tectonic hero" src="public/ToDo-hero.png" width="175" />
 </div>
 
 &nbsp;
