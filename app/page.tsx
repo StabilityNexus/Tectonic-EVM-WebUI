@@ -325,7 +325,7 @@ export default function Home() {
             <div>
               {/* Typewriter heading: triggers once when scrolled into view */}
               {/* Client component lives at components/Typewriter.tsx */}
-              {/* @ts-ignore-next-line server component can import client component */}
+              {/* @ts-expect-error server component can import client component */}
               <Typewriter 
                 text={"The Future of\nDecentralized\nPayments . . . "} 
                 className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 whitespace-pre-line leading-tight" 
