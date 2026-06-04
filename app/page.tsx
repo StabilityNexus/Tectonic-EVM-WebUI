@@ -8,6 +8,7 @@ function Typewriter({ text, className = "", speed = 45 }: { text: string; classN
   const ref = useRef<HTMLHeadingElement | null>(null);
   const [visibleText, setVisibleText] = useState("");
   const started = useRef(false);
+  const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -19,11 +20,14 @@ function Typewriter({ text, className = "", speed = 45 }: { text: string; classN
           if (entry.isIntersecting && !started.current) {
             started.current = true;
             let i = 0;
-            const id = window.setInterval(() => {
+            intervalRef.current = window.setInterval(() => {
               i += 1;
               setVisibleText(text.slice(0, i));
               if (i >= text.length) {
-                clearInterval(id);
+                if (intervalRef.current !== null) {
+                  clearInterval(intervalRef.current);
+                  intervalRef.current = null;
+                }
               }
             }, speed);
           }
@@ -33,7 +37,12 @@ function Typewriter({ text, className = "", speed = 45 }: { text: string; classN
     );
 
     obs.observe(node);
-    return () => obs.disconnect();
+    return () => {
+      obs.disconnect();
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [text, speed]);
 
   return (
@@ -176,9 +185,9 @@ export default function Home() {
             </span>
           </div>
           <div className="hidden sm:flex gap-6 items-center">
-            <a href="http://localhost:3000/#" className="nav-link px-2 py-2 text-lg font-medium">Home</a>
-            <a href="http://localhost:3000/#deployments" className="nav-link px-2 py-2 text-lg font-medium">Deployments</a>
-            <a href="http://localhost:3000/#docs" className="nav-link px-2 py-2 text-lg font-medium">Docs</a>
+            <a href="#" className="nav-link px-2 py-2 text-lg font-medium">Home</a>
+            <a href="#deployments" className="nav-link px-2 py-2 text-lg font-medium">Deployments</a>
+            <a href="#docs" className="nav-link px-2 py-2 text-lg font-medium">Docs</a>
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="nav-link px-2 py-2 text-lg font-medium">Github</a>
           </div>
 
@@ -323,9 +332,6 @@ export default function Home() {
             </div>
 
             <div>
-              {/* Typewriter heading: triggers once when scrolled into view */}
-              {/* Client component lives at components/Typewriter.tsx */}
-              {/* @ts-expect-error server component can import client component */}
               <Typewriter 
                 text={"The Future of\nDecentralized\nPayments . . . "} 
                 className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 whitespace-pre-line leading-tight" 
