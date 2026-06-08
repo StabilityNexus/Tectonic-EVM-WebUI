@@ -3,8 +3,8 @@
 
 <!-- Organization Logo -->
 <div align="center" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
-  <img alt="Stability Nexus" src="public/stability.svg" width="175">
-  <img src="public/todo-project-logo.svg" width="175" />
+   <img alt="Stability Nexus" src="public/stability.svg" width="175">
+   <img alt="Tectonic hero" src="public/tectonic-hero.png" width="175" />
 </div>
 
 &nbsp;
@@ -12,9 +12,7 @@
 <!-- Organization Name -->
 <div align="center">
 
-[![Static Badge](https://img.shields.io/badge/Stability_Nexus-/TODO-228B22?style=for-the-badge&labelColor=FFC517)](https://TODO.stability.nexus/)
-
-<!-- Correct deployed url to be added -->
+[![Static Badge](https://img.shields.io/badge/Tectonic-EVM_Web_UI-228B22?style=for-the-badge&labelColor=FFC517)](https://github.com/StabilityNexus/Tectonic-EVM-WebUI)
 
 </div>
 
@@ -34,83 +32,76 @@
 &nbsp;&nbsp;
 <!-- Medium -->
 <a href="https://news.stability.nexus/">
-  <img src="https://img.shields.io/badge/Medium-black?style=flat&logo=medium&logoColor=black&logoSize=auto&color=white" alt="Medium Badge"></a>
+   <img src="https://img.shields.io/badge/Medium-black?style=flat&logo=medium&logoColor=black&logoSize=auto&color=white" alt="Medium Badge"></a>
 &nbsp;&nbsp;
 <!-- LinkedIn -->
 <a href="https://linkedin.com/company/stability-nexus">
-  <img src="https://img.shields.io/badge/LinkedIn-black?style=flat&logo=LinkedIn&logoColor=white&logoSize=auto&color=0A66C2" alt="LinkedIn Badge"></a>
+   <img src="https://img.shields.io/badge/LinkedIn-black?style=flat&logo=LinkedIn&logoColor=white&logoSize=auto&color=0A66C2" alt="LinkedIn Badge"></a>
 &nbsp;&nbsp;
 <!-- Youtube -->
 <a href="https://www.youtube.com/@StabilityNexus">
-  <img src="https://img.shields.io/youtube/channel/subscribers/UCZOG4YhFQdlGaLugr_e5BKw?style=flat&logo=youtube&logoColor=white&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"></a>
+   <img src="https://img.shields.io/youtube/channel/subscribers/UCZOG4YhFQdlGaLugr_e5BKw?style=flat&logo=youtube&logoColor=white&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"></a>
 </p>
 
 ---
 
 <div align="center">
-<h1>TODO: Project Name</h1>
+<h1>Tectonic EVM Web UI</h1>
 </div>
 
-[TODO](https://TODO.stability.nexus/) is a ... TODO: Project Description.
+[Tectonic](https://github.com/StabilityNexus/Tectonic-EVM-WebUI) is a Next.js frontend for the Tectonic protocol. It presents the protocol story, feature highlights, community links, and update sections in a polished landing page experience.
 
 ---
 
 ## Project Maturity
 
-TODO: In the checklist below, mark the items that have been completed and delete items that are not applicable to the current project:
-
-* [ ] The project has a logo.
-* [ ] The project has a favicon.
-* [ ] The protocol:
-   - [ ] has been described and formally specified in a paper.
-   - [ ] has had its main properties mathematically proven.
-   - [ ] has been formally verified.
-* [ ] The smart contracts:
-   - [ ] were thoroughly reviewed by at least two knights of The Stable Order.
-   - [ ] were deployed to:
-      - [ ] Ergo
-      - [ ] Cardano
-      - [ ] EVM Chains:
-        - [ ] Ethereum Classic
-        - [ ] Ethereum
-        - [ ] Polygon
-        - [ ] BSC
-        - [ ] Base
-* [ ] The mobile app:
-   - [ ] has an _About_ page containing the Stability Nexus's logo and pointing to the social media accounts of the Stability Nexus.
-   - [ ] is available for download as a release in this repo.
-   - [ ] is available in the relevant app stores.
-* [ ] The web frontend:
-   - [ ] has proper title and metadata.
-   - [ ] has proper open graph metadata, to ensure that it is shown well when shared in social media (Discord, Telegram, Twitter, LinkedIn).
-   - [ ] has a footer, containing the Stability Nexus's logo and pointing to the social media accounts of the Stability Nexus.
-   - [ ] is fully static and client-side.
-   - [ ] is deployed to Github Pages via a Github Workflow.
-   - [ ] is accessible through the https://TODO:PROJECT-NAME.stability.nexus domain.
-* [ ] the project is listed in [https://stability.nexus/protocols](https://stability.nexus/protocols).
+* [x] The project has a logo.
+* [x] The project has a hero image.
+* [x] The web frontend has proper title and metadata scaffolding.
+* [x] The web frontend is built with Next.js and TypeScript.
+* [x] The web frontend uses Tailwind CSS for styling.
+* [x] The web frontend is fully static and client-side.
+* [ ] The project has a dedicated favicon.
+* [ ] The project has a deployed public URL.
+* [ ] The project has final open graph metadata.
 
 ---
 
 ## Tech Stack
 
-TODO:
-
 ### Frontend
 
-TODO:
-
-- Next.js 14+ (React)
+- Next.js 16
+- React 19
 - TypeScript
-- TailwindCSS
-- shadcn/ui
+- Tailwind CSS 4
+- ESLint
 
-### Blockchain
+### Assets
 
-TODO:
+- Stability Nexus brand logo
+- Tectonic hero illustration
 
-- Wagmi
-- Solidity Smart Contracts
-- Ethers.js
+---
+
+## Project Structure
+
+### App Router
+
+- `app/page.tsx` - main landing page content
+- `app/layout.tsx` - root layout and metadata
+- `app/globals.css` - global styles and animations
+
+### Public Assets
+
+- `public/stability.svg` - brand logo used in the README and UI
+- `public/tectonic-hero.png` - hero illustration used on the homepage
+
+### Project Config
+
+- `package.json` - scripts and dependencies
+- `next.config.ts` - Next.js configuration
+- `tsconfig.json` - TypeScript configuration
 
 ---
 
@@ -118,71 +109,62 @@ TODO:
 
 ### Prerequisites
 
-TODO
-
-- Node.js 18+
-- npm/yarn/pnpm
-- MetaMask or any other web3 wallet browser extension
+- Node.js 20+
+- npm
 
 ### Installation
-
-TODO
 
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/StabilityNexus/TODO.git
-cd TODO
+git clone https://github.com/StabilityNexus/Tectonic-EVM-WebUI.git
+cd Tectonic-EVM-WebUI
 ```
 
 #### 2. Install Dependencies
 
-Using your preferred package manager:
-
 ```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
 ```
 
 #### 3. Run the Development Server
 
-Start the app locally:
-
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 #### 4. Open your Browser
 
 Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
 
+#### 5. Build for Production
+
+```bash
+npm run build
+```
+
+#### 6. Start the Production Server
+
+```bash
+npm run start
+```
+
 ---
 
 ## Contributing
 
-We welcome contributions of all kinds! To contribute:
+We welcome contributions of all kinds. To contribute:
 
 1. Fork the repository and create your feature branch (`git checkout -b feature/AmazingFeature`).
 2. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
 3. Run the development workflow commands to ensure code quality:
-   - `npm run format:write`
-   - `npm run lint:fix`
-   - `npm run typecheck`
+    - `npm run build`
+    - `npm run lint`
 4. Push your branch (`git push origin feature/AmazingFeature`).
 5. Open a Pull Request for review.
 
-If you encounter bugs, need help, or have feature requests:
-
-- Please open an issue in this repository providing detailed information.
-- Describe the problem clearly and include any relevant logs or screenshots.
+If you encounter bugs, need help, or have feature requests, open an issue with the relevant details and screenshots if possible.
 
 We appreciate your feedback and contributions!
 
-© 2025 The Stable Order.
+© 2026 The Stable Order.

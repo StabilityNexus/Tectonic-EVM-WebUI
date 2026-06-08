@@ -5,13 +5,21 @@
   --foreground: #1a1a1a;
   --primary: #fbbf24;
   --primary-dark: #f59e0b;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* Ensure any use of the `font-serif` utility renders with the site's sans stack
+   so remaining components that still include `font-serif` will match the
+   standardized typography. */
+.font-serif {
+  font-family: var(--font-sans) !important;
 }
 
 @keyframes float {
@@ -235,6 +243,68 @@ body {
   }
 }
 
+.community-title {
+  display: inline-block;
+  background: linear-gradient(135deg, #334155 0%, #b45309 58%, #7c2d12 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28), 0 6px 16px rgba(120, 53, 15, 0.10);
+  animation: gradient-shift 10s ease-in-out infinite, community-title-lift 5.6s ease-in-out infinite;
+}
+
+@keyframes community-title-lift {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.logo-hover-zoom {
+  display: block;
+  transform-origin: center;
+  will-change: transform;
+  transform: scale(1);
+  transition: transform 260ms ease;
+}
+
+.logo-hover-zoom:hover,
+.logo-hover-wrap:hover .logo-hover-zoom {
+  transform: scale(1.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-hover-zoom,
+  .logo-hover-zoom:hover {
+    animation: none !important;
+    transition: none;
+    transform: none;
+  }
+}
+
+/* HOW IT WORKS connector (dotted curved path behind cards) */
+.how-connector { display: none; }
+@media (min-width: 768px) {
+  /* position connector relative to container center and push it up for behind-cards placement */
+  .how-connector { display: block; position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-80px); width: 100%; height: 160px; pointer-events: none; z-index: 0; }
+}
+.how-connector path {
+  stroke: #cdb688; /* warm beige */
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 8;
+  opacity: 0.9;
+}
+.how-connector .arrow {
+  fill: #cdb688;
+  opacity: 0.95;
+}
+
 @keyframes orbit-3 {
   0% {
     transform: translate(-50%, -50%) rotate(240deg) translateX(300px) rotate(-240deg);
@@ -314,34 +384,47 @@ body {
   display: none;
 }
 
-.ring::after {
-  display: none;
+.nav-link {
+  position: relative;
+  display: inline-block;
+  padding: 8px 14px 20px; /* larger horizontal padding and bottom gap */
+  color: #334155;
+  text-decoration: none;
+  transition: color 220ms ease, background-color 260ms ease, transform 260ms ease;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 
-.ring-1 {
-  display: none;
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  bottom: 10px; /* underline offset from text */
+  width: calc(100% - 20px); /* leave a small horizontal inset for visual balance */
+  transform: scaleX(0);
+  transform-origin: center;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+  border-radius: 3px;
+  opacity: 0.98;
+  transition: transform 420ms cubic-bezier(.18,.9,.32,1), opacity 220ms ease;
 }
 
-.ring-1::before {
-  display: none;
+/* underline animate on hover/focus */
+.nav-link:hover::after,
+.nav-link:focus::after {
+  transform: scaleX(1);
+  opacity: 1;
 }
 
-.ring-2 {
-  display: none;
+.nav-link:hover,
+.nav-link:focus {
+  color: var(--primary-dark);
 }
 
-.ring-2::before {
-  display: none;
-}
-
-.ring-3 {
-  display: none;
-}
-
-.ring-3::before {
-  display: none;
-}
-
+/* removed older width-based underline rules to avoid conflicts; scaleX implementation above is used */
 .gradient-orbital::before,
 .gradient-orbital::after {
   content: "";
@@ -389,6 +472,132 @@ body {
   transform: translateY(-1px);
 }
 
+/* Hero-specific primary button to match provided design */
+.btn-hero {
+  background: linear-gradient(180deg, #f7b733 0%, #fbbf24 100%);
+  color: #000000;
+  padding: 0.78rem 1.6rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 20px rgba(15,23,42,0.08), inset 0 -5px 0 rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.03);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 140ms ease;
+}
+.btn-hero:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #f59e0b 0%, #f39c12 100%);
+  box-shadow: 0 14px 28px rgba(15,23,42,0.10), inset 0 -6px 0 rgba(0,0,0,0.07);
+}
+.btn-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Navbar-specific pill sizing so hero remains unchanged */
+.glassy-navbar .btn-primary.btn-hero {
+  /* Standard comfortable pill sizing for navbar CTA */
+  padding: 0.4rem 2rem;
+  height: 42px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 16px rgba(15,23,42,0.06), inset 0 -4px 0 rgba(0,0,0,0.04);
+  border-radius: 9999px; /* fully pill-shaped */
+  min-width: 170px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.glassy-navbar .btn-primary.btn-hero span {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Force text to stay centered by default */
+  transform: translateX(0);
+}
+
+.glassy-navbar .btn-primary.btn-hero .btn-arrow {
+  width: 16px !important;
+  height: 16px !important;
+  position: absolute;
+  /* Position it off-screen to the right by default */
+  right: 20px;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+  margin-left: 0;
+  pointer-events: none;
+}
+
+.glassy-navbar .btn-primary.btn-hero:hover span {
+  /* Shift text left to make room for arrow */
+  transform: translateX(-12px);
+}
+
+.glassy-navbar .btn-primary.btn-hero:hover .btn-arrow {
+  opacity: 1 !important;
+  /* Slide arrow in from the right to its final position */
+  transform: translateX(0) !important;
+}
+
+/* Arrow that slides in on hover for primary buttons */
+.btn-primary {
+  position: relative;
+  overflow: visible;
+}
+
+.btn-arrow {
+  display: inline-block;
+  margin-left: 6px;
+  font-weight: 700; /* bolder arrow glyph */
+  transform: translateX(-10px) scale(0.98);
+  opacity: 0;
+  transition: transform 640ms cubic-bezier(.16,.84,.24,1), opacity 360ms ease;
+  will-change: transform, opacity;
+}
+
+.btn-primary:hover .btn-arrow,
+.btn-primary:focus .btn-arrow {
+  transform: translateX(0) scale(1) !important;
+  opacity: 1 !important;
+}
+
+/* Ensure SVG arrow is vertically centered inside the button */
+.glassy-navbar .btn-primary.wallet-circle {
+  height: 48px;
+  padding: 0 14px; /* allow room for text while keeping circular ends */
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 48px;
+  line-height: 1;
+  font-size: 0.95rem;
+  white-space: normal; /* allow wrap if needed, keep text centered */
+  text-align: center;
+  overflow: hidden;
+}
+.glassy-navbar .btn-primary.wallet-circle .btn-arrow {
+  margin-left: 6px;
+}
+
+
+/* Compact wallet button override to reduce visual footprint */
+.wallet-btn {
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  font-size: 0.9rem !important;
+  min-width: 0 !important;
+}
+
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -405,6 +614,15 @@ body {
   background: #fbbf24;
   color: #1a1a1a;
   transform: translateY(-1px);
+}
+
+/* subtle entrance animation used for CTAs */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fadeUp 520ms cubic-bezier(.22,.98,.38,.99) both;
 }
 
 /* Glassy navbar styles */
@@ -428,10 +646,27 @@ body {
   align-items: center;
 }
 
+/* Reduce the visual color area of primary buttons inside the navbar only */
+.glassy-navbar .btn-primary {
+  padding: 0.28rem 0.65rem; /* tighter vertical/horizontal padding */
+  border-radius: 8px; /* slightly less pill-like */
+  min-width: auto;
+  font-size: 0.95rem;
+}
+
+/* Circular icon-only wallet button inside navbar */
+
+
 .glassy-navbar .animated-word,
 .glassy-navbar a,
 .glassy-navbar button {
   color: #1f2937; /* gray-800 */
+}
+
+/* Nudge navbar links slightly downward for better visual alignment */
+.glassy-navbar .nav-link {
+  padding-top: 12px; /* previously 8px, move down a bit */
+  padding-bottom: 16px; /* slight reduction to keep nav height balanced */
 }
 
 /* Ensure brand letters never wrap or stack */
@@ -464,7 +699,7 @@ body {
 }
 
 @media (max-width: 640px) {
-  /* compact the brand letters and buttons on small screens */
+  .how-connector { display: block; position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-80px); width: 100%; height: 160px; pointer-events: none; z-index: 0; }
   .glassy-navbar .animated-word { gap: 0.12rem !important; font-size: 0.95rem !important; }
   .glassy-navbar .navbar-letter { padding: 0 1px !important; line-height: 1 !important; }
   .glassy-navbar .btn-primary { padding: 0.35rem 0.75rem !important; font-size: 0.825rem !important; }

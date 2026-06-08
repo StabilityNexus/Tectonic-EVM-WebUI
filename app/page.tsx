@@ -1,34 +1,204 @@
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
+
+function Typewriter({ text, className = "", speed = 45 }: { text: string; className?: string; speed?: number }) {
+  const ref = useRef<HTMLHeadingElement | null>(null);
+  const [visibleText, setVisibleText] = useState("");
+  const started = useRef(false);
+  const intervalRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const node = ref.current;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !started.current) {
+            started.current = true;
+            let i = 0;
+            intervalRef.current = window.setInterval(() => {
+              i += 1;
+              setVisibleText(text.slice(0, i));
+              if (i >= text.length) {
+                if (intervalRef.current !== null) {
+                  clearInterval(intervalRef.current);
+                  intervalRef.current = null;
+                }
+              }
+            }, speed);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    obs.observe(node);
+    return () => {
+      obs.disconnect();
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [text, speed]);
+
+  return (
+    <h2 ref={ref} className={className}>
+      <span>{visibleText}</span>
+      <span className="ml-1 inline-block animate-pulse">▌</span>
+    </h2>
+  );
+}
+
+function CountUpValue({
+  end,
+  decimals = 0,
+  prefix = "",
+  suffix = "",
+  duration = 2400,
+  className = "",
+}: {
+  end: number;
+  decimals?: number;
+  prefix?: string;
+  suffix?: string;
+  duration?: number;
+  className?: string;
+}) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+    const start = window.performance.now();
+
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(end * eased);
+
+      if (progress < 1) {
+        frame = window.requestAnimationFrame(step);
+      }
+    };
+
+    frame = window.requestAnimationFrame(step);
+    return () => window.cancelAnimationFrame(frame);
+  }, [end, duration]);
+
+  return (
+    <span className={className}>
+      {prefix}
+      {value.toFixed(decimals)}
+      {suffix}
+    </span>
+  );
+}
+
+// tsserver-refresh: touched to force editor re-parse
 
 const tectonicLetters = 'TECTONIC'.split('');
 
 export default function Home() {
+  // Features data and reveal animation refs
+  const features = [
+    {
+      title: 'Forced Redemptions',
+      emoji: '⚡',
+      desc: 'Unique mechanism ensuring protocol stability through automatic redemptions at predetermined rates.',
+      color: 'from-yellow-400 to-yellow-500'
+    },
+    {
+      title: 'Secure Base Layer',
+      emoji: '🔒',
+      desc: "Built on EVM with battle-tested security. Leverage blockchain's immutable infrastructure.",
+      color: 'from-indigo-400 to-indigo-600'
+    },
+    {
+      title: 'EVM Compatible',
+      emoji: '🌐',
+      desc: 'Deploy on any EVM-compatible chain. Maximum interoperability and reach.',
+      color: 'from-green-400 to-emerald-500'
+    },
+    {
+      title: 'DeFi Integration',
+      emoji: '💱',
+      desc: 'Seamlessly integrate with existing DeFi protocols. Composable by design.',
+      color: 'from-pink-400 to-pink-500'
+    }
+  ];
+
+  const featureRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  const deployments = [
+    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Ethereum', chainShort: 'ETH', reserve: '132%', ratio: 132, supply: '22.41M tUSD', tvl: '$45.2M', status: 'Active', accent: 'text-slate-600', badge: 'bg-slate-100 text-slate-700', chainColor: 'bg-indigo-100 text-indigo-700', symbolBg: 'bg-indigo-50', symbolColor: 'text-indigo-700' },
+    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Polygon', chainShort: 'POL', reserve: '128%', ratio: 128, supply: '18.76M tUSD', tvl: '$18.7M', status: 'Active', accent: 'text-violet-600', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-violet-100 text-violet-700', symbolBg: 'bg-violet-50', symbolColor: 'text-violet-600' },
+    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'BSC', chainShort: 'BNB', reserve: '135%', ratio: 135, supply: '22.11M tUSD', tvl: '$22.1M', status: 'Active', accent: 'text-amber-500', badge: 'bg-amber-100 text-amber-700', chainColor: 'bg-amber-100 text-amber-700', symbolBg: 'bg-amber-50', symbolColor: 'text-amber-500' },
+    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Base', chainShort: 'ETH', reserve: '130%', ratio: 130, supply: '12.91M tUSD', tvl: '$12.9M', status: 'Active', accent: 'text-blue-600', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-blue-100 text-blue-700', symbolBg: 'bg-blue-50', symbolColor: 'text-blue-600' },
+    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Ethereum Classic', chainShort: 'ETC', reserve: '127%', ratio: 127, supply: '8.32M tUSD', tvl: '$8.3M', status: 'Active', accent: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-emerald-100 text-emerald-700', symbolBg: 'bg-emerald-50', symbolColor: 'text-emerald-700' },
+  ];
+
+  const protocolStats = [
+    { value: 132, label: 'Average Reserve Ratio', prefix: '', suffix: '%' },
+    { value: 84.5, label: 'Stablecoin Supply', prefix: '', suffix: 'M', decimals: 1 },
+    { value: 2.8, label: 'Average Leverage', prefix: '', suffix: 'x', decimals: 1 },
+  ];
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    featureRefs.current.forEach((el) => {
+      if (el) obs.observe(el);
+    });
+
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-hidden pt-0">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 glassy-navbar">
-        <div className="px-6 py-3 flex items-center justify-between w-full">
-          <div className="text-2xl font-bold tracking-wider flex items-center gap-2">
-            <span className="text-yellow-500">◊</span>
-            <span className="animated-word" aria-label="TECTONIC">
-              {tectonicLetters.map((letter, index) => (
-                <span
-                  key={`${letter}-${index}`}
-                  className="navbar-letter"
-                  style={{ animationDelay: `${index * 0.12}s` }}
-                >
-                  {letter}
-                </span>
-              ))}
+        <div className="px-6 py-2 flex items-center justify-between w-full">
+          <div className="logo-hover-wrap flex items-center gap-3">
+            <Image
+              src="/Logo.svg"
+              alt="Tectonic logo"
+              width={180}
+              height={48}
+              priority
+              className="logo-hover-zoom h-9 w-auto object-contain sm:h-10"
+            />
+            <span className="text-lg font-bold tracking-[0.2em] text-slate-900 sm:text-xl">
+              TECTONIC
             </span>
           </div>
-          <div className="hidden sm:flex gap-8 items-center">
-            <a href="#learn" className="text-gray-700 hover:text-yellow-500 transition">LEARN</a>
-            <a href="#build" className="text-gray-700 hover:text-yellow-500 transition">BUILD</a>
-            <a href="#explore" className="text-gray-700 hover:text-yellow-500 transition">EXPLORE</a>
+          <div className="hidden sm:flex gap-6 items-center">
+            <a href="#" className="nav-link px-2 py-2 text-lg font-medium">Home</a>
+            <a href="#deployments" className="nav-link px-2 py-2 text-lg font-medium">Deployments</a>
+            <a href="#docs" className="nav-link px-2 py-2 text-lg font-medium">Docs</a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="nav-link px-2 py-2 text-lg font-medium">Github</a>
           </div>
-          <button className="btn-primary text-sm">START BUILDING</button>
+
+          {/* Compact Connect Wallet button */}
+          <button className="btn-primary btn-hero text-sm flex items-center justify-center" aria-label="Connect Wallet">
+            <span>Connect Wallet</span>
+            <svg className="btn-arrow" aria-hidden width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12h12" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
         </div>
       </nav>
 
@@ -97,155 +267,372 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="learn" className="py-20 px-6 max-w-7xl mx-auto bg-white">
-        <div className="mb-16">
-          <h2 className="text-5xl font-bold mb-4 text-gray-900">Why Tectonic?</h2>
-          <p className="text-gray-700 text-lg">More flexibility, more composability, more security. Major upgrades across the entire Tectonic ecosystem.</p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Feature 1 */}
-          <div className="bg-gray-50 border border-yellow-200 rounded-lg p-8 hover:border-yellow-400 transition">
-            <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">⚡</span>
-            </div>
-            <h3 className="text-2xl font-bold mb-3 text-gray-900">Forced Redemptions</h3>
-            <p className="text-gray-700">Unique mechanism ensuring protocol stability through automatic redemptions at predetermined rates.</p>
+      {/* Features Section (styled to match provided design) */}
+      <section id="learn" className="py-20 px-6 bg-[#fbf6ec]">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-8 text-center">
+            <h2 className="text-5xl font-sans mb-3 text-gray-900">
+              <span className="mr-2">Why</span>
+              <span className="text-yellow-600">Tectonic?</span>
+            </h2>
+            <p className="mx-auto max-w-2xl text-gray-700 text-lg">More flexibility, more composability, more security. Major upgrades across the entire Tectonic ecosystem.</p>
           </div>
 
-          {/* Feature 2 */}
-          <div className="bg-gray-50 border border-yellow-200 rounded-lg p-8 hover:border-yellow-400 transition">
-            <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">🔒</span>
-            </div>
-            <h3 className="text-2xl font-bold mb-3 text-gray-900">Secure Base Layer</h3>
-            <p className="text-gray-700">Built on EVM with battle-tested security. Leverage blockchain&apos;s immutable infrastructure.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+            {features.map((f, i) => (
+              <div key={f.title} className="w-full h-full">
+                <div
+                  ref={(el) => { featureRefs.current[i] = el }}
+                  style={{ transitionDelay: `${i * 120}ms` }}
+                  className="relative rounded-xl border border-[#e7dac4] bg-[#fbf6ec] p-6 transform transition-all duration-700 opacity-0 translate-y-6 hover:-translate-y-1 hover:shadow-lg h-full"
+                >
+                  {/* inner white panel for contrast */}
+                  <div className="relative bg-white rounded-lg pt-20 px-6 pb-6 min-h-[220px] shadow-sm flex flex-col justify-between h-full">
+                    <div className="absolute top-4 left-4 w-14 h-14 rounded-full bg-white border border-[#efe2c9] flex items-center justify-center text-2xl shadow-sm">
+                      <span className="leading-none">{f.emoji}</span>
+                    </div>
+
+                    <h3 className="text-lg md:text-xl font-semibold mb-2 text-gray-900">{f.title}</h3>
+                    <p className="text-gray-700 text-sm leading-relaxed">{f.desc}</p>
+
+                    <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <a href="#" className="text-yellow-600 font-medium hover:underline">Learn more →</a>
+                    </div>
+
+                    <svg className="absolute right-4 bottom-4 opacity-20" width="72" height="36" viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                      <path d="M2 30 C20 10, 60 10, 78 30" stroke="#e6d7c1" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                      <circle cx="14" cy="28" r="1.2" fill="#e6d7c1" />
+                      <circle cx="38" cy="20" r="1.2" fill="#e6d7c1" />
+                      <circle cx="62" cy="12" r="1.2" fill="#e6d7c1" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
-          {/* Feature 3 */}
-          <div className="bg-gray-50 border border-yellow-200 rounded-lg p-8 hover:border-yellow-400 transition">
-            <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">🌐</span>
-            </div>
-            <h3 className="text-2xl font-bold mb-3 text-gray-900">EVM Compatible</h3>
-            <p className="text-gray-700">Deploy on any EVM-compatible chain. Maximum interoperability and reach.</p>
-          </div>
-
-          {/* Feature 4 */}
-          <div className="bg-gray-50 border border-yellow-200 rounded-lg p-8 hover:border-yellow-400 transition">
-            <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">💱</span>
-            </div>
-            <h3 className="text-2xl font-bold mb-3 text-gray-900">DeFi Integration</h3>
-            <p className="text-gray-700">Seamlessly integrate with existing DeFi protocols. Composable by design.</p>
+          <div className="mt-16 flex justify-center">
+            <a href="#" className="inline-block rounded-full border border-[#e7dac4] px-6 py-3 text-lg tracking-wide text-gray-900 font-medium hover:bg-[#fffaf0] animate-fade-up transition-transform duration-200 hover:-translate-y-1 hover:scale-105">Learn more →</a>
           </div>
         </div>
       </section>
 
-      {/* Protocol Overview */}
-      <section id="build" className="py-20 px-6 max-w-7xl mx-auto bg-white">
-        <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-12">
-          <h2 className="text-4xl font-bold mb-4 text-gray-900">How It Works</h2>
-          <p className="text-gray-700 mb-8 text-lg">
-            Tectonic introduces forced redemptions as a core mechanism, significantly different from traditional stablecoin protocols like Djed. 
-            This approach provides enhanced stability guarantees while maintaining composability with the broader EVM ecosystem.
+      {/* StableCoin Panel (inserted after learn) */}
+      <section className="py-12 px-6 bg-white">
+        <div className="mx-auto max-w-7xl px-0">
+          <div className="grid items-center gap-10 lg:grid-cols-2">
+            <div className="overflow-hidden rounded-2xl flex items-center justify-center bg-white">
+              <Image
+                src="/undraw_crypto-portfolio_mf2i (1).svg"
+                alt="Tectonic crypto portfolio illustration"
+                width={1200}
+                height={900}
+                className="h-[280px] w-auto max-w-full object-contain p-4 md:h-[340px] md:p-6"
+              />
+            </div>
+
+            <div>
+              <Typewriter 
+                text={"The Future of\nDecentralized\nPayments . . . "} 
+                className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 whitespace-pre-line leading-tight" 
+                speed={120} 
+              />
+              <p className="mt-6 max-w-xl text-xl leading-9 text-gray-700">
+                Tectonic is a fully collateralized stablecoin protocol built for the EVM ecosystem. By combining reserve-backed stability, equity participation, and automatic forced redemptions, it provides a secure foundation for next-generation payment infrastructure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Deployments Panel */}
+      <section id="explore" className="bg-[#fdf7ef] pt-12 pb-20">
+        <div className="-mt-14 w-full border-y-2 border-amber-200 bg-white py-12 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(251,191,36,0.14)]">
+          <div className="mx-auto max-w-[1440px] px-6">
+            <div className="grid gap-6 text-center sm:grid-cols-2 lg:grid-cols-3">
+              {protocolStats.map((stat) => (
+                <div key={stat.label} className="px-2 py-2">
+                  <div className="text-3xl font-bold tracking-tight text-slate-900 md:text-[2rem]">
+                    <CountUpValue
+                      end={stat.value}
+                      decimals={stat.decimals ?? 0}
+                      prefix={stat.prefix}
+                      suffix={stat.suffix}
+                    />
+                  </div>
+                  <div className="mt-1 text-sm font-medium leading-6 text-slate-600">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto mt-10 max-w-[1440px] px-6">
+          <div className="mb-8 max-w-3xl">
+            <div className="mb-3 inline-flex items-center gap-2 text-sm font-semibold tracking-[0.22em] text-amber-600 uppercase">
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-amber-600">◎</span>
+              Active Deployments
+            </div>
+            <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">Live on Leading Chains</h2>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
+              Tectonic is deployed across multiple EVM-compatible chains. Choose a deployment to explore, mint, and earn.
+            </p>
+          </div>
+
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+            <div className="overflow-hidden rounded-3xl border border-amber-100 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+              <table className="w-full table-fixed border-collapse text-left">
+                <colgroup>
+                  <col className="w-[26%]" />
+                  <col className="w-[17%]" />
+                  <col className="w-[12%]" />
+                  <col className="w-[14%]" />
+                  <col className="w-[14%]" />
+                  <col className="w-[10%]" />
+                  <col className="w-[7%]" />
+                  <col className="w-[4%]" />
+                </colgroup>
+                  <thead>
+                    <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                      <th className="px-6 py-5">Deployment</th>
+                      <th className="px-6 py-5">Chain</th>
+                      <th className="px-6 py-5">Reserve Asset</th>
+                      <th className="px-6 py-5">Reserve Ratio</th>
+                      <th className="px-6 py-5">Stablecoin Supply</th>
+                      <th className="px-6 py-5">TVL</th>
+                      <th className="px-6 py-5">Status</th>
+                      <th className="px-5 py-5"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {deployments.map((deployment, index) => (
+                      <tr key={`${deployment.chain}-${index}`} className="group transition-colors hover:bg-amber-50/40">
+                        <td className="px-6 py-6 align-middle">
+                          <div className="flex items-center gap-4">
+                            <div className={`flex h-10 w-10 items-center justify-center rounded-full ${deployment.symbolBg} text-sm font-bold ${deployment.symbolColor}`}>
+                              {index % 3 === 0 ? '◈' : index % 3 === 1 ? '◌' : '⬢'}
+                            </div>
+                            <div>
+                              <div className="text-sm font-semibold leading-5 text-slate-900">{deployment.name}</div>
+                              <div className="text-xs leading-4 text-slate-500">{deployment.symbol}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-6 align-middle">
+                          <div className="flex items-center gap-2 text-sm font-medium text-slate-700 whitespace-nowrap">
+                            <span className={`flex h-5 w-5 items-center justify-center rounded-full ${deployment.chainColor} text-[10px] font-bold`}>{deployment.chainShort}</span>
+                            {deployment.chain}
+                          </div>
+                        </td>
+                        <td className="px-6 py-6 align-middle">
+                          <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 whitespace-nowrap">
+                            <span className={`flex h-5 w-5 items-center justify-center rounded-full ${deployment.chainColor} text-[10px] font-bold`}>{deployment.chainShort}</span>
+                            {deployment.chainShort}
+                          </div>
+                        </td>
+                        <td className="px-6 py-6 align-middle">
+                          <div className="w-full max-w-[130px]">
+                            <div className="mb-2 text-sm font-semibold text-emerald-600">{deployment.reserve}</div>
+                            <div className="h-2 rounded-full bg-slate-200">
+                              <div className="h-2 rounded-full bg-emerald-500" style={{ width: `${Math.max(60, deployment.ratio - 55)}%` }} />
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.supply}</td>
+                        <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.tvl}</td>
+                        <td className="px-6 py-6 align-middle">
+                          <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${deployment.badge}`}>{deployment.status}</span>
+                        </td>
+                        <td className="px-5 py-6 align-middle text-right text-slate-400">
+                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full transition group-hover:bg-white group-hover:text-slate-700">›</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+            </div>
+
+            <aside className="relative overflow-hidden rounded-[2rem] border border-amber-100/80 bg-gradient-to-b from-white via-white/90 to-amber-50/40 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] ring-1 ring-amber-100/60 backdrop-blur-xl">
+              <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-amber-200/35 blur-3xl"></div>
+              <div className="pointer-events-none absolute -left-10 bottom-0 h-24 w-24 rounded-full bg-white/60 blur-2xl"></div>
+              <div className="pointer-events-none absolute inset-x-6 top-6 h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent"></div>
+
+              <div className="relative mb-8 flex h-28 w-28 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-amber-50 via-white to-amber-100 text-amber-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_16px_36px_rgba(251,191,36,0.18)] ring-1 ring-white/80">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M12 2l7 3v6c0 5-3.4 9.6-7 11-3.6-1.4-7-6-7-11V5l7-3z" stroke="currentColor" strokeWidth="1.6" />
+                  <path d="M9.5 12.2l1.9 1.9 3.6-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+
+              <h3 className="max-w-xs text-2xl font-bold tracking-tight text-slate-900 drop-shadow-sm">Built for Stability. Made for Payments.</h3>
+              <p className="mt-5 max-w-sm text-base leading-8 text-slate-600">
+                Tectonic uses forced redemptions to maintain high reserve ratios without ever disabling minting.
+                This keeps stablecoins available when payments matter.
+              </p>
+
+              <a href="#" className="mt-10 inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-white/90 px-4 py-2 text-base font-semibold text-amber-600 shadow-[0_12px_28px_rgba(251,191,36,0.12)] transition hover:-translate-y-0.5 hover:bg-white hover:text-amber-700 hover:shadow-[0_16px_34px_rgba(251,191,36,0.18)]">
+                Learn more about Tectonic
+                <span aria-hidden>→</span>
+              </a>
+            </aside>
+          </div>
+
+          <div className="mt-10 flex justify-center">
+            <a href="#" className="btn-primary btn-hero text-sm">VIEW ALL DEPLOYMENTS →</a>
+          </div>
+        </div>
+      </section>
+
+      {/* Protocol Overview — three-column layout matching reference image */}
+      <section id="build" className="py-20 px-6 bg-[#fbf6ec]">
+        <div className="mx-auto max-w-7xl rounded-[2rem] border border-amber-100 bg-white p-8 shadow-[0_22px_60px_rgba(15,23,42,0.08)] md:p-12">
+          <h2 className="text-center text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">HOW IT WORKS</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-center text-base leading-7 text-slate-600 md:text-lg">
+            The protocol flow is intentionally simple: deposit an asset, mint the stablecoin, mint the equity coin, and redeem if the reserve needs to be restored.
           </p>
-          <button className="btn-primary">READ WHITEPAPER</button>
-        </div>
-      </section>
 
-      {/* Latest News */}
-      <section id="explore" className="py-20 px-6 max-w-7xl mx-auto bg-white">
-        <h2 className="text-4xl font-bold mb-12 text-gray-900">Latest Updates</h2>
-        
-        <div className="grid md:grid-cols-3 gap-8">
-          <article className="border border-yellow-200 rounded-lg overflow-hidden hover:border-yellow-400 transition group">
-            <div className="h-40 bg-gradient-to-br from-yellow-200 to-transparent"></div>
-            <div className="p-6">
-              <p className="text-sm text-yellow-600 font-semibold mb-2">SOLIDITY CONTRACTS</p>
-              <h3 className="text-xl font-bold mb-2 text-gray-900">Tectonic Core Implementation</h3>
-              <p className="text-gray-700 mb-4">Smart contracts for the Tectonic protocol now in active development.</p>
-              <span className="text-sm text-gray-600">May 2026</span>
-            </div>
-          </article>
+          <div className="mt-12 rounded-[1.75rem] border border-amber-100 bg-gradient-to-b from-[#fffdf8] to-[#fff7eb] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] md:p-8">
+            <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] md:items-center">
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">1</div>
+                <h3 className="text-lg font-semibold text-slate-900">Deposit Native Asset</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">Users deposit the reserve asset into the protocol.</p>
+              </div>
 
-          <article className="border border-yellow-200 rounded-lg overflow-hidden hover:border-yellow-400 transition group">
-            <div className="h-40 bg-gradient-to-br from-yellow-200 to-transparent"></div>
-            <div className="p-6">
-              <p className="text-sm text-yellow-600 font-semibold mb-2">PLATFORM</p>
-              <h3 className="text-xl font-bold mb-2 text-gray-900">Frontend Platform Launch</h3>
-              <p className="text-gray-700 mb-4">Modern web interface for interacting with Tectonic protocol.</p>
-              <span className="text-sm text-gray-600">May 2026</span>
-            </div>
-          </article>
+              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1">→</div>
 
-          <article className="border border-yellow-200 rounded-lg overflow-hidden hover:border-yellow-400 transition group">
-            <div className="h-40 bg-gradient-to-br from-yellow-200 to-transparent"></div>
-            <div className="p-6">
-              <p className="text-sm text-yellow-600 font-semibold mb-2">INTEGRATION</p>
-              <h3 className="text-xl font-bold mb-2 text-gray-900">StablePay Integration</h3>
-              <p className="text-gray-700 mb-4">Tectonic integration for StablePay payment protocol.</p>
-              <span className="text-sm text-gray-600">May 2026</span>
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">2</div>
+                <h3 className="text-lg font-semibold text-slate-900">Mint Stablecoin</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">The protocol mints the stablecoin against the reserve.</p>
+              </div>
+
+              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1">→</div>
+
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28_rgba(15,23,42,0.06)] backdrop-blur-sm">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">3</div>
+                <h3 className="text-lg font-semibold text-slate-900">Mint Equity Coin</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">An equity coin is minted to capture protocol upside.</p>
+              </div>
+
+              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1">→</div>
+
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm md:col-span-1">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">4</div>
+                <h3 className="text-lg font-semibold text-slate-900">Force Redemption</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">If needed, the system forces redemption to restore safety.</p>
+              </div>
             </div>
-          </article>
+          </div>
+
+          <div className="mt-8 text-center">
+            <a href="#" className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white px-6 py-3 text-base font-medium tracking-wide text-gray-900 shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5 hover:bg-amber-50">
+              Read Whitepaper
+              <span aria-hidden>→</span>
+            </a>
+          </div>
         </div>
       </section>
 
       {/* Community Section */}
-      <section className="py-20 px-6 bg-gray-50 border-t border-yellow-200">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-900">Join the Community</h2>
-          <p className="text-gray-700 text-lg mb-12">
-            Be part of the next generation of stablecoin infrastructure. 
-            Connect with builders, researchers, and enthusiasts.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="btn-primary">DISCORD</button>
-            <button className="btn-primary">TWITTER</button>
-            <button className="btn-primary">GITHUB</button>
+      <section className="relative py-20 px-6 bg-white border-t border-yellow-200 overflow-hidden">
+        {/* subtle theme-consistent blobs */}
+        <div className="pointer-events-none absolute -left-12 -top-8 h-40 w-40 rounded-full bg-yellow-200 opacity-30 blur-2xl"></div>
+        <div className="pointer-events-none absolute -right-12 top-20 h-44 w-44 rounded-full bg-indigo-100 opacity-20 blur-2xl"></div>
+
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            <div className="md:col-span-2">
+              <div className="relative inline-block mb-4" style={{display: 'inline-block'}}>
+                <h2 className="community-title text-4xl md:text-5xl font-semibold relative z-10 tracking-tight">Join the Community</h2>
+              </div>
+              <p className="text-gray-700 text-lg md:text-xl leading-relaxed">
+                Be part of the next generation of stablecoin infrastructure. Connect with builders, researchers, and enthusiasts.
+              </p>
+            </div>
+
+            <div className="flex justify-center md:justify-end">
+              <div className="inline-flex flex-col gap-4 rounded-3xl bg-white p-3 shadow-lg">
+                <a href="#" className="btn-primary flex items-center gap-3 px-4 py-3">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                    <path d="M20 3H4a1 1 0 00-1 1v16l4-4h13a1 1 0 001-1V4a1 1 0 00-1-1z" fill="currentColor" />
+                  </svg>
+                  DISCORD
+                </a>
+
+                <a href="#" className="btn-secondary flex items-center gap-3 px-4 py-3">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                    <path d="M22 5.92a8.3 8.3 0 01-2.36.65A4.1 4.1 0 0021.4 4c-.8.48-1.68.82-2.62 1A4.13 4.13 0 0012 8.4v.5A11.7 11.7 0 013 6.16a4.03 4.03 0 001.28 5.48 4.08 4.08 0 01-1.86-.51v.05c0 1.9 1.34 3.5 3.12 3.87a4.1 4.1 0 01-1.85.07 4.12 4.12 0 003.85 2.86A8.3 8.3 0 012 19.54 11.68 11.68 0 008.29 21c7.55 0 11.68-6.26 11.68-11.68l-.01-.53A8.18 8.18 0 0022 5.92z" fill="currentColor"/>
+                  </svg>
+                  TWITTER
+                </a>
+
+                <a href="#" className="btn-secondary flex items-center gap-3 px-4 py-3">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                    <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .8.1-.6.4-1.1.7-1.4-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 3 .1 3.3.7.9 1.2 2 1.2 3.3 0 4.5-2.7 5.4-5.3 5.8.4.4.8 1 1 2v3c0 .3.2.7.8.6A10.5 10.5 0 0023.5 12C23.5 5.7 18.3.5 12 .5z" fill="currentColor"/>
+                  </svg>
+                  GITHUB
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-yellow-200 py-12 px-6 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <div className="text-xl font-bold mb-4">
-                <span className="text-yellow-500">◊</span> TECTONIC
+      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-6 pt-14 pb-4">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-80"></div>
+        <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl"></div>
+        <div className="pointer-events-none absolute right-0 top-10 h-44 w-44 rounded-full bg-orange-200/30 blur-3xl"></div>
+
+        <div className="relative mx-auto max-w-7xl px-2 pt-4 pb-0 md:px-6">
+          <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
+            <div className="max-w-sm">
+              <div className="logo-hover-wrap mb-4 flex items-center gap-3 text-slate-900">
+                <Image
+                  src="/Logo.svg"
+                  alt="Tectonic logo"
+                  width={160}
+                  height={44}
+                  className="logo-hover-zoom h-9 w-auto object-contain"
+                />
+                <span className="text-xl font-black tracking-[0.22em]">TECTONIC</span>
               </div>
-              <p className="text-gray-600 text-sm">Next-generation stablecoin protocol.</p>
+              <p className="max-w-xs text-sm leading-6 text-slate-600">
+                Next-generation stablecoin protocol.
+              </p>
             </div>
+
             <div>
-              <h4 className="font-semibold mb-4 text-gray-900">Protocol</h4>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li><a href="#" className="hover:text-yellow-500 transition">Docs</a></li>
-                <li><a href="#" className="hover:text-yellow-500 transition">Contracts</a></li>
-                <li><a href="#" className="hover:text-yellow-500 transition">GitHub</a></li>
+              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Protocol</h4>
+              <ul className="space-y-3 text-sm text-slate-700">
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Docs</a></li>
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Contracts</a></li>
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">GitHub</a></li>
               </ul>
             </div>
+
             <div>
-              <h4 className="font-semibold mb-4 text-gray-900">Community</h4>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li><a href="#" className="hover:text-yellow-500 transition">Discord</a></li>
-                <li><a href="#" className="hover:text-yellow-500 transition">Twitter</a></li>
-                <li><a href="#" className="hover:text-yellow-500 transition">Forum</a></li>
+              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Community</h4>
+              <ul className="space-y-3 text-sm text-slate-700">
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Twitter</a></li>
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Forum</a></li>
               </ul>
             </div>
+
             <div>
-              <h4 className="font-semibold mb-4 text-gray-900">Resources</h4>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li><a href="#" className="hover:text-yellow-500 transition">Whitepaper</a></li>
-                <li><a href="#" className="hover:text-yellow-500 transition">Blog</a></li>
-                <li><a href="#" className="hover:text-yellow-500 transition">Press</a></li>
+              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Resources</h4>
+              <ul className="space-y-3 text-sm text-slate-700">
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Whitepaper</a></li>
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Blog</a></li>
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Press</a></li>
               </ul>
             </div>
           </div>
-          
-          <div className="border-t border-yellow-200 pt-8">
-            <p className="text-sm text-gray-700 text-center">
+
+          <div className="mt-24 border-t border-amber-200/80 pt-6">
+            <p className="text-center text-sm text-slate-600">
               © 2026 Tectonic Protocol. All rights reserved.
             </p>
           </div>
