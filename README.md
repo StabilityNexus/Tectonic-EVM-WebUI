@@ -1,75 +1,86 @@
 <!-- Don't delete it -->
 <div name="readme-top"></div>
 
-<!-- Organization Logo -->
-<div align="center" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
-   <img alt="Stability Nexus" src="public/stability.svg" width="175">
-   <img alt="Tectonic hero" src="public/tectonic-hero.png" width="175" />
-</div>
+<p align="center">
+  <img alt="Stability Nexus" src="public/stability.svg" width="140">
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img alt="Tectonic Logo" src="public/Logo.svg" width="140">
+</p>
 
-&nbsp;
-
-<!-- Organization Name -->
 <div align="center">
+
+# Tectonic EVM Web UI
 
 [![Static Badge](https://img.shields.io/badge/Tectonic-EVM_Web_UI-228B22?style=for-the-badge&labelColor=FFC517)](https://github.com/StabilityNexus/Tectonic-EVM-WebUI)
 
 </div>
 
-<!-- Organization/Project Social Handles -->
 <p align="center">
-<!-- Telegram -->
 <a href="https://t.me/StabilityNexus">
 <img src="https://img.shields.io/badge/Telegram-black?style=flat&logo=telegram&logoColor=white&logoSize=auto&color=24A1DE" alt="Telegram Badge"/></a>
 &nbsp;&nbsp;
-<!-- X (formerly Twitter) -->
 <a href="https://x.com/StabilityNexus">
 <img src="https://img.shields.io/twitter/follow/StabilityNexus" alt="X (formerly Twitter) Badge"/></a>
 &nbsp;&nbsp;
-<!-- Discord -->
 <a href="https://discord.gg/YzDKeEfWtS">
 <img src="https://img.shields.io/discord/995968619034984528?style=flat&logo=discord&logoColor=white&logoSize=auto&label=Discord&labelColor=5865F2&color=57F287" alt="Discord Badge"/></a>
 &nbsp;&nbsp;
-<!-- Medium -->
 <a href="https://news.stability.nexus/">
-   <img src="https://img.shields.io/badge/Medium-black?style=flat&logo=medium&logoColor=black&logoSize=auto&color=white" alt="Medium Badge"></a>
+<img src="https://img.shields.io/badge/Medium-black?style=flat&logo=medium&logoColor=black&logoSize=auto&color=white" alt="Medium Badge"></a>
 &nbsp;&nbsp;
-<!-- LinkedIn -->
 <a href="https://linkedin.com/company/stability-nexus">
-   <img src="https://img.shields.io/badge/LinkedIn-black?style=flat&logo=LinkedIn&logoColor=white&logoSize=auto&color=0A66C2" alt="LinkedIn Badge"></a>
+<img src="https://img.shields.io/badge/LinkedIn-black?style=flat&logo=LinkedIn&logoColor=white&logoSize=auto&color=0A66C2" alt="LinkedIn Badge"></a>
 &nbsp;&nbsp;
-<!-- Youtube -->
 <a href="https://www.youtube.com/@StabilityNexus">
-   <img src="https://img.shields.io/youtube/channel/subscribers/UCZOG4YhFQdlGaLugr_e5BKw?style=flat&logo=youtube&logoColor=white&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"></a>
+<img src="https://img.shields.io/youtube/channel/subscribers/UCZOG4YhFQdlGaLugr_e5BKw?style=flat&logo=youtube&logoColor=white&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"></a>
 </p>
 
 ---
 
-<div align="center">
-<h1>Tectonic EVM Web UI</h1>
-</div>
+A modern web interface for the Tectonic Protocol, enabling users to explore deployments, equity coins, stablecoin mechanics, force redemption operations, and ecosystem information through an intuitive Next.js application.
 
-[Tectonic](https://github.com/StabilityNexus/Tectonic-EVM-WebUI) is a Next.js frontend for the Tectonic protocol. It presents the protocol story, feature highlights, community links, and update sections in a polished landing page experience.
+## Table of Contents
 
----
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Local Development](#local-development)
+- [Build & Deployment](#build--deployment)
+- [Environment Variables](#environment-variables)
+- [Roadmap](#roadmap)
+- [Community and Support](#community-and-support)
+- [Contributing](#contributing)
 
-## Project Maturity
+## Overview
 
-* [x] The project has a logo.
-* [x] The project has a hero image.
-* [x] The web frontend has proper title and metadata scaffolding.
-* [x] The web frontend is built with Next.js and TypeScript.
-* [x] The web frontend uses Tailwind CSS for styling.
-* [x] The web frontend is fully static and client-side.
-* [ ] The project has a dedicated favicon.
-* [ ] The project has a deployed public URL.
-* [ ] The project has final open graph metadata.
+Tectonic is an EVM-compatible stablecoin infrastructure platform inspired by the principles of the Djed Stablecoin Protocol.
 
----
+The web interface serves as the primary gateway for users to:
+
+- Explore protocol deployments
+- Learn about StablePay
+- Monitor Equity Coins
+- Understand Force Redemption mechanisms
+- Access ecosystem resources
+- Connect with the Stability Nexus community
+
+The application is built with Next.js and TypeScript, providing a fast, responsive, and accessible user experience.
+
+## Features
+
+- Modern responsive landing page
+- Deployment explorer
+- Equity Coin information dashboard
+- StablePay ecosystem section
+- Force Redemption information hub
+- Community integration
+- Mobile-friendly UI
+- Fast static deployment support
+- SEO-ready metadata structure
 
 ## Tech Stack
-
-### Frontend
 
 - Next.js 16
 - React 19
@@ -77,94 +88,124 @@
 - Tailwind CSS 4
 - ESLint
 
-### Assets
-
-- Stability Nexus brand logo
-- Tectonic hero illustration
-
----
-
 ## Project Structure
 
-### App Router
-
-- `app/page.tsx` - main landing page content
-- `app/layout.tsx` - root layout and metadata
-- `app/globals.css` - global styles and animations
-
-### Public Assets
-
-- `public/stability.svg` - brand logo used in the README and UI
-- `public/tectonic-hero.png` - hero illustration used on the homepage
-
-### Project Config
-
-- `package.json` - scripts and dependencies
-- `next.config.ts` - Next.js configuration
-- `tsconfig.json` - TypeScript configuration
-
----
+```text
+Tectonic-EVM-WebUI/
+├── app/
+│   ├── page.tsx
+│   ├── layout.tsx
+│   └── globals.css
+├── public/
+│   ├── stability.svg
+│   ├── Logo.svg
+│   └── tectonic-hero.png
+├── components/
+├── package.json
+├── next.config.ts
+├── tsconfig.json
+└── README.md
+```
 
 ## Getting Started
-
-### Prerequisites
-
-- Node.js 20+
-- npm
-
-### Installation
-
-#### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/StabilityNexus/Tectonic-EVM-WebUI.git
 cd Tectonic-EVM-WebUI
-```
-
-#### 2. Install Dependencies
-
-```bash
 npm install
 ```
 
-#### 3. Run the Development Server
+## Local Development
 
 ```bash
 npm run dev
 ```
 
-#### 4. Open your Browser
+Open:
 
-Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+```text
+http://localhost:3000
+```
 
-#### 5. Build for Production
+## Build & Deployment
+
+### Production Build
 
 ```bash
 npm run build
 ```
 
-#### 6. Start the Production Server
+### Start Production Server
 
 ```bash
 npm run start
 ```
 
----
+### Export Static Site
+
+```bash
+npm run build
+```
+
+### GitHub Pages Deployment
+
+This repository uses GitHub Pages via `.github/workflows/nextjs.yml`. Push to `main` to trigger the deployment workflow.
+
+## Environment Variables
+
+```env
+NEXT_PUBLIC_APP_NAME=Tectonic
+NEXT_PUBLIC_NETWORK=EVM
+```
+
+Add any future protocol-specific variables here.
+
+## Roadmap
+
+- [x] Landing page
+- [x] Community integration
+- [x] StablePay section
+- [x] Deployment dashboard
+- [x] Equity Coin overview
+- [x] Force Redemption page
+- [ ] Protocol analytics
+- [ ] Governance dashboard
+- [ ] Public deployment URL
+- [ ] Multi-chain explorer
+
+## Community and Support
+
+Join the Stability Nexus ecosystem:
+
+- Telegram
+- Discord
+- X (Twitter)
+- Stable Viewpoints
+- LinkedIn
+- YouTube
+
+Use the badge links at the top of this README to connect with the community channels.
 
 ## Contributing
 
-We welcome contributions of all kinds. To contribute:
+We welcome community contributions.
 
-1. Fork the repository and create your feature branch (`git checkout -b feature/AmazingFeature`).
-2. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-3. Run the development workflow commands to ensure code quality:
-    - `npm run build`
-    - `npm run lint`
-4. Push your branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request for review.
+1. Fork the repository.
+2. Create a feature branch.
+3. Implement your changes.
+4. Run:
 
-If you encounter bugs, need help, or have feature requests, open an issue with the relevant details and screenshots if possible.
+```bash
+npm run build
+npm run lint
+```
 
-We appreciate your feedback and contributions!
+5. Submit a Pull Request.
 
-© 2026 The Stable Order.
+<p align="center">
+  <strong>Built with ❤️ by Stability Nexus.</strong>
+</p>
+
+<p align="right">
+  (<a href="#readme-top">back to top</a>)
+</p>

@@ -419,6 +419,12 @@ body {
   opacity: 1;
 }
 
+/* active nav link — underline always visible */
+.active-nav-link::after {
+  transform: scaleX(1) !important;
+  opacity: 1 !important;
+}
+
 .nav-link:hover,
 .nav-link:focus {
   color: var(--primary-dark);

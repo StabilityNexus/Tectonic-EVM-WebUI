@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
+import Navbar from "@/components/Navbar";
 
 function Typewriter({ text, className = "", speed = 45 }: { text: string; className?: string; speed?: number }) {
   const ref = useRef<HTMLHeadingElement | null>(null);
@@ -50,6 +51,38 @@ function Typewriter({ text, className = "", speed = 45 }: { text: string; classN
       <span>{visibleText}</span>
       <span className="ml-1 inline-block animate-pulse">▌</span>
     </h2>
+  );
+}
+
+function HeroTypewriter({
+  text,
+  className = "",
+  speed = 75,
+}: {
+  text: string;
+  className?: string;
+  speed?: number;
+}) {
+  const [visibleText, setVisibleText] = useState("");
+
+  useEffect(() => {
+    let index = 0;
+    const timer = window.setInterval(() => {
+      index += 1;
+      setVisibleText(text.slice(0, index));
+      if (index >= text.length) {
+        window.clearInterval(timer);
+      }
+    }, speed);
+
+    return () => window.clearInterval(timer);
+  }, [text, speed]);
+
+  return (
+    <span className={className}>
+      <span className="whitespace-pre-line">{visibleText}</span>
+      <span className="ml-1 inline-block animate-pulse">▌</span>
+    </span>
   );
 }
 
@@ -168,39 +201,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-hidden pt-0">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 glassy-navbar">
-        <div className="px-6 py-2 flex items-center justify-between w-full">
-          <div className="logo-hover-wrap flex items-center gap-3">
-            <Image
-              src="/Logo.svg"
-              alt="Tectonic logo"
-              width={180}
-              height={48}
-              priority
-              className="logo-hover-zoom h-9 w-auto object-contain sm:h-10"
-            />
-            <span className="text-lg font-bold tracking-[0.2em] text-slate-900 sm:text-xl">
-              TECTONIC
-            </span>
-          </div>
-          <div className="hidden sm:flex gap-6 items-center">
-            <a href="#" className="nav-link px-2 py-2 text-lg font-medium">Home</a>
-            <a href="#deployments" className="nav-link px-2 py-2 text-lg font-medium">Deployments</a>
-            <a href="#docs" className="nav-link px-2 py-2 text-lg font-medium">Docs</a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="nav-link px-2 py-2 text-lg font-medium">Github</a>
-          </div>
-
-          {/* Compact Connect Wallet button */}
-          <button className="btn-primary btn-hero text-sm flex items-center justify-center" aria-label="Connect Wallet">
-            <span>Connect Wallet</span>
-            <svg className="btn-arrow" aria-hidden width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 12h12" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center gradient-orbital overflow-visible pt-24 pb-16">
@@ -218,8 +219,13 @@ export default function Home() {
               <span className="hero-kicker text-sm font-semibold text-yellow-500">Next Generation Stablecoin Protocol</span>
             </div>
 
-            <h1 className="hero-title mb-6 text-5xl font-bold leading-tight text-gray-900 md:text-7xl">
-              <span className="hero-title-line hero-title-line-first">Activate the EVM economy</span>
+            <h1 className="hero-title mb-6 max-w-6xl text-5xl font-bold leading-tight text-gray-900 md:text-7xl">
+              <span className="hero-title-line hero-title-line-first max-w-5xl md:text-[4.6rem] md:leading-[1.02]">
+                <HeroTypewriter
+                  text={`The decentralized infrastructure\nfor stablecoin ecosystems`}
+                  className="block"
+                />
+              </span>
               <span className="hero-title-line hero-title-line-second hero-title-accent">
                 With{' '}
                 <span className="animated-word hero-word-inline" aria-label="TECTONIC">
@@ -388,9 +394,8 @@ export default function Home() {
                   <col className="w-[12%]" />
                   <col className="w-[14%]" />
                   <col className="w-[14%]" />
-                  <col className="w-[10%]" />
-                  <col className="w-[7%]" />
-                  <col className="w-[4%]" />
+                  <col className="w-[11%]" />
+                  <col className="w-[6%]" />
                 </colgroup>
                   <thead>
                     <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
@@ -400,7 +405,6 @@ export default function Home() {
                       <th className="px-6 py-5">Reserve Ratio</th>
                       <th className="px-6 py-5">Stablecoin Supply</th>
                       <th className="px-6 py-5">TVL</th>
-                      <th className="px-6 py-5">Status</th>
                       <th className="px-5 py-5"></th>
                     </tr>
                   </thead>
@@ -440,9 +444,6 @@ export default function Home() {
                         </td>
                         <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.supply}</td>
                         <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.tvl}</td>
-                        <td className="px-6 py-6 align-middle">
-                          <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${deployment.badge}`}>{deployment.status}</span>
-                        </td>
                         <td className="px-5 py-6 align-middle text-right text-slate-400">
                           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full transition group-hover:bg-white group-hover:text-slate-700">›</span>
                         </td>
@@ -608,14 +609,14 @@ export default function Home() {
               <ul className="space-y-3 text-sm text-slate-700">
                 <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Docs</a></li>
                 <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Contracts</a></li>
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">GitHub</a></li>
+                <li><a href="https://github.com/StabilityNexus/Tectonic-EVM-WebUI" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">GitHub</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Community</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
+                <li><a href="https://discord.com/channels/995968619034984528/1503320626096635935" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
                 <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Twitter</a></li>
                 <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Forum</a></li>
               </ul>
