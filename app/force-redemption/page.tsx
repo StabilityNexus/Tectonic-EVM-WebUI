@@ -114,7 +114,7 @@ export default function ForceRedemptionPage() {
                       <td className={`px-5 py-4 font-black whitespace-nowrap ${c.tc}`}>{d.reserveRatio}%</td>
                       <td className="px-5 py-4 text-slate-400 whitespace-nowrap">150%</td>
                       <td className="px-5 py-4">
-                        <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${c.bbg} ${c.bt}`}>{c.dot} {c.label}</span>
+                        <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${c.badgeBg} ${c.badgeBorder} ${c.badgeText}`}><span className={`h-1.5 w-1.5 rounded-full inline-block ${c.dotColor}`} /> {c.label}</span>
                       </td>
                       <td className="px-5 py-4">
                         {d.status === "danger"
@@ -149,7 +149,7 @@ export default function ForceRedemptionPage() {
                     <div className={`text-xs mt-0.5 ${c.tc}`}>{item.ratio}%</div>
                   </div>
                   <div className="flex-1 h-3 rounded-full bg-slate-100 overflow-hidden">
-                    <div className={`h-3 rounded-full ${c.bar} transition-all duration-700`} style={{ width: `${w}%` }} />
+                    <div className={`h-3 rounded-full ${c.barColor} transition-all duration-700`} style={{ width: `${w}%` }} />
                   </div>
                   <div className="w-28 text-xs text-slate-400 text-right hidden sm:block">{item.desc}</div>
                 </div>

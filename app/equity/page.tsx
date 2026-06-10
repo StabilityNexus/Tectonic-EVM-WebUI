@@ -61,15 +61,15 @@ export default function EquityPage() {
         {EQUITY_COINS.map(eq => {
           const c = statusCfg(eq.status);
           return (
-            <div key={eq.name} className={`rounded-2xl bg-white border ${c.border} shadow-sm overflow-hidden`}>
+            <div key={eq.name} className={`rounded-2xl bg-white border ${c.cardBorder} shadow-sm overflow-hidden`}>
               {/* card header */}
-              <div className={`px-5 py-4 ${c.bg} border-b ${c.border} flex items-center justify-between`}>
+              <div className={`px-5 py-4 ${c.headerBg} border-b ${c.cardBorder} flex items-center justify-between`}>
                 <div className="flex items-center gap-2.5">
                   <div className="h-8 w-8 rounded-full flex items-center justify-center text-white text-[9px] font-extrabold shadow-sm"
                     style={{ background: eq.chainColor }}>{eq.chain.slice(0, 3).toUpperCase()}</div>
                   <span className="font-black text-slate-900">{eq.name}</span>
                 </div>
-                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${c.bbg} ${c.bt}`}>{c.dot} {c.label}</span>
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${c.badgeBg} ${c.badgeBorder} ${c.badgeText}`}><span className={`h-1.5 w-1.5 rounded-full inline-block ${c.dotColor}`} /> {c.label}</span>
               </div>
 
               <div className="px-5 py-5">
