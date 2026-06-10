@@ -93,14 +93,23 @@ The application is built with Next.js and TypeScript, providing a fast, responsi
 ```text
 Tectonic-EVM-WebUI/
 ├── app/
-│   ├── page.tsx
+│   ├── page.tsx                    # Hero page with navigation
+│   ├── deployments/
+│   │   └── page.tsx                # Deployment dashboard with mint/redeem modal
+│   ├── equity/
+│   │   └── page.tsx                # Equity coins hub with yield tracking
+│   ├── force-redemption/
+│   │   └── page.tsx                # Force redemption monitor & crisis management
+│   ├── stablepay/
+│   │   └── page.tsx                # StablePay feature with payment flow demo
 │   ├── layout.tsx
 │   └── globals.css
+├── components/
+│   └── Navbar.tsx                  # Navigation with wallet connection
 ├── public/
 │   ├── stability.svg
 │   ├── Logo.svg
 │   └── tectonic-hero.png
-├── components/
 ├── package.json
 ├── next.config.ts
 ├── tsconfig.json
@@ -193,13 +202,11 @@ We welcome community contributions.
 1. Fork the repository.
 2. Create a feature branch.
 3. Implement your changes.
-4. Run:
-
-```bash
-npm run build
-npm run lint
-```
-
+4. Run the following commands:
+   ```bash
+   npm run build
+   npm run lint
+   ```
 5. Submit a Pull Request.
 
 <p align="center">

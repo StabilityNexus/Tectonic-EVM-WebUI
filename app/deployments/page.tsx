@@ -213,28 +213,42 @@ function StatusBadge({ status }: { status: RatioStatus }) {
 /* ─── Mint / Redeem Modal ─── */
 export function MRModal({ mode, d, onClose }: { mode: "mint" | "redeem"; d: Deployment; onClose: () => void }) {
   const [amount, setAmount] = useState("10");
-  const [asset,  setAsset]  = useState("ETH");
+  const asset = d.reserveAsset;
   const oracle  = parseFloat(d.oraclePrice.replace(/[$,]/g, "")) || 3800;
   const fee     = 0.003;
   const receive = mode === "mint"
     ? `${(parseFloat(amount || "0") * oracle * (1 - fee)).toLocaleString(undefined, { maximumFractionDigits: 0 })} ${d.stablecoin}`
     : `${(parseFloat(amount || "0") / oracle * (1 - fee)).toFixed(6)} ${d.reserveAsset}`;
 
+  const headerId = `modal-${mode}-${d.id}`;
+  
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") onClose();
+  };
+
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4"
       onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="w-full max-w-md rounded-2xl bg-white border border-[#e7dac4] shadow-xl overflow-hidden animate-fade-up">
-
+      <div 
+        className="w-full max-w-md rounded-2xl bg-white border border-[#e7dac4] shadow-xl overflow-hidden animate-fade-up"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={headerId}
+        onKeyDown={handleKeyDown}
+      >
         {/* header — warm amber tint like homepage sections */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#e7dac4] bg-[#fbf6ec]">
           <div>
-            <h3 className="text-base font-bold text-[#1a1a1a]">
+            <h3 id={headerId} className="text-base font-bold text-[#1a1a1a]">
               {mode === "mint" ? "Mint Stablecoins" : "Redeem Stablecoins"}
             </h3>
             <p className="text-xs text-gray-500 mt-0.5">{d.name} · {d.chain}</p>
           </div>
-          <button onClick={onClose}
-            className="h-7 w-7 flex items-center justify-center rounded-full bg-[#efe2c9] hover:bg-[#e7dac4] text-gray-600 transition text-xs font-semibold">
+          <button 
+            onClick={onClose}
+            aria-label="Close dialog"
+            className="h-7 w-7 flex items-center justify-center rounded-full bg-[#efe2c9] hover:bg-[#e7dac4] text-gray-600 transition text-xs font-semibold"
+          >
             ✕
           </button>
         </div>
@@ -244,10 +258,11 @@ export function MRModal({ mode, d, onClose }: { mode: "mint" | "redeem"; d: Depl
             <>
               <div>
                 <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Reserve Asset</label>
-                <select value={asset} onChange={e => setAsset(e.target.value)}
-                  className="w-full rounded-lg border border-[#e7dac4] bg-[#fbf6ec] px-3 py-2.5 text-sm text-[#1a1a1a] focus:outline-none focus:border-amber-400">
-                  <option>ETH</option><option>WBTC</option><option>MATIC</option>
-                </select>
+                <input
+                  value={asset}
+                  readOnly
+                  className="w-full rounded-lg border border-[#e7dac4] bg-[#fbf6ec] px-3 py-2.5 text-sm text-[#1a1a1a]"
+                />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Amount</label>
@@ -389,12 +404,16 @@ export default function DeploymentsPage() {
     if (countDone.current) return;
     countDone.current = true;
     const target = 12.4, dur = 1800, s0 = performance.now();
+    let rafId: number;
     const tick = (now: number) => {
       const p = Math.min((now - s0) / dur, 1);
       setTvl(target * (1 - Math.pow(1 - p, 3)));
-      if (p < 1) requestAnimationFrame(tick);
+      if (p < 1) rafId = requestAnimationFrame(tick);
     };
-    requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const filtered = DEPLOYMENTS.filter(d => {

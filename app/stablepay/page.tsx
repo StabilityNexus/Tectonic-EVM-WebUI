@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { PageShell } from "@/app/deployments/page";
 
 /* ─── animated payment flow ─── */
@@ -9,13 +9,23 @@ function PaymentFlow() {
   const [running, setRunning] = useState(false);
   const [method,  setMethod]  = useState<"eth" | "stable">("eth");
   const [amount,  setAmount]  = useState("1000");
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
   const start = () => {
+    timeoutsRef.current.forEach(clearTimeout);
+    timeoutsRef.current = [];
     setRunning(true); setStep(1);
-    setTimeout(() => setStep(2), 900);
-    setTimeout(() => setStep(3), 1900);
-    setTimeout(() => setStep(4), 3200);
+    timeoutsRef.current.push(setTimeout(() => setStep(2), 900));
+    timeoutsRef.current.push(setTimeout(() => setStep(3), 1900));
+    timeoutsRef.current.push(setTimeout(() => setStep(4), 3200));
   };
+
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(clearTimeout);
+    };
+  }, []);
+
   const reset = () => { setStep(0); setRunning(false); };
 
   const steps = [

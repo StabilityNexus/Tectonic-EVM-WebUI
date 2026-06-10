@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const isGitHubPagesBuild = process.env.GITHUB_ACTIONS === "true";
-const repoName = "Tectonic-EVM-WebUI";
+const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "Tectonic-EVM-WebUI";
 
 const nextConfig: NextConfig = {
   output: "export",
