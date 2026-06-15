@@ -1,6 +1,6 @@
 "use client";
 
-import { PageShell, statusCfg } from "@/app/deployments/page";
+import { PageShell, statusCfg } from "@/lib/deployments-ui";
 import { DEPLOYMENTS } from "@/lib/deployments-data";
 
 const EQUITY_COINS = [

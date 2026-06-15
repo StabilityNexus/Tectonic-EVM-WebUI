@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import Navbar from "@/components/Navbar";
+import { useTranslations } from "@/lib/i18n";
 
 function Typewriter({ text, className = "", speed = 45 }: { text: string; className?: string; speed?: number }) {
   const ref = useRef<HTMLHeadingElement | null>(null);
@@ -136,30 +137,35 @@ function CountUpValue({
 const tectonicLetters = 'TECTONIC'.split('');
 
 export default function Home() {
+  const tHome = useTranslations("home");
+  const tCommon = useTranslations("common");
+  const tDetail = useTranslations("deploymentDetail");
+  const tFooter = useTranslations("footer");
+
   // Features data and reveal animation refs
   const features = [
     {
-      title: 'Trigger Redemptions',
+      title: tHome("whyTectonicFeatures.triggerRedemptions.title"),
       emoji: '⚡',
-      desc: 'Unique mechanism ensuring protocol stability through automatic redemptions at predetermined rates.',
+      desc: tHome("whyTectonicFeatures.triggerRedemptions.desc"),
       color: 'from-yellow-400 to-yellow-500'
     },
     {
-      title: 'Secure Base Layer',
+      title: tHome("whyTectonicFeatures.secureBaseLayer.title"),
       emoji: '🔒',
-      desc: "Built on EVM with battle-tested security. Leverage blockchain's immutable infrastructure.",
+      desc: tHome("whyTectonicFeatures.secureBaseLayer.desc"),
       color: 'from-indigo-400 to-indigo-600'
     },
     {
-      title: 'EVM Compatible',
+      title: tHome("whyTectonicFeatures.evmCompatible.title"),
       emoji: '🌐',
-      desc: 'Deploy on any EVM-compatible chain. Maximum interoperability and reach.',
+      desc: tHome("whyTectonicFeatures.evmCompatible.desc"),
       color: 'from-green-400 to-emerald-500'
     },
     {
-      title: 'DeFi Integration',
+      title: tHome("whyTectonicFeatures.defiIntegration.title"),
       emoji: '💱',
-      desc: 'Seamlessly integrate with existing DeFi protocols. Composable by design.',
+      desc: tHome("whyTectonicFeatures.defiIntegration.desc"),
       color: 'from-pink-400 to-pink-500'
     }
   ];
@@ -175,10 +181,28 @@ export default function Home() {
   ];
 
   const protocolStats = [
-    { value: 132, label: 'Average Reserve Ratio', prefix: '', suffix: '%' },
-    { value: 84.5, label: 'StableCoin Supply', prefix: '', suffix: 'M', decimals: 1 },
-    { value: 2.8, label: 'Average Leverage', prefix: '', suffix: 'x', decimals: 1 },
+    { value: 132, label: tHome("stats.avgReserveRatio"), prefix: '', suffix: '%' },
+    { value: 84.5, label: tHome("stats.stablecoinSupply"), prefix: '', suffix: 'M', decimals: 1 },
+    { value: 2.8, label: tHome("stats.avgLeverage"), prefix: '', suffix: 'x', decimals: 1 },
   ];
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleMotionPreference = (e: MediaQueryListEvent | MediaQueryList) => {
+      if (videoRef.current) {
+        if (e.matches) {
+          videoRef.current.pause();
+        } else {
+          videoRef.current.play().catch(() => {});
+        }
+      }
+    };
+    handleMotionPreference(mediaQuery);
+    mediaQuery.addEventListener('change', handleMotionPreference);
+    return () => mediaQuery.removeEventListener('change', handleMotionPreference);
+  }, []);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -217,13 +241,13 @@ export default function Home() {
         <div className="z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="text-left">
             <div className="mb-8 inline-block">
-              <span className="hero-kicker text-sm font-semibold text-yellow-500">Next Generation StableCoin Protocol</span>
+              <span className="hero-kicker text-sm font-semibold text-yellow-500">{tHome("kicker")}</span>
             </div>
 
             <h1 className="hero-title mb-6 max-w-6xl text-5xl font-bold leading-tight text-gray-900 md:text-7xl">
               <span className="hero-title-line hero-title-line-first max-w-5xl md:text-[4.6rem] md:leading-[1.02]">
                 <HeroTypewriter
-                  text={`The decentralized infrastructure\nfor stablecoin ecosystems`}
+                  text={tHome("title")}
                   className="block"
                 />
               </span>
@@ -244,13 +268,12 @@ export default function Home() {
             </h1>
 
             <p className="mb-12 max-w-2xl text-lg text-gray-600 md:text-xl">
-              A revolutionary stablecoin protocol enabling trigger redemptions and enhanced stability.
-              Use and build apps that leverage EVM as a secure base layer.
+              {tHome("description")}
             </p>
 
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-start">
-              <button className="btn-primary text-lg">START BUILDING →</button>
-              <button className="btn-secondary text-lg">LEARN MORE</button>
+              <button className="btn-primary text-lg">{tHome("startBuilding")}</button>
+              <button className="btn-secondary text-lg">{tHome("learnMore")}</button>
             </div>
           </div>
 
@@ -279,10 +302,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-8 text-center">
             <h2 className="text-5xl font-sans mb-3 text-gray-900">
-              <span className="mr-2">Why</span>
-              <span className="text-yellow-600">Tectonic?</span>
+              <span className="mr-2">{tHome("why")}</span>
+              <span className="text-yellow-600">{tHome("tectonicQ")}</span>
             </h2>
-            <p className="mx-auto max-w-2xl text-gray-700 text-lg">More flexibility, more composability, more security. Major upgrades across the entire Tectonic ecosystem.</p>
+            <p className="mx-auto max-w-2xl text-gray-700 text-lg">{tHome("whyTectonicDesc")}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
@@ -303,7 +326,7 @@ export default function Home() {
                     <p className="text-gray-700 text-sm leading-relaxed">{f.desc}</p>
 
                     <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <a href="#" className="text-yellow-600 font-medium hover:underline">Learn more →</a>
+                      <a href="#" className="text-yellow-600 font-medium hover:underline">{tHome("learnMoreLink")}</a>
                     </div>
 
                     <svg className="absolute right-4 bottom-4 opacity-20" width="72" height="36" viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
@@ -319,7 +342,7 @@ export default function Home() {
           </div>
 
           <div className="mt-16 flex justify-center">
-            <a href="#" className="inline-block rounded-full border border-[#e7dac4] px-6 py-3 text-lg tracking-wide text-gray-900 font-medium hover:bg-[#fffaf0] animate-fade-up transition-transform duration-200 hover:-translate-y-1 hover:scale-105">Learn more →</a>
+            <a href="#" className="inline-block rounded-full border border-[#e7dac4] px-6 py-3 text-lg tracking-wide text-gray-900 font-medium hover:bg-[#fffaf0] animate-fade-up transition-transform duration-200 hover:-translate-y-1 hover:scale-105">{tHome("learnMoreLink")}</a>
           </div>
         </div>
       </section>
@@ -330,23 +353,25 @@ export default function Home() {
           <div className="grid items-center gap-10 lg:grid-cols-2">
             <div className="rounded-2xl flex items-center justify-center bg-white">
               <video
+                ref={videoRef}
                 src="/effect.mp4"
                 autoPlay
                 loop
                 muted
                 playsInline
+                aria-hidden="true"
                 className="w-full max-w-full rounded-2xl md:h-[380px] object-contain"
               />
             </div>
 
             <div>
               <Typewriter 
-                text={"The Future of\nDecentralized\nPayments . . . "} 
+                text={tHome("futurePayments")} 
                 className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 whitespace-pre-line leading-tight" 
                 speed={120} 
               />
               <p className="mt-6 max-w-xl text-xl leading-9 text-gray-700">
-                Tectonic is a fully collateralized stablecoin protocol built for the EVM ecosystem. By combining reserve-backed stability, equity participation, and automatic trigger redemptions, it provides a secure foundation for next-generation payment infrastructure.
+                {tHome("futurePaymentsDesc")}
               </p>
             </div>
           </div>
@@ -379,11 +404,11 @@ export default function Home() {
           <div className="mb-8 max-w-3xl">
             <div className="mb-3 inline-flex items-center gap-2 text-sm font-semibold tracking-[0.22em] text-amber-600 uppercase">
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-amber-600">◎</span>
-              Active Deployments
+              {tHome("activeDeployments")}
             </div>
-            <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">Live on Leading Chains</h2>
+            <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">{tHome("liveOnLeadingChains")}</h2>
             <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
-              Tectonic is deployed across multiple EVM-compatible chains. Choose a deployment to explore, mint, and earn.
+              {tHome("liveOnLeadingChainsDesc")}
             </p>
           </div>
 
@@ -401,11 +426,11 @@ export default function Home() {
                 </colgroup>
                   <thead>
                     <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      <th className="px-6 py-5">Deployment</th>
+                      <th className="px-6 py-5">{tHome("activeDeployments").split(" ")[1] || "Deployment"}</th>
                       <th className="px-6 py-5">Chain</th>
                       <th className="px-6 py-5">Reserve Asset</th>
-                      <th className="px-6 py-5">Reserve Ratio</th>
-                      <th className="px-6 py-5">StableCoin Supply</th>
+                      <th className="px-6 py-5">{tDetail("reserveRatio")}</th>
+                      <th className="px-6 py-5">{tCommon("stablecoinSupply")}</th>
                       <th className="px-6 py-5">TVL</th>
                       <th className="px-5 py-5"></th>
                     </tr>
@@ -447,7 +472,7 @@ export default function Home() {
                         <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.supply}</td>
                         <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.tvl}</td>
                         <td className="px-5 py-6 align-middle text-right text-slate-400">
-                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full transition group-hover:bg-white group-hover:text-slate-700">›</span>
+                           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full transition group-hover:bg-white group-hover:text-slate-700">›</span>
                         </td>
                       </tr>
                     ))}
@@ -467,14 +492,13 @@ export default function Home() {
                 </svg>
               </div>
 
-              <h3 className="max-w-xs text-2xl font-bold tracking-tight text-slate-900 drop-shadow-sm">Built for Stability. Made for Payments.</h3>
+              <h3 className="max-w-xs text-2xl font-bold tracking-tight text-slate-900 drop-shadow-sm">{tHome("stabilityPaymentsTitle")}</h3>
               <p className="mt-5 max-w-sm text-base leading-8 text-slate-600">
-                Tectonic uses trigger redemptions to maintain high reserve ratios without ever disabling minting.
-                This keeps stablecoins available when payments matter.
+                {tHome("stabilityPaymentsDesc")}
               </p>
 
               <a href="#" className="mt-10 inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-white/90 px-4 py-2 text-base font-semibold text-amber-600 shadow-[0_12px_28px_rgba(251,191,36,0.12)] transition hover:-translate-y-0.5 hover:bg-white hover:text-amber-700 hover:shadow-[0_16px_34px_rgba(251,191,36,0.18)]">
-                Learn more about Tectonic
+                {tHome("learnMoreAboutTectonic")}
                 <span aria-hidden>→</span>
               </a>
             </aside>
@@ -485,7 +509,7 @@ export default function Home() {
               href="/deployments"
               className="btn-primary btn-hero group flex h-11 items-center justify-center gap-2 rounded-full px-7 text-sm font-bold tracking-wide"
             >
-              <span>VIEW ALL DEPLOYMENTS</span>
+              <span>{tHome("viewAllDeployments")}</span>
               <svg
                 className="w-4 h-4 flex-shrink-0 opacity-0 -translate-x-1 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:translate-x-0"
                 viewBox="0 0 24 24" fill="none" aria-hidden
@@ -500,48 +524,48 @@ export default function Home() {
       {/* Protocol Overview — three-column layout matching reference image */}
       <section id="build" className="py-20 px-6 bg-[#fbf6ec]">
         <div className="mx-auto max-w-7xl rounded-[2rem] border border-amber-100 bg-white p-8 shadow-[0_22px_60px_rgba(15,23,42,0.08)] md:p-12">
-          <h2 className="text-center text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">HOW IT WORKS</h2>
+          <h2 className="text-center text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">{tHome("howItWorks")}</h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-base leading-7 text-slate-600 md:text-lg">
-            The protocol flow is intentionally simple: deposit an asset, mint the stablecoin, mint the equity coin, and redeem if the reserve needs to be restored.
+            {tHome("howItWorksDesc")}
           </p>
 
           <div className="mt-12 rounded-[1.75rem] border border-amber-100 bg-gradient-to-b from-[#fffdf8] to-[#fff7eb] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] md:p-8">
             <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] md:items-center">
               <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">1</div>
-                <h3 className="text-lg font-semibold text-slate-900">Deposit Native Asset</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">Users deposit the reserve asset into the protocol.</p>
+                <h3 className="text-lg font-semibold text-slate-900">{tHome("howItWorksSteps.1.title")}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{tHome("howItWorksSteps.1.desc")}</p>
               </div>
 
               <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1">→</div>
 
               <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">2</div>
-                <h3 className="text-lg font-semibold text-slate-900">Mint StableCoin</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">The protocol mints the stablecoin against the reserve.</p>
+                <h3 className="text-lg font-semibold text-slate-900">{tHome("howItWorksSteps.2.title")}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{tHome("howItWorksSteps.2.desc")}</p>
               </div>
 
               <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1">→</div>
 
-              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28_rgba(15,23,42,0.06)] backdrop-blur-sm">
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">3</div>
-                <h3 className="text-lg font-semibold text-slate-900">Mint EquityCoin</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">An equity coin is minted to capture protocol upside.</p>
+                <h3 className="text-lg font-semibold text-slate-900">{tHome("howItWorksSteps.3.title")}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{tHome("howItWorksSteps.3.desc")}</p>
               </div>
 
               <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1">→</div>
 
               <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm md:col-span-1">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">4</div>
-                <h3 className="text-lg font-semibold text-slate-900">Trigger Redemptions</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">If needed, the system triggers redemptions to restore safety.</p>
+                <h3 className="text-lg font-semibold text-slate-900">{tHome("howItWorksSteps.4.title")}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{tHome("howItWorksSteps.4.desc")}</p>
               </div>
             </div>
           </div>
 
           <div className="mt-8 text-center">
             <a href="#" className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white px-6 py-3 text-base font-medium tracking-wide text-gray-900 shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5 hover:bg-amber-50">
-              Read Technical Paper
+              {tHome("readTechnicalPaper")}
               <span aria-hidden>→</span>
             </a>
           </div>
@@ -558,10 +582,10 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             <div className="md:col-span-2">
               <div className="relative inline-block mb-4" style={{display: 'inline-block'}}>
-                <h2 className="community-title text-4xl md:text-5xl font-semibold relative z-10 tracking-tight">Join the Community</h2>
+                <h2 className="community-title text-4xl md:text-5xl font-semibold relative z-10 tracking-tight">{tHome("joinCommunity")}</h2>
               </div>
               <p className="text-gray-700 text-lg md:text-xl leading-relaxed">
-                Be part of the next generation of stablecoin infrastructure. Connect with builders, researchers, and enthusiasts.
+                {tHome("joinCommunityDesc")}
               </p>
             </div>
 
@@ -613,12 +637,12 @@ export default function Home() {
                 <span className="text-xl font-black tracking-[0.22em]">TECTONIC</span>
               </div>
               <p className="max-w-xs text-sm leading-6 text-slate-600">
-                Next-generation stablecoin protocol.
+                {tFooter("desc")}
               </p>
             </div>
 
             <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Protocol</h4>
+              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{tFooter("protocol")}</h4>
               <ul className="space-y-3 text-sm text-slate-700">
                 <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Docs</a></li>
                 <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Contracts</a></li>
@@ -627,7 +651,7 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Community</h4>
+              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{tFooter("community")}</h4>
               <ul className="space-y-3 text-sm text-slate-700">
                 <li><a href="https://discord.com/channels/995968619034984528/1503320626096635935" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
                 <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Twitter</a></li>
@@ -635,16 +659,16 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Resources</h4>
+              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{tFooter("resources")}</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Technical Paper</a></li>
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{tFooter("technicalPaper")}</a></li>
               </ul>
             </div>
           </div>
 
           <div className="mt-24 border-t border-amber-200/80 pt-6">
             <p className="text-center text-sm text-slate-600">
-              © 2026 Tectonic Protocol. All rights reserved.
+              {tFooter("rights")}
             </p>
           </div>
         </div>

@@ -1,0 +1,112 @@
+{
+  "common": {
+    "deposit": "Deposit",
+    "burn": "Burn",
+    "fee": "Fee",
+    "youReceive": "You Receive",
+    "mint": "Mint",
+    "redeem": "Redeem",
+    "triggerRedemptions": "Trigger Redemptions",
+    "stablecoinSupply": "StableCoin Supply",
+    "technicalPaper": "Technical Paper"
+  },
+  "home": {
+    "kicker": "Next Generation StableCoin Protocol",
+    "title": "The decentralized infrastructure\nfor stablecoin ecosystems",
+    "tectonic": "TECTONIC",
+    "description": "A revolutionary stablecoin protocol enabling trigger redemptions and enhanced stability. Use and build apps that leverage EVM as a secure base layer.",
+    "startBuilding": "START BUILDING →",
+    "learnMore": "LEARN MORE",
+    "whyTectonic": "Why Tectonic?",
+    "why": "Why",
+    "tectonicQ": "Tectonic?",
+    "whyTectonicDesc": "More flexibility, more composability, more security. Major upgrades across the entire Tectonic ecosystem.",
+    "futurePayments": "The Future of\nDecentralized\nPayments . . . ",
+    "futurePaymentsDesc": "Tectonic is a fully collateralized stablecoin protocol built for the EVM ecosystem. By combining reserve-backed stability, equity participation, and automatic trigger redemptions, it provides a secure foundation for next-generation payment infrastructure.",
+    "activeDeployments": "Active Deployments",
+    "liveOnLeadingChains": "Live on Leading Chains",
+    "liveOnLeadingChainsDesc": "Tectonic is deployed across multiple EVM-compatible chains. Choose a deployment to explore, mint, and earn.",
+    "stabilityPaymentsTitle": "Built for Stability. Made for Payments.",
+    "stabilityPaymentsDesc": "Tectonic uses trigger redemptions to maintain high reserve ratios without ever disabling minting. This keeps stablecoins available when payments matter.",
+    "learnMoreAboutTectonic": "Learn more about Tectonic",
+    "viewAllDeployments": "VIEW ALL DEPLOYMENTS",
+    "howItWorks": "HOW IT WORKS",
+    "howItWorksDesc": "The protocol flow is intentionally simple: deposit an asset, mint the stablecoin, mint the equity coin, and redeem if the reserve needs to be restored.",
+    "howItWorksSteps": {
+      "1": {
+        "title": "Deposit Native Asset",
+        "desc": "Users deposit the reserve asset into the protocol."
+      },
+      "2": {
+        "title": "Mint StableCoin",
+        "desc": "The protocol mints the stablecoin against the reserve."
+      },
+      "3": {
+        "title": "Mint EquityCoin",
+        "desc": "An equity coin is minted to capture protocol upside."
+      },
+      "4": {
+        "title": "Trigger Redemptions",
+        "desc": "If needed, the system triggers redemptions to restore safety."
+      }
+    },
+    "joinCommunity": "Join the Community",
+    "joinCommunityDesc": "Be part of the next generation of stablecoin infrastructure. Connect with builders, researchers, and enthusiasts.",
+    "learnMoreLink": "Learn more →",
+    "readTechnicalPaper": "Read Technical Paper",
+    "stats": {
+      "avgReserveRatio": "Average Reserve Ratio",
+      "stablecoinSupply": "StableCoin Supply",
+      "avgLeverage": "Average Leverage"
+    },
+    "whyTectonicFeatures": {
+      "triggerRedemptions": {
+        "title": "Trigger Redemptions",
+        "desc": "Unique mechanism ensuring protocol stability through automatic redemptions at predetermined rates."
+      },
+      "secureBaseLayer": {
+        "title": "Secure Base Layer",
+        "desc": "Built on EVM with battle-tested security. Leverage blockchain's immutable infrastructure."
+      },
+      "evmCompatible": {
+        "title": "EVM Compatible",
+        "desc": "Deploy on any EVM-compatible chain. Maximum interoperability and reach."
+      },
+      "defiIntegration": {
+        "title": "DeFi Integration",
+        "desc": "Seamlessly integrate with existing DeFi protocols. Composable by design."
+      }
+    }
+  },
+  "deploymentDetail": {
+    "back": "← Back to Deployments",
+    "backedBy": "Backed by {reserve} · Pegged to {peg} · {chain}",
+    "stablecoin": "StableCoin",
+    "equityCoin": "EquityCoin",
+    "supply": "Supply",
+    "crashTolerance": "Crash Tolerance",
+    "reserveRatio": "Reserve Ratio",
+    "annualYield": "Annual Yield",
+    "leverage": "Leverage",
+    "health": "Deployment Health",
+    "totalReserve": "Total Reserve",
+    "inReserve": "in {reserve}",
+    "minSafe": "/ 150% min",
+    "safeSafe": "150% safe",
+    "triggerRedemptions": "Trigger Redemptions",
+    "active": "⚠ Active",
+    "activeDesc": "StableCoin holders can redeem 1:1 until the ratio recovers above 150%.",
+    "warning": "⚡ Warning",
+    "warningDesc": "Approaching the 150% threshold. Monitor closely.",
+    "notActive": "✓ Not Active",
+    "notActiveDesc": "Reserve ratio is healthy. Normal operations running."
+  },
+  "footer": {
+    "desc": "Next-generation stablecoin protocol.",
+    "protocol": "Protocol",
+    "community": "Community",
+    "resources": "Resources",
+    "technicalPaper": "Technical Paper",
+    "rights": "© 2026 Tectonic Protocol. All rights reserved."
+  }
+}

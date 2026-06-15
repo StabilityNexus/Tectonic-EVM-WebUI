@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { PageShell, ReserveWidget, statusCfg } from "@/app/deployments/page";
+import { PageShell, ReserveWidget, statusCfg } from "@/lib/deployments-ui";
 import { DEPLOYMENTS } from "@/lib/deployments-data";
 
 export default function ForceRedemptionPage() {
@@ -138,12 +138,27 @@ export default function ForceRedemptionPage() {
       <div className="mt-6 rounded-2xl bg-white border border-[#e7dac4] shadow-sm p-6">
         <h3 className="font-bold text-xs uppercase tracking-wider text-gray-400 mb-5">Reserve Ratio Scale</h3>
         <div className="space-y-4">
-          {[
-            { ratio: 350, status: "healthy" as const, label: "Ethereum — TUSD-ETH",  desc: "Well above the safety threshold" },
-            { ratio: 287, status: "healthy" as const, label: "Base — USDB-BASE",     desc: "Healthy margin above threshold" },
-            { ratio: 155, status: "warning" as const, label: "Polygon — USDP-POLY",  desc: "Approaching the 150% threshold" },
-            { ratio: 120, status: "danger"  as const, label: "BSC — USDBN-BSC",      desc: "Below threshold — active" },
-          ].map(item => {
+          {[...DEPLOYMENTS]
+            .sort((a, b) => b.reserveRatio - a.reserveRatio)
+            .map(d => {
+              const label = `${d.chain} — ${d.stablecoin}-${d.reserveAsset}`;
+              let desc = "";
+              if (d.status === "danger") {
+                desc = "Below threshold — active";
+              } else if (d.status === "warning") {
+                desc = "Approaching the 150% threshold";
+              } else if (d.reserveRatio > 300) {
+                desc = "Well above the safety threshold";
+              } else {
+                desc = "Healthy margin above threshold";
+              }
+              return {
+                ratio: d.reserveRatio,
+                status: d.status,
+                label,
+                desc
+              };
+            }).map(item => {
             const c = statusCfg(item.status);
             const w = Math.min(100, Math.max(0, ((item.ratio - 100) / 300) * 100));
             return (

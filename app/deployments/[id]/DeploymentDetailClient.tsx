@@ -5,8 +5,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
-import { statusCfg, pct, type Deployment } from "@/app/deployments/page";
+import { statusCfg, pct } from "@/lib/deployments-ui";
 import { DEPLOYMENTS } from "@/lib/deployments-data";
+import type { Deployment } from "@/lib/deployments-data";
+import { useTranslations } from "@/lib/i18n";
 
 /* ─── Shared mint/redeem form ─── */
 function MintRedeemForm({
@@ -28,13 +30,14 @@ function MintRedeemForm({
   const net = parseFloat(amount || "0") * (1 - 0.003);
   const estimate = estimateFn(net);
   const isMint = mode === "mint";
-
+  const t = useTranslations("common");
+ 
   return (
     <div className="space-y-4 pt-2">
       {/* input row */}
       <div>
         <label className="block text-xs text-gray-400 mb-1.5">
-          {isMint ? "Deposit" : "Burn"} {inputAsset}
+          {isMint ? t("deposit") : t("burn")} {inputAsset}
         </label>
         <div className="relative">
           <input
@@ -49,21 +52,21 @@ function MintRedeemForm({
           </span>
         </div>
       </div>
-
+ 
       {/* summary box */}
       <div className="rounded-xl border border-[#e7dac4] bg-[#fafaf8] px-4 py-3 space-y-2">
         <div className="flex justify-between text-xs text-gray-400">
-          <span>Fee</span>
+          <span>{t("fee")}</span>
           <span className="text-[#1a1a1a] font-medium">0.3%</span>
         </div>
         <div className="border-t border-[#efe2c9] pt-2 flex justify-between text-sm font-bold">
-          <span className="text-[#1a1a1a]">You Receive</span>
+          <span className="text-[#1a1a1a]">{t("youReceive")}</span>
           <span className="text-amber-500">
             {estimate} {outputToken}
           </span>
         </div>
       </div>
-
+ 
       {/* action button */}
       <button
         className={`w-full py-3 rounded-full text-sm font-bold tracking-wide transition hover:-translate-y-0.5 shadow-sm ${
@@ -72,7 +75,7 @@ function MintRedeemForm({
             : "border-2 border-amber-300 bg-white hover:bg-amber-50 text-[#1a1a1a]"
         }`}
       >
-        {isMint ? `Mint ${outputToken}` : `Redeem ${inputAsset}`}
+        {isMint ? `${t("mint")} ${outputToken}` : `${t("redeem")} ${inputAsset}`}
       </button>
     </div>
   );
@@ -83,27 +86,29 @@ function StableCoinCard({ d }: { d: Deployment }) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
   const c = statusCfg(d.status);
   const crashTolerance = Math.round(((d.reserveRatio - 100) / d.reserveRatio) * 100);
+  const tCommon = useTranslations("common");
+  const tDetail = useTranslations("deploymentDetail");
 
   return (
     <div className="rounded-2xl border border-[#e7dac4] bg-white shadow-[0_4px_24px_rgba(15,23,42,0.07)] overflow-hidden flex flex-col">
       {/* header */}
       <div className="px-6 pt-6 pb-4 text-center border-b border-[#f0ece4]">
-        <p className="text-[10px] font-black tracking-[0.2em] text-amber-500 uppercase mb-1">StableCoin</p>
+        <p className="text-[10px] font-black tracking-[0.2em] text-amber-500 uppercase mb-1">{tDetail("stablecoin")}</p>
         <p className="text-3xl font-black text-[#1a1a1a]">{d.stablecoin}</p>
       </div>
 
       {/* stats row */}
       <div className="grid grid-cols-3 divide-x divide-[#f0ece4] border-b border-[#f0ece4]">
         <div className="px-4 py-3 text-center">
-          <p className="text-[10px] text-gray-400 mb-1">Supply</p>
+          <p className="text-[10px] text-gray-400 mb-1">{tDetail("supply")}</p>
           <p className="text-sm font-bold text-[#1a1a1a]">{d.stableSupply}</p>
         </div>
         <div className="px-4 py-3 text-center">
-          <p className="text-[10px] text-gray-400 mb-1">Crash Tolerance</p>
+          <p className="text-[10px] text-gray-400 mb-1">{tDetail("crashTolerance")}</p>
           <p className="text-sm font-bold text-emerald-500">{crashTolerance}%</p>
         </div>
         <div className="px-4 py-3 text-center">
-          <p className="text-[10px] text-gray-400 mb-1">Reserve Ratio</p>
+          <p className="text-[10px] text-gray-400 mb-1">{tDetail("reserveRatio")}</p>
           <p className={`text-sm font-bold ${c.tc}`}>{d.reserveRatio}%</p>
         </div>
       </div>
@@ -119,7 +124,7 @@ function StableCoinCard({ d }: { d: Deployment }) {
                 : "bg-white text-gray-400 hover:bg-[#faf7f0]"
             }`}
           >
-            Mint
+            {tCommon("mint")}
           </button>
           <button
             onClick={() => setTab("redeem")}
@@ -129,7 +134,7 @@ function StableCoinCard({ d }: { d: Deployment }) {
                 : "bg-white text-gray-400 hover:bg-[#faf7f0]"
             }`}
           >
-            Redeem
+            {tCommon("redeem")}
           </button>
         </div>
 
@@ -160,27 +165,29 @@ function StableCoinCard({ d }: { d: Deployment }) {
 /* ─── EquityCoin card ─── */
 function EquityCoinCard({ d }: { d: Deployment }) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
+  const tCommon = useTranslations("common");
+  const tDetail = useTranslations("deploymentDetail");
 
   return (
     <div className="rounded-2xl border border-[#e7dac4] bg-white shadow-[0_4px_24px_rgba(15,23,42,0.07)] overflow-hidden flex flex-col">
       {/* header */}
       <div className="px-6 pt-6 pb-4 text-center border-b border-[#f0ece4]">
-        <p className="text-[10px] font-black tracking-[0.2em] text-violet-500 uppercase mb-1">EquityCoin</p>
+        <p className="text-[10px] font-black tracking-[0.2em] text-violet-500 uppercase mb-1">{tDetail("equityCoin")}</p>
         <p className="text-3xl font-black text-[#1a1a1a]">{d.equityCoin}</p>
       </div>
 
       {/* stats row */}
       <div className="grid grid-cols-3 divide-x divide-[#f0ece4] border-b border-[#f0ece4]">
         <div className="px-4 py-3 text-center">
-          <p className="text-[10px] text-gray-400 mb-1">Supply</p>
+          <p className="text-[10px] text-gray-400 mb-1">{tDetail("supply")}</p>
           <p className="text-sm font-bold text-[#1a1a1a]">{d.equitySupply}</p>
         </div>
         <div className="px-4 py-3 text-center">
-          <p className="text-[10px] text-gray-400 mb-1">Annual Yield</p>
+          <p className="text-[10px] text-gray-400 mb-1">{tDetail("annualYield")}</p>
           <p className="text-sm font-bold text-amber-500">{d.equityYield}%</p>
         </div>
         <div className="px-4 py-3 text-center">
-          <p className="text-[10px] text-gray-400 mb-1">Leverage</p>
+          <p className="text-[10px] text-gray-400 mb-1">{tDetail("leverage")}</p>
           <p className="text-sm font-bold text-violet-500">{d.equityLeverage}</p>
         </div>
       </div>
@@ -196,7 +203,7 @@ function EquityCoinCard({ d }: { d: Deployment }) {
                 : "bg-white text-gray-400 hover:bg-[#faf7f0]"
             }`}
           >
-            Mint
+            {tCommon("mint")}
           </button>
           <button
             onClick={() => setTab("redeem")}
@@ -206,7 +213,7 @@ function EquityCoinCard({ d }: { d: Deployment }) {
                 : "bg-white text-gray-400 hover:bg-[#faf7f0]"
             }`}
           >
-            Redeem
+            {tCommon("redeem")}
           </button>
         </div>
 
@@ -240,6 +247,8 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
   if (!d) return notFound();
 
   const c = statusCfg(d.status);
+  const tDetail = useTranslations("deploymentDetail");
+  const tFooter = useTranslations("footer");
 
   return (
     <>
@@ -252,7 +261,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
             href="/deployments"
             className="text-xs font-semibold text-amber-500 hover:text-amber-600 transition flex items-center gap-1 mb-4"
           >
-            ← Back to Deployments
+            {tDetail("back")}
           </Link>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
@@ -267,7 +276,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
                   {d.name}
                 </h1>
                 <p className="text-sm text-gray-400 mt-0.5">
-                  Backed by {d.reserveAsset} · Pegged to {d.pegAsset} · {d.chain}
+                  {tDetail("backedBy", { reserve: d.reserveAsset, peg: d.pegAsset, chain: d.chain })}
                 </p>
               </div>
             </div>
@@ -294,23 +303,23 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
           <div className="rounded-2xl border border-[#e7dac4] bg-white shadow-[0_4px_24px_rgba(15,23,42,0.07)] overflow-hidden">
             <div className="px-6 py-4 border-b border-[#f0ece4]">
               <p className="text-[10px] font-black tracking-[0.2em] text-amber-500 uppercase">
-                Deployment Health
+                {tDetail("health")}
               </p>
             </div>
             <div className="px-6 py-6 grid sm:grid-cols-3 gap-8">
 
               {/* Total Reserve */}
               <div>
-                <p className="text-xs text-gray-400 mb-2">Total Reserve</p>
+                <p className="text-xs text-gray-400 mb-2">{tDetail("totalReserve")}</p>
                 <p className="text-3xl font-black text-[#1a1a1a]">{d.totalReserve}</p>
-                <p className="text-xs text-gray-400 mt-1">in {d.reserveAsset}</p>
+                <p className="text-xs text-gray-400 mt-1">{tDetail("inReserve", { reserve: d.reserveAsset })}</p>
               </div>
 
               {/* Reserve Ratio slider */}
               <div>
-                <p className="text-xs text-gray-400 mb-2">Reserve Ratio</p>
+                <p className="text-xs text-gray-400 mb-2">{tDetail("reserveRatio")}</p>
                 <p className={`text-2xl font-black mb-3 ${c.tc}`}>
-                  {d.reserveRatio}% <span className="text-base font-semibold text-gray-400">/ 150% min</span>
+                  {d.reserveRatio}% <span className="text-base font-semibold text-gray-400">{tDetail("minSafe")}</span>
                 </p>
                 <div className="h-2.5 w-full rounded-full bg-[#efe2c9] overflow-hidden">
                   <div
@@ -320,33 +329,33 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
                 </div>
                 <div className="flex justify-between text-[10px] mt-1.5">
                   <span className="text-gray-300">100%</span>
-                  <span className="text-amber-400 font-bold">150% safe</span>
+                  <span className="text-amber-400 font-bold">{tDetail("safeSafe")}</span>
                   <span className="text-gray-300">400%</span>
                 </div>
               </div>
 
               {/* Trigger Redemptions */}
               <div>
-                <p className="text-xs text-gray-400 mb-2">Trigger Redemptions</p>
+                <p className="text-xs text-gray-400 mb-2">{tDetail("triggerRedemptions")}</p>
                 {d.status === "danger" ? (
                   <div className="rounded-xl bg-red-50 border border-red-200 p-4">
-                    <p className="text-sm font-bold text-red-600 mb-1">⚠ Active</p>
+                    <p className="text-sm font-bold text-red-600 mb-1">{tDetail("active")}</p>
                     <p className="text-xs text-red-500 leading-5">
-                      StableCoin holders can redeem 1:1 until the ratio recovers above 150%.
+                      {tDetail("activeDesc")}
                     </p>
                   </div>
                 ) : d.status === "warning" ? (
                   <div className="rounded-xl bg-amber-50 border border-amber-200 p-4">
-                    <p className="text-sm font-bold text-amber-600 mb-1">⚡ Warning</p>
+                    <p className="text-sm font-bold text-amber-600 mb-1">{tDetail("warning")}</p>
                     <p className="text-xs text-amber-500 leading-5">
-                      Approaching the 150% threshold. Monitor closely.
+                      {tDetail("warningDesc")}
                     </p>
                   </div>
                 ) : (
                   <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-4">
-                    <p className="text-sm font-bold text-emerald-600 mb-1">✓ Not Active</p>
+                    <p className="text-sm font-bold text-emerald-600 mb-1">{tDetail("notActive")}</p>
                     <p className="text-xs text-emerald-600 leading-5">
-                      Reserve ratio is healthy.<br />Normal operations running.
+                      {tDetail("notActiveDesc")}
                     </p>
                   </div>
                 )}
@@ -370,12 +379,12 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
                 <Image src="/Logo.svg" alt="Tectonic logo" width={140} height={40} className="logo-hover-zoom h-8 w-auto object-contain" />
                 <span className="text-lg font-black tracking-[0.22em]">TECTONIC</span>
               </div>
-              <p className="max-w-xs text-sm leading-6 text-slate-600">Next-generation stablecoin protocol.</p>
+              <p className="max-w-xs text-sm leading-6 text-slate-600">{tFooter("desc")}</p>
             </div>
             {[
-              { title: "Protocol",  links: [["Docs","#"],["Contracts","#"],["GitHub","https://github.com/StabilityNexus/Tectonic-EVM-WebUI"]] },
-              { title: "Community", links: [["Discord","https://discord.com/channels/995968619034984528/1503320626096635935"],["Twitter","#"]] },
-              { title: "Resources", links: [["Technical Paper","#"]] },
+              { title: tFooter("protocol"),  links: [["Docs","#"],["Contracts","#"],["GitHub","https://github.com/StabilityNexus/Tectonic-EVM-WebUI"]] },
+              { title: tFooter("community"), links: [["Discord","https://discord.com/channels/995968619034984528/1503320626096635935"],["Twitter","#"]] },
+              { title: tFooter("resources"), links: [[tFooter("technicalPaper"),"#"]] },
             ].map(col => (
               <div key={col.title}>
                 <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{col.title}</h4>
@@ -397,7 +406,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
             ))}
           </div>
           <div className="mt-16 border-t border-amber-200/80 pt-6">
-            <p className="text-center text-sm text-slate-600">© 2026 Tectonic Protocol. All rights reserved.</p>
+            <p className="text-center text-sm text-slate-600">{tFooter("rights")}</p>
           </div>
         </div>
       </footer>
