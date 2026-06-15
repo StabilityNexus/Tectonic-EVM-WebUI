@@ -1,6 +1,7 @@
 "use client";
 
-import { PageShell, DEPLOYMENTS, statusCfg } from "@/app/deployments/page";
+import { PageShell, statusCfg } from "@/app/deployments/page";
+import { DEPLOYMENTS } from "@/lib/deployments-data";
 
 const EQUITY_COINS = [
   { name:"TEQT-ETH",  status:"healthy" as const, price:"$24.50", priceChange:"+2.3%", yield_:"6.2%", leverage:"3.25×", apr:"18.4%", supply:"45K", chain:"Ethereum", chainColor:"#627eea" },
@@ -13,7 +14,7 @@ const EQUITY_COINS = [
 export default function EquityPage() {
   return (
     <PageShell
-      title="Equity Coins"
+      title="EquityCoins"
       subtitle="Protocol ownership tokens — earn yield from mint/redeem fees and hold leveraged exposure to reserve assets."
       badge={
         <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-violet-600 bg-violet-50 border border-violet-200 rounded-full px-3 py-1.5 self-start">
@@ -56,7 +57,7 @@ export default function EquityPage() {
       </div>
 
       {/* equity coin cards */}
-      <h3 className="font-black text-slate-900 text-lg mb-4">All Equity Coins</h3>
+      <h3 className="font-black text-slate-900 text-lg mb-4">All EquityCoins</h3>
       <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
         {EQUITY_COINS.map(eq => {
           const c = statusCfg(eq.status);
@@ -124,7 +125,7 @@ export default function EquityPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100">
-                {["Deployment","Chain","Oracle Price","Equity Yield","Reserve Ratio","Equity Supply"].map(h=>(
+                {["Deployment","Chain","Total Reserve","Equity Yield","Reserve Ratio","Equity Supply"].map(h=>(
                   <th key={h} className="px-5 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-slate-400 whitespace-nowrap">{h}</th>
                 ))}
               </tr>
@@ -141,7 +142,7 @@ export default function EquityPage() {
                         <span className="text-xs text-slate-600">{d.chain}</span>
                       </div>
                     </td>
-                    <td className="px-5 py-4 text-slate-700 font-medium whitespace-nowrap">{d.oraclePrice}</td>
+                    <td className="px-5 py-4 text-slate-700 font-medium whitespace-nowrap">{d.totalReserve}</td>
                     <td className="px-5 py-4 font-black text-amber-600 whitespace-nowrap">{d.equityYield}%</td>
                     <td className={`px-5 py-4 font-black whitespace-nowrap ${c.tc}`}>{d.reserveRatio}%</td>
                     <td className="px-5 py-4 text-slate-700 font-medium whitespace-nowrap">{d.equitySupply}</td>

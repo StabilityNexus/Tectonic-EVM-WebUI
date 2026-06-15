@@ -5,33 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 
-/*
-  THEME: matches homepage exactly
-  --primary:      #fbbf24  (amber-400)
-  --primary-dark: #f59e0b  (amber-500)
-  background:     #ffffff / #fbf6ec (warm off-white sections)
-  card border:    #e7dac4
-  text:           #1a1a1a / #374151 / #6b7280
-  CTA button:     bg-[#fbbf24] → bg-[#f59e0b], text-[#1a1a1a], pill rounded
-  Status colours: emerald = healthy | amber = warning | red = danger
-*/
+/* Re-export from lib so sub-pages importing from here still work */
+export type { RatioStatus, Deployment } from "@/lib/deployments-data";
+export { DEPLOYMENTS } from "@/lib/deployments-data";
 
-export type RatioStatus = "healthy" | "warning" | "danger";
-
-export interface Deployment {
-  id: string; name: string; chain: string; chainShort: string; chainColor: string;
-  stablecoin: string; equityCoin: string; reserveRatio: number; stableSupply: string;
-  equitySupply: string; oraclePrice: string; equityYield: number; tvl: string;
-  status: RatioStatus; reserveAsset: string;
-}
-
-export const DEPLOYMENTS: Deployment[] = [
-  { id:"tusd-eth",    name:"TUSD-ETH",    chain:"Ethereum", chainShort:"ETH",  chainColor:"#627eea", stablecoin:"TUSD",  equityCoin:"TEQT",  reserveRatio:325, stableSupply:"1.2M",  equitySupply:"45K", oraclePrice:"$3,800", equityYield:6.2, tvl:"$4.56M",  status:"healthy", reserveAsset:"ETH"  },
-  { id:"tusd-eth-v2", name:"TUSD-ETH v2", chain:"Ethereum", chainShort:"ETH",  chainColor:"#627eea", stablecoin:"TUSD",  equityCoin:"TEQT",  reserveRatio:410, stableSupply:"850K", equitySupply:"22K", oraclePrice:"$3,800", equityYield:5.8, tvl:"$3.24M",  status:"healthy", reserveAsset:"WBTC" },
-  { id:"usdp-poly",   name:"USDP-POLY",   chain:"Polygon",  chainShort:"MATIC",chainColor:"#8247e5", stablecoin:"USDP",  equityCoin:"PEQT",  reserveRatio:155, stableSupply:"2.1M",  equitySupply:"18K", oraclePrice:"$0.98",  equityYield:4.1, tvl:"$2.06M",  status:"warning", reserveAsset:"MATIC"},
-  { id:"usdb-base",   name:"USDB-BASE",   chain:"Base",     chainShort:"BASE", chainColor:"#0052ff", stablecoin:"USDB",  equityCoin:"BEQT",  reserveRatio:287, stableSupply:"3.4M",  equitySupply:"31K", oraclePrice:"$3,802", equityYield:7.0, tvl:"$9.76M",  status:"healthy", reserveAsset:"ETH"  },
-  { id:"usdbn-bsc",   name:"USDBN-BSC",   chain:"BSC",      chainShort:"BNB",  chainColor:"#f0b90b", stablecoin:"USDBN", equityCoin:"BEQT2", reserveRatio:120, stableSupply:"900K", equitySupply:"4K",  oraclePrice:"$0.62",  equityYield:0.0, tvl:"$0.56M",  status:"danger",  reserveAsset:"BNB"  },
-];
+import type { RatioStatus, Deployment } from "@/lib/deployments-data";
+import { DEPLOYMENTS } from "@/lib/deployments-data";
 
 export const CHART_DATA = {
   reserveRatio: [290,305,315,298,312,320,308,315,325,318,312,322],
@@ -39,11 +18,23 @@ export const CHART_DATA = {
 };
 
 const CHAINS = [
-  { id:"all",      label:"All Chains", short:"ALL"  },
-  { id:"Ethereum", label:"Ethereum",   short:"ETH"  },
-  { id:"Polygon",  label:"Polygon",    short:"MATIC"},
-  { id:"Base",     label:"Base",       short:"BASE" },
-  { id:"BSC",      label:"BSC",        short:"BNB"  },
+  { id:"all",      label:"All Networks", short:"ALL"  },
+  { id:"Ethereum", label:"Ethereum",     short:"ETH"  },
+  { id:"Polygon",  label:"Polygon",      short:"MATIC"},
+  { id:"Base",     label:"Base",         short:"BASE" },
+  { id:"BSC",      label:"BSC",          short:"BNB"  },
+];
+
+const PEG_ASSETS = [
+  { id:"all", label:"All" },
+  { id:"USD", label:"USD" },
+  { id:"EUR", label:"EUR" },
+  { id:"AUD", label:"AUD" },
+  { id:"INR", label:"INR" },
+  { id:"BRL", label:"BRL" },
+  { id:"RUB", label:"RUB" },
+  { id:"CNY", label:"CNY" },
+  { id:"ZAR", label:"ZAR" },
 ];
 
 /* ─── Status — using site's amber palette for non-error states ─── */
@@ -71,7 +62,7 @@ export function statusCfg(s: RatioStatus) {
     headerBg:     "bg-amber-50",
   };
   return {
-    label:        "Force Redemption",
+    label:        "Trigger Redemptions",
     dotColor:     "bg-red-500",
     tc:           "text-red-600",
     badgeBg:      "bg-red-50",
@@ -125,7 +116,7 @@ export function ReserveWidget({ ratio, status, label }: { ratio: number; status:
   );
 }
 
-/* ─── Shared page shell for sub-pages (equity / force / stablepay) ─── */
+/* ─── Shared page shell for sub-pages (equity / force-redemption) ─── */
 export function PageShell({ title, subtitle, badge, children }: {
   title: string; subtitle: string; badge?: React.ReactNode; children: React.ReactNode;
 }) {
@@ -171,13 +162,13 @@ export function PageShell({ title, subtitle, badge, children }: {
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Community</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                {["Discord","Twitter","Forum"].map(l=><li key={l}><a href={l==="Discord"?"https://discord.com/channels/995968619034984528/1503320626096635935":"#"} target={l==="Discord"?"_blank":undefined} rel={l==="Discord"?"noopener noreferrer":undefined} className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>)}
+                {["Discord","Twitter"].map(l=><li key={l}><a href={l==="Discord"?"https://discord.com/channels/995968619034984528/1503320626096635935":"#"} target={l==="Discord"?"_blank":undefined} rel={l==="Discord"?"noopener noreferrer":undefined} className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>)}
               </ul>
             </div>
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Resources</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                {["Whitepaper","Blog","Press"].map(l=><li key={l}><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>)}
+                {["Technical Paper"].map(l=><li key={l}><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>)}
               </ul>
             </div>
           </div>
@@ -210,145 +201,43 @@ function StatusBadge({ status }: { status: RatioStatus }) {
   );
 }
 
-/* ─── Mint / Redeem Modal ─── */
-export function MRModal({ mode, d, onClose }: { mode: "mint" | "redeem"; d: Deployment; onClose: () => void }) {
-  const [amount, setAmount] = useState("10");
-  const asset = d.reserveAsset;
-  const oracle  = parseFloat(d.oraclePrice.replace(/[$,]/g, "")) || 3800;
-  const fee     = 0.003;
-  const receive = mode === "mint"
-    ? `${(parseFloat(amount || "0") * oracle * (1 - fee)).toLocaleString(undefined, { maximumFractionDigits: 0 })} ${d.stablecoin}`
-    : `${(parseFloat(amount || "0") / oracle * (1 - fee)).toFixed(6)} ${d.reserveAsset}`;
-
-  const headerId = `modal-${mode}-${d.id}`;
-  
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape") onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4"
-      onClick={e => e.target === e.currentTarget && onClose()}>
-      <div 
-        className="w-full max-w-md rounded-2xl bg-white border border-[#e7dac4] shadow-xl overflow-hidden animate-fade-up"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={headerId}
-        onKeyDown={handleKeyDown}
-      >
-        {/* header — warm amber tint like homepage sections */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#e7dac4] bg-[#fbf6ec]">
-          <div>
-            <h3 id={headerId} className="text-base font-bold text-[#1a1a1a]">
-              {mode === "mint" ? "Mint Stablecoins" : "Redeem Stablecoins"}
-            </h3>
-            <p className="text-xs text-gray-500 mt-0.5">{d.name} · {d.chain}</p>
-          </div>
-          <button 
-            onClick={onClose}
-            aria-label="Close dialog"
-            className="h-7 w-7 flex items-center justify-center rounded-full bg-[#efe2c9] hover:bg-[#e7dac4] text-gray-600 transition text-xs font-semibold"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div className="px-6 py-5 space-y-4 bg-white">
-          {mode === "mint" ? (
-            <>
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Reserve Asset</label>
-                <input
-                  value={asset}
-                  readOnly
-                  className="w-full rounded-lg border border-[#e7dac4] bg-[#fbf6ec] px-3 py-2.5 text-sm text-[#1a1a1a]"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Amount</label>
-                <div className="relative">
-                  <input type="number" value={amount} onChange={e => setAmount(e.target.value)}
-                    className="w-full rounded-lg border border-[#e7dac4] bg-[#fbf6ec] px-3 py-2.5 pr-14 text-sm text-[#1a1a1a] focus:outline-none focus:border-amber-400" />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-600">{asset}</span>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">{d.stablecoin} Amount</label>
-              <div className="relative">
-                <input type="number" value={amount} onChange={e => setAmount(e.target.value)}
-                  className="w-full rounded-lg border border-[#e7dac4] bg-[#fbf6ec] px-3 py-2.5 pr-16 text-sm text-[#1a1a1a] focus:outline-none focus:border-amber-400" />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-600">{d.stablecoin}</span>
-              </div>
-            </div>
-          )}
-
-          {/* estimate box */}
-          <div className="rounded-lg border border-[#e7dac4] bg-[#fbf6ec] p-3.5 space-y-2">
-            {[
-              ["Oracle Price", `${d.oraclePrice} / ${d.reserveAsset}`],
-              ["Reserve Ratio", `${d.reserveRatio}%`],
-              ["Fee", "0.3%"],
-            ].map(([k, v]) => (
-              <div key={k} className="flex justify-between text-xs text-gray-500">
-                <span>{k}</span>
-                <span className="font-semibold text-[#1a1a1a]">{v}</span>
-              </div>
-            ))}
-            <div className="border-t border-[#e7dac4] pt-2 flex justify-between text-sm font-bold">
-              <span className="text-[#1a1a1a]">You Receive</span>
-              <span className="text-amber-600">{receive}</span>
-            </div>
-          </div>
-
-          <ReserveWidget ratio={d.reserveRatio} status={d.status} label="Current Reserve Ratio" />
-        </div>
-
-        <div className="px-6 py-4 bg-[#fbf6ec] border-t border-[#e7dac4]">
-          <button className="btn-primary w-full py-2.5 rounded-full font-semibold text-sm text-[#1a1a1a] hover:-translate-y-0.5 transition-transform">
-            {mode === "mint" ? `Mint ${d.stablecoin}` : `Redeem ${d.stablecoin}`}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── Contract Card — matches homepage feature cards exactly ─── */
-function ContractCard({ d, onMint, onRedeem }: {
-  d: Deployment; onMint: (d: Deployment) => void; onRedeem: (d: Deployment) => void;
-}) {
+/* ─── Contract Card — clean summary card, single Open button ─── */
+function ContractCard({ d }: { d: Deployment }) {
   const c = statusCfg(d.status);
   return (
     <div className={`rounded-xl border ${c.cardBorder} bg-[#fbf6ec] hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col`}>
-
-      {/* inner white panel — same pattern as homepage feature cards */}
       <div className="m-3 rounded-lg bg-white shadow-sm flex flex-col flex-1 overflow-hidden">
 
         {/* header */}
-        <div className={`flex items-center justify-between px-4 py-3 border-b border-[#efe2c9] ${c.headerBg}`}>
-          <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0"
-              style={{ background: d.chainColor }}>
-              {d.chainShort.slice(0, 3)}
+        <div className={`px-4 pt-4 pb-3 border-b border-[#efe2c9] ${c.headerBg}`}>
+          {/* chain badge + status */}
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-6 rounded-full flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0"
+                style={{ background: d.chainColor }}>
+                {d.chainShort.slice(0, 3)}
+              </div>
+              <span className="text-xs text-gray-400">{d.chain}</span>
             </div>
-            <div>
-              <div className="text-sm font-bold text-[#1a1a1a] leading-tight">{d.name}</div>
-              <div className="text-xs text-gray-400">{d.chain}</div>
-            </div>
+            <StatusBadge status={d.status} />
           </div>
-          <StatusBadge status={d.status} />
+          {/* title line */}
+          <h3 className="text-base font-bold text-[#1a1a1a] leading-tight">{d.name}</h3>
+          {/* subtitle: Backed by X · Pegged to Y */}
+          <p className="text-xs text-gray-400 mt-0.5">
+            Backed by {d.reserveAsset} · Pegged to {d.pegAsset}
+          </p>
         </div>
 
-        {/* stats */}
+        {/* stats — mentor's exact order */}
         <div className="px-4 py-3 flex flex-col flex-1">
           {([
-            ["Reserve Ratio", <span className={`font-bold ${c.tc}`} key="r">{d.reserveRatio}%</span>],
-            ["Stable Supply",  d.stableSupply],
-            ["Equity Supply",  d.equitySupply],
-            ["Oracle Price",   d.oraclePrice],
-            ["Equity Yield",   <span className="font-bold text-amber-600" key="y">{d.equityYield}%</span>],
+            ["Reserve Ratio",   <span className={`font-bold ${c.tc}`} key="rr">{d.reserveRatio}%</span>],
+            ["Total Reserve",   d.totalReserve],
+            ["StableCoin Supply", d.stableSupply],
+            ["EquityCoin Supply", d.equitySupply],
+            ["EquityCoin Leverage", <span className="font-bold text-[#1a1a1a]" key="lev">{d.equityLeverage}</span>],
+            ["EquityCoin Yield", <span className="font-bold text-amber-600" key="y">{d.equityYield}%</span>],
           ] as [string, React.ReactNode][]).map(([lbl, val]) => (
             <div key={lbl} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0 text-sm">
               <span className="text-gray-400">{lbl}</span>
@@ -364,25 +253,12 @@ function ContractCard({ d, onMint, onRedeem }: {
           </div>
         </div>
 
-        {/* action buttons */}
-        <div className="px-4 py-3 flex gap-2 border-t border-[#efe2c9]">
-          <button onClick={() => onMint(d)}
-            className="flex-1 py-1.5 rounded-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#1a1a1a] text-xs font-semibold transition">
-            Mint
-          </button>
-          <button onClick={() => onRedeem(d)}
-            className="flex-1 py-1.5 rounded-full border border-[#e7dac4] bg-white hover:bg-[#fbf6ec] text-[#1a1a1a] text-xs font-semibold transition">
-            Redeem
-          </button>
-          {d.status === "danger"
-            ? <Link href="/force-redemption"
-                className="flex-1 py-1.5 rounded-full border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold transition text-center">
-                Force Redeem
-              </Link>
-            : <button className="flex-1 py-1.5 rounded-full border border-[#e7dac4] bg-white hover:bg-[#fbf6ec] text-gray-600 text-xs font-semibold transition">
-                Details
-              </button>
-          }
+        {/* single Open button */}
+        <div className="px-4 py-3 border-t border-[#efe2c9]">
+          <Link href={`/deployments/${d.id}`}
+            className="block w-full py-2 rounded-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#1a1a1a] text-xs font-semibold transition text-center">
+            Open →
+          </Link>
         </div>
       </div>
     </div>
@@ -394,9 +270,8 @@ function ContractCard({ d, onMint, onRedeem }: {
 ───────────────────────────────────────────────────────────────────────────── */
 export default function DeploymentsPage() {
   const [activeChain,  setActiveChain]  = useState("all");
+  const [activePeg,    setActivePeg]    = useState("all");
   const [search,       setSearch]       = useState("");
-  const [mintTarget,   setMintTarget]   = useState<Deployment | null>(null);
-  const [redeemTarget, setRedeemTarget] = useState<Deployment | null>(null);
   const [tvl,          setTvl]          = useState(0);
   const countDone = useRef(false);
 
@@ -418,8 +293,9 @@ export default function DeploymentsPage() {
 
   const filtered = DEPLOYMENTS.filter(d => {
     const mc = activeChain === "all" || d.chain === activeChain;
+    const mp = activePeg   === "all" || d.pegAsset === activePeg;
     const ms = !search || [d.name, d.chain, d.stablecoin].some(v => v.toLowerCase().includes(search.toLowerCase()));
-    return mc && ms;
+    return mc && mp && ms;
   });
 
   const dangerList  = DEPLOYMENTS.filter(d => d.status === "danger");
@@ -427,9 +303,6 @@ export default function DeploymentsPage() {
 
   return (
     <>
-      {mintTarget   && <MRModal mode="mint"   d={mintTarget}   onClose={() => setMintTarget(null)}   />}
-      {redeemTarget && <MRModal mode="redeem" d={redeemTarget} onClose={() => setRedeemTarget(null)} />}
-
       <Navbar />
 
       {/* ── page header — white with amber accent label ───────────────── */}
@@ -448,7 +321,7 @@ export default function DeploymentsPage() {
             {dangerList.length > 0 && (
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded-full px-3 py-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-                {dangerList.length} Force Redemption Active
+                {dangerList.length} Trigger Redemptions Active
               </span>
             )}
             {warningList.length > 0 && (
@@ -470,7 +343,7 @@ export default function DeploymentsPage() {
             {[
               { label:"Total TVL",     value:`$${tvl.toFixed(1)}M`, accent:"text-amber-600"  },
               { label:"Stablecoins",   value:"8.4M",                accent:"text-[#1a1a1a]"  },
-              { label:"Equity Coins",  value:"120K",                accent:"text-[#1a1a1a]"  },
+              { label:"EquityCoins",   value:"120K",                accent:"text-[#1a1a1a]"  },
               { label:"Reserve Ratio", value:"312%",                accent:"text-emerald-600" },
             ].map(m => (
               <SiteCard key={m.label} className="px-4 py-3.5">
@@ -484,186 +357,82 @@ export default function DeploymentsPage() {
           <section className="py-6">
             <div className="mb-5">
               <h2 className="text-lg font-bold text-[#1a1a1a]">Deployments</h2>
-              <p className="text-gray-500 text-xs mt-0.5">All active protocol contracts across EVM chains</p>
+              <p className="text-gray-500 text-xs mt-0.5">All active protocol contracts across EVM networks</p>
             </div>
 
-            {/* filters */}
-            <div className="mb-4 flex flex-wrap gap-2 items-center">
+            {/* ── Filters ──────────────────────────────────────────────── */}
+            <div className="mb-5 flex flex-wrap gap-3 items-center">
+              {/* search */}
               <div className="relative">
                 <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" aria-hidden>
                   <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
                   <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
                 <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search…"
-                  className="w-40 rounded-full border border-[#e7dac4] bg-white py-1.5 pl-8 pr-3 text-sm text-[#1a1a1a] focus:border-amber-400 focus:outline-none shadow-sm" />
+                  className="w-44 rounded-lg border border-[#e7dac4] bg-white py-2 pl-8 pr-3 text-sm text-[#1a1a1a] focus:border-amber-400 focus:outline-none shadow-sm" />
               </div>
-              {CHAINS.map(c => (
-                <button key={c.id} onClick={() => setActiveChain(c.id)}
-                  className={`rounded-full border px-4 py-1.5 text-xs font-semibold transition ${
-                    activeChain === c.id
-                      ? "border-[#fbbf24] bg-[#fbbf24] text-[#1a1a1a] shadow-sm"
-                      : "border-[#e7dac4] bg-white text-gray-600 hover:border-amber-300 hover:text-amber-700"
-                  }`}>
-                  {c.label}
+
+              {/* network dropdown */}
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-semibold text-gray-400 whitespace-nowrap">Network</label>
+                <select value={activeChain} onChange={e => setActiveChain(e.target.value)}
+                  className="rounded-lg border border-[#e7dac4] bg-white py-2 pl-3 pr-8 text-sm text-[#1a1a1a] font-medium focus:border-amber-400 focus:outline-none shadow-sm cursor-pointer appearance-none"
+                  style={{ backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b8a99a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 10px center" }}>
+                  {CHAINS.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                </select>
+              </div>
+
+              {/* peg asset dropdown */}
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-semibold text-gray-400 whitespace-nowrap">Peg Asset</label>
+                <select value={activePeg} onChange={e => setActivePeg(e.target.value)}
+                  className="rounded-lg border border-[#e7dac4] bg-white py-2 pl-3 pr-8 text-sm text-[#1a1a1a] font-medium focus:border-amber-400 focus:outline-none shadow-sm cursor-pointer appearance-none"
+                  style={{ backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b8a99a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 10px center" }}>
+                  {PEG_ASSETS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                </select>
+              </div>
+
+              {/* active filter chips */}
+              {(activeChain !== "all" || activePeg !== "all") && (
+                <button onClick={() => { setActiveChain("all"); setActivePeg("all"); }}
+                  className="text-xs font-semibold text-amber-600 hover:text-amber-800 transition flex items-center gap-1">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  Clear filters
                 </button>
-              ))}
+              )}
             </div>
 
-            <div className="flex gap-4 items-start">
-              {/* sidebar — matching homepage card style */}
-              <SiteCard className="hidden lg:flex flex-col w-40 flex-shrink-0 overflow-hidden">
-                <div className="px-3 py-2.5 border-b border-[#efe2c9] bg-[#fbf6ec]">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Networks</p>
-                </div>
-                {CHAINS.map(c => (
-                  <button key={c.id} onClick={() => setActiveChain(c.id)}
-                    className={`w-full flex items-center gap-2 px-3 py-2.5 text-sm transition border-l-2 ${
-                      activeChain === c.id
-                        ? "border-amber-500 bg-amber-50 text-amber-700 font-semibold"
-                        : "border-transparent text-gray-500 hover:bg-[#fbf6ec] hover:text-[#1a1a1a]"
-                    }`}>
-                    <span>{c.label}</span>
-                  </button>
-                ))}
-              </SiteCard>
-
-              {/* cards grid */}
-              <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-                {filtered.length === 0
-                  ? <div className="col-span-full text-center py-16 text-gray-400 text-sm">No deployments found</div>
-                  : filtered.map(d => <ContractCard key={d.id} d={d} onMint={setMintTarget} onRedeem={setRedeemTarget} />)
-                }
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+              {filtered.length === 0
+                ? <div className="col-span-full text-center py-16 text-gray-400 text-sm">No deployments found</div>
+                : filtered.map(d => <ContractCard key={d.id} d={d} />)
+              }
             </div>
           </section>
 
           {/* divider */}
           <div className="border-t border-[#e7dac4]" />
 
-          {/* ── SECTION 2: Protocol Overview ───────────────────────────── */}
-          <section className="py-6">
-            <div className="mb-5">
-              <h2 className="text-lg font-bold text-[#1a1a1a]">Protocol Overview</h2>
-              <p className="text-gray-500 text-xs mt-0.5">Reserve health and supply metrics</p>
-            </div>
-
-            <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] mb-4">
-              {/* reserve health card */}
-              <SiteCard className="p-5">
-                <div className="mb-4 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-bold text-amber-600 uppercase tracking-widest">System Health</p>
-                    <h3 className="mt-1 text-base font-bold text-[#1a1a1a]">Healthy overall — one chain under watch</h3>
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-1 flex-shrink-0">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />Live
-                  </span>
-                </div>
-                <div className="grid gap-3 md:grid-cols-3">
-                  <ReserveWidget ratio={350} status="healthy" label="Ethereum" />
-                  <ReserveWidget ratio={155} status="warning" label="Polygon"  />
-                  <ReserveWidget ratio={120} status="danger"  label="BSC"      />
-                </div>
-              </SiteCard>
-
-              {/* key info card */}
-              <SiteCard className="p-5 flex flex-col gap-3">
-                <p className="text-xs font-bold text-amber-600 uppercase tracking-widest">Key Info</p>
-                <div className="rounded-lg bg-[#fbf6ec] border border-[#e7dac4] p-3.5">
-                  <div className="text-xs text-gray-500 font-medium">Minimum safe ratio</div>
-                  <div className="text-2xl font-bold text-amber-600 mt-0.5">150%</div>
-                  <p className="text-xs text-gray-500 mt-1 leading-5">
-                    Below this level equity minting pauses and redemptions activate.
-                  </p>
-                </div>
-                <div className="rounded-lg bg-[#fbf6ec] border border-[#e7dac4] p-3.5">
-                  <div className="text-xs text-gray-500 font-medium mb-1">Force redemption watch</div>
-                  <p className="text-sm text-[#1a1a1a] font-medium">
-                    {dangerList.length > 0
-                      ? `${dangerList.length} deployment is below the 150% threshold.`
-                      : "No deployments are currently below the threshold."
-                    }
-                  </p>
-                </div>
-              </SiteCard>
-            </div>
-
-            {/* charts */}
-            <div className="grid gap-4 md:grid-cols-2">
-              {([
-                { title:"Reserve Ratio Trend", value:"312%", trend:"Stable",  data:CHART_DATA.reserveRatio, color:"#f59e0b" },
-                { title:"Stablecoin Supply",   value:"8.4M", trend:"Growing", data:CHART_DATA.stableSupply, color:"#f59e0b" },
-              ] as { title:string; value:string; trend:string; data:number[]; color:string }[]).map(card => (
-                <SiteCard key={card.title} className="p-4">
-                  <div className="flex items-baseline justify-between mb-3">
-                    <div>
-                      <div className="text-xs text-gray-400 font-medium">{card.title}</div>
-                      <div className="text-xl font-bold text-[#1a1a1a] mt-0.5">{card.value}</div>
-                    </div>
-                    <span className="text-xs font-medium text-amber-600">{card.trend}</span>
-                  </div>
-                  <Sparkline data={card.data} color={card.color} />
-                </SiteCard>
-              ))}
-            </div>
-          </section>
-
-          {/* divider */}
-          <div className="border-t border-[#e7dac4]" />
-
-          {/* ── SECTION 3: Explore features — styled like homepage cards ─ */}
-          <section className="py-6">
-            <div className="mb-5">
-              <h2 className="text-lg font-bold text-[#1a1a1a]">Explore Protocol Features</h2>
-              <p className="text-gray-500 text-xs mt-0.5">Deep-dive into each feature</p>
-            </div>
-            <div className="grid sm:grid-cols-3 gap-4">
-              {[
-                {
-                  href: "/equity",
-                  title: "Equity Coins",
-                  desc: "Protocol ownership tokens that earn yield from fees and carry leveraged reserve exposure.",
-                  meta: "18.4% APR",
-                  metaColor: "text-amber-600",
-                },
-                {
-                  href: "/force-redemption",
-                  title: "Force Redemption",
-                  desc: "When reserve drops below 150%, equity minting halts and stablecoin holders redeem 1:1.",
-                  meta: dangerList.length > 0 ? `${dangerList.length} deployment active` : "All deployments healthy",
-                  metaColor: dangerList.length > 0 ? "text-red-600" : "text-emerald-600",
-                  alert: dangerList.length > 0,
-                },
-                {
-                  href: "/stablepay",
-                  title: "StablePay",
-                  desc: "Pay with native assets and settle in stablecoins. Try the live animated payment flow.",
-                  meta: "Live demo available",
-                  metaColor: "text-amber-600",
-                },
-              ].map(fc => (
-                /* matches homepage feature card pattern exactly */
-                <Link key={fc.href} href={fc.href}
-                  className="group rounded-xl border border-[#e7dac4] bg-[#fbf6ec] p-1 hover:-translate-y-1 hover:shadow-lg transition-all duration-200">
-                  <div className="relative bg-white rounded-lg pt-14 px-5 pb-5 shadow-sm flex flex-col h-full min-h-[180px]">
-                    {/* top-left icon circle */}
-                    <div className="absolute top-4 left-4 h-10 w-10 rounded-full bg-white border border-[#efe2c9] flex items-center justify-center shadow-sm">
-                      {fc.alert
-                        ? <span className="h-3 w-3 rounded-full bg-red-500 block" />
-                        : <span className="h-3 w-3 rounded-full bg-amber-400 block" />
-                      }
-                    </div>
-                    <h3 className="text-sm font-bold text-[#1a1a1a] mb-1.5">{fc.title}</h3>
-                    <p className="text-xs text-gray-500 leading-5 flex-1">{fc.desc}</p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className={`text-xs font-semibold ${fc.metaColor}`}>{fc.meta}</span>
-                      <span className="text-xs font-semibold text-amber-600 group-hover:translate-x-0.5 transition-transform">
-                        Open →
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+          {/* ── feature nav buttons — centered ──────────────────────────── */}
+          <section className="py-8 flex justify-center">
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link href="/equity"
+                className="inline-flex items-center gap-2 rounded-full border border-[#e7dac4] bg-white px-6 py-2.5 text-sm font-semibold text-[#1a1a1a] hover:bg-[#fbf6ec] hover:border-amber-300 hover:-translate-y-0.5 transition-all shadow-sm">
+                EquityCoins
+                <span className="text-amber-600 font-bold">→</span>
+              </Link>
+              <Link href="/force-redemption"
+                className={`inline-flex items-center gap-2 rounded-full border px-6 py-2.5 text-sm font-semibold hover:-translate-y-0.5 transition-all shadow-sm ${
+                  dangerList.length > 0
+                    ? "border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                    : "border-[#e7dac4] bg-white text-[#1a1a1a] hover:bg-[#fbf6ec] hover:border-amber-300"
+                }`}>
+                {dangerList.length > 0 && (
+                  <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
+                )}
+                Trigger Redemptions
+                <span className={`font-bold ${dangerList.length > 0 ? "text-red-500" : "text-amber-600"}`}>→</span>
+              </Link>
             </div>
           </section>
 
@@ -701,7 +470,7 @@ export default function DeploymentsPage() {
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Community</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                {["Discord","Twitter","Forum"].map(l=>(
+                {["Discord","Twitter"].map(l=>(
                   <li key={l}><a href={l==="Discord"?"https://discord.com/channels/995968619034984528/1503320626096635935":"#"} target={l==="Discord"?"_blank":undefined} rel={l==="Discord"?"noopener noreferrer":undefined} className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>
                 ))}
               </ul>
@@ -711,7 +480,7 @@ export default function DeploymentsPage() {
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Resources</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                {["Whitepaper","Blog","Press"].map(l=>(
+                {["Technical Paper"].map(l=>(
                   <li key={l}><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>
                 ))}
               </ul>

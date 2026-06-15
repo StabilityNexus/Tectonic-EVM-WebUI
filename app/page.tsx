@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from 'next/image';
+import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import Navbar from "@/components/Navbar";
 
@@ -138,7 +139,7 @@ export default function Home() {
   // Features data and reveal animation refs
   const features = [
     {
-      title: 'Forced Redemptions',
+      title: 'Trigger Redemptions',
       emoji: '⚡',
       desc: 'Unique mechanism ensuring protocol stability through automatic redemptions at predetermined rates.',
       color: 'from-yellow-400 to-yellow-500'
@@ -175,7 +176,7 @@ export default function Home() {
 
   const protocolStats = [
     { value: 132, label: 'Average Reserve Ratio', prefix: '', suffix: '%' },
-    { value: 84.5, label: 'Stablecoin Supply', prefix: '', suffix: 'M', decimals: 1 },
+    { value: 84.5, label: 'StableCoin Supply', prefix: '', suffix: 'M', decimals: 1 },
     { value: 2.8, label: 'Average Leverage', prefix: '', suffix: 'x', decimals: 1 },
   ];
 
@@ -216,7 +217,7 @@ export default function Home() {
         <div className="z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="text-left">
             <div className="mb-8 inline-block">
-              <span className="hero-kicker text-sm font-semibold text-yellow-500">Next Generation Stablecoin Protocol</span>
+              <span className="hero-kicker text-sm font-semibold text-yellow-500">Next Generation StableCoin Protocol</span>
             </div>
 
             <h1 className="hero-title mb-6 max-w-6xl text-5xl font-bold leading-tight text-gray-900 md:text-7xl">
@@ -243,7 +244,7 @@ export default function Home() {
             </h1>
 
             <p className="mb-12 max-w-2xl text-lg text-gray-600 md:text-xl">
-              A revolutionary stablecoin protocol enabling forced redemptions and enhanced stability.
+              A revolutionary stablecoin protocol enabling trigger redemptions and enhanced stability.
               Use and build apps that leverage EVM as a secure base layer.
             </p>
 
@@ -327,13 +328,14 @@ export default function Home() {
       <section className="py-12 px-6 bg-white">
         <div className="mx-auto max-w-7xl px-0">
           <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div className="overflow-hidden rounded-2xl flex items-center justify-center bg-white">
-              <Image
-                src="/undraw_crypto-portfolio_mf2i (1).svg"
-                alt="Tectonic crypto portfolio illustration"
-                width={1200}
-                height={900}
-                className="h-[280px] w-auto max-w-full object-contain p-4 md:h-[340px] md:p-6"
+            <div className="rounded-2xl flex items-center justify-center bg-white">
+              <video
+                src="/effect.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full max-w-full rounded-2xl md:h-[380px] object-contain"
               />
             </div>
 
@@ -344,7 +346,7 @@ export default function Home() {
                 speed={120} 
               />
               <p className="mt-6 max-w-xl text-xl leading-9 text-gray-700">
-                Tectonic is a fully collateralized stablecoin protocol built for the EVM ecosystem. By combining reserve-backed stability, equity participation, and automatic forced redemptions, it provides a secure foundation for next-generation payment infrastructure.
+                Tectonic is a fully collateralized stablecoin protocol built for the EVM ecosystem. By combining reserve-backed stability, equity participation, and automatic trigger redemptions, it provides a secure foundation for next-generation payment infrastructure.
               </p>
             </div>
           </div>
@@ -403,7 +405,7 @@ export default function Home() {
                       <th className="px-6 py-5">Chain</th>
                       <th className="px-6 py-5">Reserve Asset</th>
                       <th className="px-6 py-5">Reserve Ratio</th>
-                      <th className="px-6 py-5">Stablecoin Supply</th>
+                      <th className="px-6 py-5">StableCoin Supply</th>
                       <th className="px-6 py-5">TVL</th>
                       <th className="px-5 py-5"></th>
                     </tr>
@@ -467,7 +469,7 @@ export default function Home() {
 
               <h3 className="max-w-xs text-2xl font-bold tracking-tight text-slate-900 drop-shadow-sm">Built for Stability. Made for Payments.</h3>
               <p className="mt-5 max-w-sm text-base leading-8 text-slate-600">
-                Tectonic uses forced redemptions to maintain high reserve ratios without ever disabling minting.
+                Tectonic uses trigger redemptions to maintain high reserve ratios without ever disabling minting.
                 This keeps stablecoins available when payments matter.
               </p>
 
@@ -479,7 +481,18 @@ export default function Home() {
           </div>
 
           <div className="mt-10 flex justify-center">
-            <a href="#" className="btn-primary btn-hero text-sm">VIEW ALL DEPLOYMENTS →</a>
+            <Link
+              href="/deployments"
+              className="btn-primary btn-hero group flex h-11 items-center justify-center gap-2 rounded-full px-7 text-sm font-bold tracking-wide"
+            >
+              <span>VIEW ALL DEPLOYMENTS</span>
+              <svg
+                className="w-4 h-4 flex-shrink-0 opacity-0 -translate-x-1 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:translate-x-0"
+                viewBox="0 0 24 24" fill="none" aria-hidden
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Link>
           </div>
         </div>
       </section>
@@ -504,7 +517,7 @@ export default function Home() {
 
               <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">2</div>
-                <h3 className="text-lg font-semibold text-slate-900">Mint Stablecoin</h3>
+                <h3 className="text-lg font-semibold text-slate-900">Mint StableCoin</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">The protocol mints the stablecoin against the reserve.</p>
               </div>
 
@@ -512,7 +525,7 @@ export default function Home() {
 
               <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28_rgba(15,23,42,0.06)] backdrop-blur-sm">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">3</div>
-                <h3 className="text-lg font-semibold text-slate-900">Mint Equity Coin</h3>
+                <h3 className="text-lg font-semibold text-slate-900">Mint EquityCoin</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">An equity coin is minted to capture protocol upside.</p>
               </div>
 
@@ -520,15 +533,15 @@ export default function Home() {
 
               <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm md:col-span-1">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">4</div>
-                <h3 className="text-lg font-semibold text-slate-900">Force Redemption</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">If needed, the system forces redemption to restore safety.</p>
+                <h3 className="text-lg font-semibold text-slate-900">Trigger Redemptions</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">If needed, the system triggers redemptions to restore safety.</p>
               </div>
             </div>
           </div>
 
           <div className="mt-8 text-center">
             <a href="#" className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white px-6 py-3 text-base font-medium tracking-wide text-gray-900 shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5 hover:bg-amber-50">
-              Read Whitepaper
+              Read Technical Paper
               <span aria-hidden>→</span>
             </a>
           </div>
@@ -618,16 +631,13 @@ export default function Home() {
               <ul className="space-y-3 text-sm text-slate-700">
                 <li><a href="https://discord.com/channels/995968619034984528/1503320626096635935" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
                 <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Twitter</a></li>
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Forum</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Resources</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Whitepaper</a></li>
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Blog</a></li>
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Press</a></li>
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Technical Paper</a></li>
               </ul>
             </div>
           </div>

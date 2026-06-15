@@ -61,7 +61,7 @@ The web interface serves as the primary gateway for users to:
 
 - Explore protocol deployments
 - Learn about StablePay
-- Monitor Equity Coins
+- Monitor EquityCoins
 - Understand Force Redemption mechanisms
 - Access ecosystem resources
 - Connect with the Stability Nexus community
@@ -72,7 +72,7 @@ The application is built with Next.js and TypeScript, providing a fast, responsi
 
 - Modern responsive landing page
 - Deployment explorer
-- Equity Coin information dashboard
+- EquityCoin information dashboard
 - StablePay ecosystem section
 - Force Redemption information hub
 - Community integration
@@ -175,7 +175,7 @@ Add any future protocol-specific variables here.
 - [x] Community integration
 - [x] StablePay section
 - [x] Deployment dashboard
-- [x] Equity Coin overview
+- [x] EquityCoin overview
 - [x] Force Redemption page
 - [ ] Protocol analytics
 - [ ] Governance dashboard

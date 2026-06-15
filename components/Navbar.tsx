@@ -353,9 +353,8 @@ function WalletDropdown({ info, onDisconnect, onClose }: {
    NAVBAR
 ───────────────────────────────────────────────────────────────────────────── */
 const NAV_ITEMS = [
-  { href: "/",            label: "Home"        },
   { href: "/deployments", label: "Deployments" },
-  { href: "/",            label: "Docs"        },
+  { href: "#docs",        label: "Docs"        },
 ];
 
 export default function Navbar() {
