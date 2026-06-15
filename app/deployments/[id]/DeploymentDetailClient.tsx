@@ -12,17 +12,13 @@ import { useTranslations } from "@/lib/i18n";
 
 /* ─── Shared mint/redeem form ─── */
 function MintRedeemForm({
-  d,
   mode,
   inputAsset,
-  outputAsset,
   outputToken,
   estimateFn,
 }: {
-  d: Deployment;
   mode: "mint" | "redeem";
   inputAsset: string;
-  outputAsset: string;
   outputToken: string;
   estimateFn: (net: number) => string;
 }) {
@@ -141,17 +137,15 @@ function StableCoinCard({ d }: { d: Deployment }) {
         <div className="pb-6">
           {tab === "mint" ? (
             <MintRedeemForm
-              d={d} mode="mint"
+              mode="mint"
               inputAsset={d.reserveAsset}
-              outputAsset={d.stablecoin}
               outputToken={d.stablecoin}
               estimateFn={net => `~${(net * 3800).toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
             />
           ) : (
             <MintRedeemForm
-              d={d} mode="redeem"
+              mode="redeem"
               inputAsset={d.stablecoin}
-              outputAsset={d.reserveAsset}
               outputToken={d.reserveAsset}
               estimateFn={net => `~${(net / 3800).toFixed(6)}`}
             />
@@ -220,17 +214,15 @@ function EquityCoinCard({ d }: { d: Deployment }) {
         <div className="pb-6">
           {tab === "mint" ? (
             <MintRedeemForm
-              d={d} mode="mint"
+              mode="mint"
               inputAsset={d.reserveAsset}
-              outputAsset={d.equityCoin}
               outputToken={d.equityCoin}
               estimateFn={net => `~${(net / 24.5).toFixed(4)}`}
             />
           ) : (
             <MintRedeemForm
-              d={d} mode="redeem"
+              mode="redeem"
               inputAsset={d.equityCoin}
-              outputAsset={d.reserveAsset}
               outputToken={d.reserveAsset}
               estimateFn={net => `~${(net * 24.5 / 3800).toFixed(6)}`}
             />
@@ -243,12 +235,13 @@ function EquityCoinCard({ d }: { d: Deployment }) {
 
 /* ─── Main page ─── */
 export default function DeploymentDetailClient({ id }: { id: string }) {
+  const tDetail = useTranslations("deploymentDetail");
+  const tFooter = useTranslations("footer");
+
   const d = DEPLOYMENTS.find(x => x.id === id);
   if (!d) return notFound();
 
   const c = statusCfg(d.status);
-  const tDetail = useTranslations("deploymentDetail");
-  const tFooter = useTranslations("footer");
 
   return (
     <>
