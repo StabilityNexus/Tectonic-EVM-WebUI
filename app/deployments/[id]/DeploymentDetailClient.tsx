@@ -331,11 +331,15 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
               <div>
                 <p className="text-xs text-gray-400 mb-2">{tDetail("triggerRedemptions")}</p>
                 {d.status === "danger" ? (
-                  <div className="rounded-xl bg-red-50 border border-red-200 p-4">
-                    <p className="text-sm font-bold text-red-600 mb-1">{tDetail("active")}</p>
+                  <div className="rounded-xl bg-red-50 border border-red-200 p-4 space-y-3">
+                    <p className="text-sm font-bold text-red-600">{tDetail("active")}</p>
                     <p className="text-xs text-red-500 leading-5">
                       {tDetail("activeDesc")}
                     </p>
+                    <button className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition">
+                      <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping flex-shrink-0" />
+                      Trigger Redemption →
+                    </button>
                   </div>
                 ) : d.status === "warning" ? (
                   <div className="rounded-xl bg-amber-50 border border-amber-200 p-4">

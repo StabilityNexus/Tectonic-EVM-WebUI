@@ -521,7 +521,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Protocol Overview — three-column layout matching reference image */}
+      {/* Protocol Overview — horizontal flow */}
       <section id="build" className="py-20 px-6 bg-[#fbf6ec]">
         <div className="mx-auto max-w-7xl rounded-[2rem] border border-amber-100 bg-white p-8 shadow-[0_22px_60px_rgba(15,23,42,0.08)] md:p-12">
           <h2 className="text-center text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">{tHome("howItWorks")}</h2>
@@ -530,36 +530,38 @@ export default function Home() {
           </p>
 
           <div className="mt-12 rounded-[1.75rem] border border-amber-100 bg-gradient-to-b from-[#fffdf8] to-[#fff7eb] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] md:p-8">
-            <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] md:items-center">
-              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">1</div>
-                <h3 className="text-lg font-semibold text-slate-900">{tHome("howItWorksSteps.1.title")}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{tHome("howItWorksSteps.1.desc")}</p>
+            <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] md:items-stretch">
+
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col">
+                <div className="mx-auto mb-4 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">1</div>
+                <h3 className="text-base font-semibold text-slate-900">{tHome("howItWorksSteps.1.title")}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600 flex-1">{tHome("howItWorksSteps.1.desc")}</p>
               </div>
 
-              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1">→</div>
+              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1 flex-shrink-0">→</div>
 
-              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">2</div>
-                <h3 className="text-lg font-semibold text-slate-900">{tHome("howItWorksSteps.2.title")}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{tHome("howItWorksSteps.2.desc")}</p>
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col">
+                <div className="mx-auto mb-4 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">2</div>
+                <h3 className="text-base font-semibold text-slate-900">{tHome("howItWorksSteps.2.title")}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600 flex-1">{tHome("howItWorksSteps.2.desc")}</p>
               </div>
 
-              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1">→</div>
+              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1 flex-shrink-0">→</div>
 
-              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">3</div>
-                <h3 className="text-lg font-semibold text-slate-900">{tHome("howItWorksSteps.3.title")}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{tHome("howItWorksSteps.3.desc")}</p>
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col">
+                <div className="mx-auto mb-4 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">3</div>
+                <h3 className="text-base font-semibold text-slate-900">{tHome("howItWorksSteps.3.title")}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600 flex-1">{tHome("howItWorksSteps.3.desc")}</p>
               </div>
 
-              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1">→</div>
+              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1 flex-shrink-0">→</div>
 
-              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm md:col-span-1">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">4</div>
-                <h3 className="text-lg font-semibold text-slate-900">{tHome("howItWorksSteps.4.title")}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{tHome("howItWorksSteps.4.desc")}</p>
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col">
+                <div className="mx-auto mb-4 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">4</div>
+                <h3 className="text-base font-semibold text-slate-900">{tHome("howItWorksSteps.4.title")}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600 flex-1">{tHome("howItWorksSteps.4.desc")}</p>
               </div>
+
             </div>
           </div>
 
