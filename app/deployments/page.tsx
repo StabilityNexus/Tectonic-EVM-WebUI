@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import type { RatioStatus, Deployment } from "@/lib/deployments-data";
 import { DEPLOYMENTS } from "@/lib/deployments-data";
 import { statusCfg, pct } from "@/lib/deployments-ui";
+import { useTranslations } from "@/lib/i18n";
 
 
 const CHAINS = [
@@ -53,6 +54,7 @@ function StatusBadge({ status }: { status: RatioStatus }) {
 /* ─── Contract Card — clean summary card, single Open button ─── */
 function ContractCard({ d }: { d: Deployment }) {
   const c = statusCfg(d.status);
+  const tDeploy = useTranslations("deployments");
   return (
     <div className={`rounded-xl border ${c.cardBorder} bg-[#fbf6ec] hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col`}>
       <div className="m-3 rounded-lg bg-white shadow-sm flex flex-col flex-1 overflow-hidden">
@@ -110,12 +112,12 @@ function ContractCard({ d }: { d: Deployment }) {
           </Link>
           {d.status === "warning" && (
             <p className="text-[10px] text-amber-600 text-center font-medium">
-              ⚡ Approaching 150% threshold
+              {tDeploy("warningStatus")}
             </p>
           )}
           {d.status === "danger" && (
             <p className="text-[10px] text-red-500 text-center font-medium">
-              ⚠ Reserve below 150% — redemptions active
+              {tDeploy("dangerStatus")}
             </p>
           )}
         </div>

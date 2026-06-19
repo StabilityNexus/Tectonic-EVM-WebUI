@@ -99,7 +99,12 @@
     "warning": "⚡ Warning",
     "warningDesc": "Approaching the 150% threshold. Monitor closely.",
     "notActive": "✓ Not Active",
-    "notActiveDesc": "Reserve ratio is healthy. Normal operations running."
+    "notActiveDesc": "Reserve ratio is healthy. Normal operations running.",
+    "triggerRedemptionCta": "Trigger Redemption →"
+  },
+  "deployments": {
+    "warningStatus": "⚡ Approaching 150% threshold",
+    "dangerStatus": "⚠ Reserve below 150% — redemptions active"
   },
   "footer": {
     "desc": "Next-generation stablecoin protocol.",

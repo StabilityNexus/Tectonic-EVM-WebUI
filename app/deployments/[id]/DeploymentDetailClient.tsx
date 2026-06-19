@@ -336,10 +336,13 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
                     <p className="text-xs text-red-500 leading-5">
                       {tDetail("activeDesc")}
                     </p>
-                    <button className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition">
+                    <Link
+                      href="/force-redemption"
+                      className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition"
+                    >
                       <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping flex-shrink-0" />
-                      Trigger Redemption →
-                    </button>
+                      {tDetail("triggerRedemptionCta")}
+                    </Link>
                   </div>
                 ) : d.status === "warning" ? (
                   <div className="rounded-xl bg-amber-50 border border-amber-200 p-4">
