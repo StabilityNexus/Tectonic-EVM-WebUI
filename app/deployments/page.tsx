@@ -285,7 +285,7 @@ export default function DeploymentsPage() {
             {/* brand */}
             <div className="max-w-sm">
               <div className="logo-hover-wrap mb-4 flex items-center gap-3 text-slate-900">
-                <Image src="/Logo.svg" alt="Tectonic logo" width={160} height={44} className="logo-hover-zoom h-9 w-auto object-contain" />
+                <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={160} height={44} className="logo-hover-zoom h-9 w-auto object-contain" />
                 <span className="text-xl font-black tracking-[0.22em]">TECTONIC</span>
               </div>
               <p className="max-w-xs text-sm leading-6 text-slate-600">Next-generation stablecoin protocol.</p>

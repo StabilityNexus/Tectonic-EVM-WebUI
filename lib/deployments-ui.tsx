@@ -186,7 +186,7 @@ export function PageShell({
             <div className="max-w-sm">
               <div className="logo-hover-wrap mb-4 flex items-center gap-3 text-slate-900">
                 <Image
-                  src="/Logo.svg"
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`}
                   alt="Tectonic logo"
                   width={160}
                   height={44}

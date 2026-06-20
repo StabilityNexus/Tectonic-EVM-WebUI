@@ -398,8 +398,14 @@ export default function Navbar() {
 
           {/* logo */}
           <Link href="/" className="logo-hover-wrap mr-auto flex flex-shrink-0 items-center gap-3">
-            <Image src="/Logo.svg" alt="Tectonic" width={130} height={36}
-              className="logo-hover-zoom h-9 w-auto object-contain sm:h-10" priority/>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`}
+              alt="Tectonic"
+              width={130}
+              height={36}
+              className="logo-hover-zoom h-9 w-auto object-contain sm:h-10"
+              priority
+            />
             <span className="hidden text-xl leading-none font-extrabold tracking-[0.22em] text-slate-900 sm:block">
               TECTONIC
             </span>

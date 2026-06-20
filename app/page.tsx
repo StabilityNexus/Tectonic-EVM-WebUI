@@ -131,9 +131,6 @@ function CountUpValue({
     </span>
   );
 }
-
-// tsserver-refresh: touched to force editor re-parse
-
 const tectonicLetters = 'TECTONIC'.split('');
 
 export default function Home() {
@@ -280,7 +277,7 @@ export default function Home() {
           <div className="relative mx-auto mt-8 w-full max-w-sm md:mt-0 md:absolute hero-visual md:w-[min(85vw,950px)] hero-visual-lg lg:w-[min(90vw,1200px)] lg:max-w-none">
             <div className="relative aspect-[4/3] w-full drop-shadow-2xl md:aspect-[5/4]">
               <Image
-                src="/tectonic-hero.png"
+                src="./tectonic-hero.png"
                 alt="Tectonic hero illustration"
                 fill
                 priority
@@ -354,7 +351,7 @@ export default function Home() {
             <div className="rounded-2xl flex items-center justify-center bg-white">
               <video
                 ref={videoRef}
-                src="/effect.mp4"
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/effect.mp4`}
                 autoPlay
                 loop
                 muted
@@ -630,7 +627,7 @@ export default function Home() {
             <div className="max-w-sm">
               <div className="logo-hover-wrap mb-4 flex items-center gap-3 text-slate-900">
                 <Image
-                  src="/Logo.svg"
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`}
                   alt="Tectonic logo"
                   width={160}
                   height={44}
