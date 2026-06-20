@@ -376,7 +376,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
           <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
             <div className="max-w-sm">
               <div className="logo-hover-wrap mb-4 flex items-center gap-3 text-slate-900">
-                <Image src="/Logo.svg" alt="Tectonic logo" width={140} height={40} className="logo-hover-zoom h-8 w-auto object-contain" />
+                <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={140} height={40} className="logo-hover-zoom h-8 w-auto object-contain" />
                 <span className="text-lg font-black tracking-[0.22em]">TECTONIC</span>
               </div>
               <p className="max-w-xs text-sm leading-6 text-slate-600">{tFooter("desc")}</p>
