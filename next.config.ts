@@ -6,7 +6,17 @@ const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "Tectonic-EVM-W
 // Allow explicit override via NEXT_PUBLIC_BASE_PATH so local or CI builds
 // can set the site base path unambiguously.
 const publicBase = process.env.NEXT_PUBLIC_BASE_PATH;
-const basePath = publicBase ?? (isGitHubPagesBuild ? `/${repoName}` : "");
+const normalizedPublicBase = publicBase
+  ? `/${publicBase}`.replace(/^\/+/, "/").replace(/\/+$/, "")
+  : "";
+const basePath =
+  normalizedPublicBase && normalizedPublicBase !== "/"
+    ? normalizedPublicBase
+    : publicBase === undefined
+    ? isGitHubPagesBuild
+      ? `/${repoName}`
+      : ""
+    : "";
 const assetPrefix = basePath ? `${basePath}/` : undefined;
 
 const nextConfig: NextConfig = {

@@ -277,7 +277,7 @@ export default function Home() {
           <div className="relative mx-auto mt-8 w-full max-w-sm md:mt-0 md:absolute hero-visual md:w-[min(85vw,950px)] hero-visual-lg lg:w-[min(90vw,1200px)] lg:max-w-none">
             <div className="relative aspect-[4/3] w-full drop-shadow-2xl md:aspect-[5/4]">
               <Image
-                src="./tectonic-hero.png"
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/tectonic-hero.png`}
                 alt="Tectonic hero illustration"
                 fill
                 priority
