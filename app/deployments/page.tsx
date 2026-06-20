@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import type { RatioStatus, Deployment } from "@/lib/deployments-data";
 import { DEPLOYMENTS } from "@/lib/deployments-data";
 import { statusCfg, pct } from "@/lib/deployments-ui";
+import { useTranslations } from "@/lib/i18n";
 
 
 const CHAINS = [
@@ -53,6 +54,7 @@ function StatusBadge({ status }: { status: RatioStatus }) {
 /* ─── Contract Card — clean summary card, single Open button ─── */
 function ContractCard({ d }: { d: Deployment }) {
   const c = statusCfg(d.status);
+  const tDeploy = useTranslations("deployments");
   return (
     <div className={`rounded-xl border ${c.cardBorder} bg-[#fbf6ec] hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col`}>
       <div className="m-3 rounded-lg bg-white shadow-sm flex flex-col flex-1 overflow-hidden">
@@ -102,12 +104,22 @@ function ContractCard({ d }: { d: Deployment }) {
           </div>
         </div>
 
-        {/* single Open button */}
-        <div className="px-4 py-3 border-t border-[#efe2c9]">
+        {/* action buttons */}
+        <div className="px-4 py-3 border-t border-[#efe2c9] flex flex-col gap-2">
           <Link href={`/deployments/${d.id}`}
-            className="block w-full py-2 rounded-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#1a1a1a] text-xs font-semibold transition text-center">
+            className="block w-full py-2.5 rounded-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#1a1a1a] text-xs font-semibold transition text-center">
             Open →
           </Link>
+          {d.status === "warning" && (
+            <p className="text-[10px] text-amber-600 text-center font-medium">
+              {tDeploy("warningStatus")}
+            </p>
+          )}
+          {d.status === "danger" && (
+            <p className="text-[10px] text-red-500 text-center font-medium">
+              {tDeploy("dangerStatus")}
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -256,32 +268,6 @@ export default function DeploymentsPage() {
                 ? <div className="col-span-full text-center py-16 text-gray-400 text-sm">No deployments found</div>
                 : filtered.map(d => <ContractCard key={d.id} d={d} />)
               }
-            </div>
-          </section>
-
-          {/* divider */}
-          <div className="border-t border-[#e7dac4]" />
-
-          {/* ── feature nav buttons — centered ──────────────────────────── */}
-          <section className="py-8 flex justify-center">
-            <div className="flex flex-wrap gap-3 justify-center">
-              <Link href="/equity"
-                className="inline-flex items-center gap-2 rounded-full border border-[#e7dac4] bg-white px-6 py-2.5 text-sm font-semibold text-[#1a1a1a] hover:bg-[#fbf6ec] hover:border-amber-300 hover:-translate-y-0.5 transition-all shadow-sm">
-                EquityCoins
-                <span className="text-amber-600 font-bold">→</span>
-              </Link>
-              <Link href="/force-redemption"
-                className={`inline-flex items-center gap-2 rounded-full border px-6 py-2.5 text-sm font-semibold hover:-translate-y-0.5 transition-all shadow-sm ${
-                  dangerList.length > 0
-                    ? "border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
-                    : "border-[#e7dac4] bg-white text-[#1a1a1a] hover:bg-[#fbf6ec] hover:border-amber-300"
-                }`}>
-                {dangerList.length > 0 && (
-                  <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
-                )}
-                Trigger Redemptions
-                <span className={`font-bold ${dangerList.length > 0 ? "text-red-500" : "text-amber-600"}`}>→</span>
-              </Link>
             </div>
           </section>
 

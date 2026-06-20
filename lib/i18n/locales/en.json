@@ -31,23 +31,23 @@
     "learnMoreAboutTectonic": "Learn more about Tectonic",
     "viewAllDeployments": "VIEW ALL DEPLOYMENTS",
     "howItWorks": "HOW IT WORKS",
-    "howItWorksDesc": "The protocol flow is intentionally simple: deposit an asset, mint the stablecoin, mint the equity coin, and redeem if the reserve needs to be restored.",
+    "howItWorksDesc": "The protocol flow is straightforward: deposit a native asset, mint a stablecoin, use or redeem it, and rely on automatic safety mechanisms to keep the reserve healthy.",
     "howItWorksSteps": {
       "1": {
         "title": "Deposit Native Asset",
-        "desc": "Users deposit the reserve asset into the protocol."
+        "desc": "Users deposit the blockchain's native asset into the protocol."
       },
       "2": {
         "title": "Mint StableCoin",
-        "desc": "The protocol mints the stablecoin against the reserve."
+        "desc": "The protocol issues stablecoins backed by the reserve."
       },
       "3": {
-        "title": "Mint EquityCoin",
-        "desc": "An equity coin is minted to capture protocol upside."
+        "title": "Use or Redeem",
+        "desc": "Users can use the stablecoins for payments or redeem them back for the reserve asset."
       },
       "4": {
-        "title": "Trigger Redemptions",
-        "desc": "If needed, the system triggers redemptions to restore safety."
+        "title": "Automatic Safety Protection",
+        "desc": "If reserve levels become unsafe, the protocol can trigger redemptions to restore the reserve ratio and maintain the peg."
       }
     },
     "joinCommunity": "Join the Community",
@@ -99,7 +99,12 @@
     "warning": "⚡ Warning",
     "warningDesc": "Approaching the 150% threshold. Monitor closely.",
     "notActive": "✓ Not Active",
-    "notActiveDesc": "Reserve ratio is healthy. Normal operations running."
+    "notActiveDesc": "Reserve ratio is healthy. Normal operations running.",
+    "triggerRedemptionCta": "Trigger Redemption →"
+  },
+  "deployments": {
+    "warningStatus": "⚡ Approaching 150% threshold",
+    "dangerStatus": "⚠ Reserve below 150% — redemptions active"
   },
   "footer": {
     "desc": "Next-generation stablecoin protocol.",
