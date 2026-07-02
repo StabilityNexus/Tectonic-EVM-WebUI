@@ -31,3 +31,48 @@ export const DEPLOYMENTS: Deployment[] = [
   { id:"usdb-base",   name:"USDB on Base",                  chain:"Base",     chainShort:"BASE", chainColor:"#0052ff", stablecoin:"USDB",  equityCoin:"BEQT",  reserveRatio:287, totalReserve:"$28.01M", stableSupply:"3.4M",  equitySupply:"31K", equityLeverage:"2.87×", equityYield:7.0, tvl:"$9.76M",  status:"healthy", reserveAsset:"ETH",  pegAsset:"USD" },
   { id:"usdbn-bsc",   name:"USDBN on BSC",                  chain:"BSC",      chainShort:"BNB",  chainColor:"#f0b90b", stablecoin:"USDBN", equityCoin:"BEQT2", reserveRatio:120, totalReserve:"$1.08M",  stableSupply:"900K", equitySupply:"4K",  equityLeverage:"1.2×",  equityYield:0.0, tvl:"$0.56M",  status:"danger",  reserveAsset:"BNB",  pegAsset:"USD" },
 ];
+
+/** Parse supply strings like "1.2M" or "850K" into millions. */
+export function parseSupplyInMillions(s: string): number {
+  const match = s.trim().match(/^([\d.]+)\s*([KkMm])?$/);
+  if (!match) return 0;
+  const num = parseFloat(match[1]);
+  const unit = match[2]?.toUpperCase();
+  if (unit === "K") return num / 1000;
+  if (unit === "M") return num;
+  return num;
+}
+
+/** Parse leverage strings like "3.25×" into a numeric multiplier. */
+export function parseLeverageMultiplier(s: string): number {
+  return parseFloat(s.replace(/[^\d.]/g, "")) || 0;
+}
+
+export interface ProtocolStats {
+  avgReserveRatio: number;
+  totalStablecoinSupplyM: number;
+  avgLeverage: number;
+}
+
+/** Aggregate protocol stats derived from the shared deployment list. */
+export function getProtocolStats(deployments: Deployment[] = DEPLOYMENTS): ProtocolStats {
+  if (deployments.length === 0) {
+    return { avgReserveRatio: 0, totalStablecoinSupplyM: 0, avgLeverage: 0 };
+  }
+
+  const totals = deployments.reduce(
+    (acc, d) => ({
+      reserveRatio: acc.reserveRatio + d.reserveRatio,
+      stableSupply: acc.stableSupply + parseSupplyInMillions(d.stableSupply),
+      leverage: acc.leverage + parseLeverageMultiplier(d.equityLeverage),
+    }),
+    { reserveRatio: 0, stableSupply: 0, leverage: 0 }
+  );
+
+  const count = deployments.length;
+  return {
+    avgReserveRatio: totals.reserveRatio / count,
+    totalStablecoinSupplyM: totals.stableSupply,
+    avgLeverage: totals.leverage / count,
+  };
+}

@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
 import type { CSSProperties } from 'react';
 import Navbar from "@/components/Navbar";
+import { DEPLOYMENTS, getProtocolStats } from "@/lib/deployments-data";
+import { pct, statusCfg } from "@/lib/deployments-ui";
 import { useTranslations } from "@/lib/i18n";
 
 function Typewriter({ text, className = "", speed = 45 }: { text: string; className?: string; speed?: number }) {
@@ -134,6 +137,7 @@ function CountUpValue({
 const tectonicLetters = 'TECTONIC'.split('');
 
 export default function Home() {
+  const router = useRouter();
   const tHome = useTranslations("home");
   const tCommon = useTranslations("common");
   const tDetail = useTranslations("deploymentDetail");
@@ -169,19 +173,14 @@ export default function Home() {
 
   const featureRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  const deployments = [
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Ethereum', chainShort: 'ETH', reserve: '132%', ratio: 132, supply: '22.41M tUSD', tvl: '$45.2M', status: 'Active', accent: 'text-slate-600', badge: 'bg-slate-100 text-slate-700', chainColor: 'bg-indigo-100 text-indigo-700', symbolBg: 'bg-indigo-50', symbolColor: 'text-indigo-700' },
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Polygon', chainShort: 'POL', reserve: '128%', ratio: 128, supply: '18.76M tUSD', tvl: '$18.7M', status: 'Active', accent: 'text-violet-600', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-violet-100 text-violet-700', symbolBg: 'bg-violet-50', symbolColor: 'text-violet-600' },
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'BSC', chainShort: 'BNB', reserve: '135%', ratio: 135, supply: '22.11M tUSD', tvl: '$22.1M', status: 'Active', accent: 'text-amber-500', badge: 'bg-amber-100 text-amber-700', chainColor: 'bg-amber-100 text-amber-700', symbolBg: 'bg-amber-50', symbolColor: 'text-amber-500' },
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Base', chainShort: 'ETH', reserve: '130%', ratio: 130, supply: '12.91M tUSD', tvl: '$12.9M', status: 'Active', accent: 'text-blue-600', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-blue-100 text-blue-700', symbolBg: 'bg-blue-50', symbolColor: 'text-blue-600' },
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Ethereum Classic', chainShort: 'ETC', reserve: '127%', ratio: 127, supply: '8.32M tUSD', tvl: '$8.3M', status: 'Active', accent: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-emerald-100 text-emerald-700', symbolBg: 'bg-emerald-50', symbolColor: 'text-emerald-700' },
-  ];
-
-  const protocolStats = [
-    { value: 132, label: tHome("stats.avgReserveRatio"), prefix: '', suffix: '%' },
-    { value: 84.5, label: tHome("stats.stablecoinSupply"), prefix: '', suffix: 'M', decimals: 1 },
-    { value: 2.8, label: tHome("stats.avgLeverage"), prefix: '', suffix: 'x', decimals: 1 },
-  ];
+  const protocolStats = useMemo(() => {
+    const stats = getProtocolStats(DEPLOYMENTS);
+    return [
+      { value: stats.avgReserveRatio, label: tHome("stats.avgReserveRatio"), prefix: "", suffix: "%", decimals: 0 },
+      { value: stats.totalStablecoinSupplyM, label: tHome("stats.stablecoinSupply"), prefix: "", suffix: "M", decimals: 1 },
+      { value: stats.avgLeverage, label: tHome("stats.avgLeverage"), prefix: "", suffix: "x", decimals: 1 },
+    ];
+  }, [tHome]);
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -433,46 +432,76 @@ export default function Home() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {deployments.map((deployment, index) => (
-                      <tr key={`${deployment.chain}-${index}`} className="group transition-colors hover:bg-amber-50/40">
-                        <td className="px-6 py-6 align-middle">
-                          <div className="flex items-center gap-4">
-                            <div className={`flex h-10 w-10 items-center justify-center rounded-full ${deployment.symbolBg} text-sm font-bold ${deployment.symbolColor}`}>
-                              {index % 3 === 0 ? '◈' : index % 3 === 1 ? '◌' : '⬢'}
+                    {DEPLOYMENTS.map((deployment, index) => {
+                      const status = statusCfg(deployment.status);
+                      return (
+                        <tr
+                          key={deployment.id}
+                          onClick={() => router.push(`/deployments/${deployment.id}`)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              router.push(`/deployments/${deployment.id}`);
+                            }
+                          }}
+                          tabIndex={0}
+                          role="link"
+                          aria-label={`View ${deployment.name} deployment`}
+                          className="group cursor-pointer transition-colors hover:bg-amber-50/40"
+                        >
+                          <td className="px-6 py-6 align-middle">
+                            <div className="flex items-center gap-4">
+                              <div
+                                className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white"
+                                style={{ background: deployment.chainColor }}
+                              >
+                                {index % 3 === 0 ? "◈" : index % 3 === 1 ? "◌" : "⬢"}
+                              </div>
+                              <div>
+                                <div className="text-sm font-semibold leading-5 text-slate-900">{deployment.name}</div>
+                                <div className="text-xs leading-4 text-slate-500">{deployment.stablecoin}</div>
+                              </div>
                             </div>
-                            <div>
-                              <div className="text-sm font-semibold leading-5 text-slate-900">{deployment.name}</div>
-                              <div className="text-xs leading-4 text-slate-500">{deployment.symbol}</div>
+                          </td>
+                          <td className="px-6 py-6 align-middle">
+                            <div className="flex items-center gap-2 text-sm font-medium text-slate-700 whitespace-nowrap">
+                              <span
+                                className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                                style={{ background: deployment.chainColor }}
+                              >
+                                {deployment.chainShort.slice(0, 3)}
+                              </span>
+                              {deployment.chain}
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-6 align-middle">
-                          <div className="flex items-center gap-2 text-sm font-medium text-slate-700 whitespace-nowrap">
-                            <span className={`flex h-5 w-5 items-center justify-center rounded-full ${deployment.chainColor} text-[10px] font-bold`}>{deployment.chainShort}</span>
-                            {deployment.chain}
-                          </div>
-                        </td>
-                        <td className="px-6 py-6 align-middle">
-                          <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 whitespace-nowrap">
-                            <span className={`flex h-5 w-5 items-center justify-center rounded-full ${deployment.chainColor} text-[10px] font-bold`}>{deployment.chainShort}</span>
-                            {deployment.chainShort}
-                          </div>
-                        </td>
-                        <td className="px-6 py-6 align-middle">
-                          <div className="w-full max-w-[130px]">
-                            <div className="mb-2 text-sm font-semibold text-emerald-600">{deployment.reserve}</div>
-                            <div className="h-2 rounded-full bg-slate-200">
-                              <div className="h-2 rounded-full bg-emerald-500" style={{ width: `${Math.max(60, deployment.ratio - 55)}%` }} />
+                          </td>
+                          <td className="px-6 py-6 align-middle">
+                            <div className="text-sm font-semibold text-slate-700 whitespace-nowrap">
+                              {deployment.reserveAsset}
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.supply}</td>
-                        <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.tvl}</td>
-                        <td className="px-5 py-6 align-middle text-right text-slate-400">
-                           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full transition group-hover:bg-white group-hover:text-slate-700">›</span>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                          <td className="px-6 py-6 align-middle">
+                            <div className="w-full max-w-[130px]">
+                              <div className={`mb-2 text-sm font-semibold ${status.tc}`}>
+                                {deployment.reserveRatio}%
+                              </div>
+                              <div className="h-2 rounded-full bg-slate-200">
+                                <div
+                                  className={`h-2 rounded-full ${status.barColor}`}
+                                  style={{ width: pct(deployment.reserveRatio) }}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">
+                            {deployment.stableSupply} {deployment.stablecoin}
+                          </td>
+                          <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.tvl}</td>
+                          <td className="px-5 py-6 align-middle text-right text-slate-400">
+                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full transition group-hover:bg-white group-hover:text-slate-700">›</span>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
             </div>
