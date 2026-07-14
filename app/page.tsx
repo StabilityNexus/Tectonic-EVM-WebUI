@@ -362,11 +362,13 @@ export default function Home() {
             </div>
 
             <div>
-              <Typewriter 
-                text={tHome("futurePayments")} 
-                className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 whitespace-pre-line leading-tight" 
-                speed={120} 
-              />
+              <div className="min-h-[180px] md:min-h-[225px]">
+                <Typewriter 
+                  text={tHome("futurePayments")} 
+                  className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 whitespace-pre-line leading-tight" 
+                  speed={120} 
+                />
+              </div>
               <p className="mt-6 max-w-xl text-xl leading-9 text-gray-700">
                 {tHome("futurePaymentsDesc")}
               </p>
