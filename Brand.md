@@ -32,7 +32,8 @@ The Tectonic UI uses a modern, high-contrast color scheme to ensure accessibilit
 * **Primary Accent (Tectonic Gold):** `#FFC517`
   * Used for primary badges, highlights, and calls to action. Represents wealth, stability, and the EquityCoin system.
 * **Secondary Accent (Forest Green):** `#228B22`
-  * Used for success states, stablecoin health indicators, and positive yields.
+  * Used for non-text success states, stablecoin health indicators, and positive yields.
+  * Do not use for normal-sized text on the documented dark surfaces; use an approved high-contrast text color instead.
 * **Dark Surfaces & Text Contrasts:**
   * **Surface Background:** `#0F172A` (Slate 900) - Primary app background.
   * **Surface Element:** `#1E293B` (Slate 800) - Used for cards, modals, and elevated elements.
@@ -65,3 +66,4 @@ Always link to the official community channels using the standard badges or text
 - **Discord:** [https://discord.gg/YzDKeEfWtS](https://discord.gg/YzDKeEfWtS)
 - **Medium:** [https://news.stability.nexus/](https://news.stability.nexus/)
 - **YouTube:** [https://www.youtube.com/@StabilityNexus](https://www.youtube.com/@StabilityNexus)
+- **LinkedIn:** [https://www.linkedin.com/company/stability-nexus/](https://www.linkedin.com/company/stability-nexus/)
