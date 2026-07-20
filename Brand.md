@@ -1,19 +1,10 @@
 # Brand Guidelines
 
-This document outlines the brand guidelines, visual identity, and communication tone for the **Tectonic EVM Web UI** and its parent ecosystem, **Stability Nexus**.
+This document outlines the brand guidelines, visual identity, and communication tone for the **Tectonic Protocol**.
 
 ## Core Identity
 
-### Stability Nexus
-
-Stability Nexus is the overarching community and development hub focused on building decentralized, stable, and robust financial infrastructure.
-- **Mission:** To provide censorship-resistant, decentralized financial tools that ensure stability in the Web3 ecosystem.
-- **Tone:** Professional, Transparent, Community-driven, and Technically precise.
-
-### Tectonic Protocol
-
-Tectonic is an EVM-compatible stablecoin infrastructure platform inspired by the principles of the Djed Stablecoin Protocol.
-- **Mission:** To empower users with StablePay, EquityCoins, and reliable Force Redemption mechanics.
+- **Mission:** To empower users with EquityCoins and reliable Trigger Redemption mechanics.
 - **Tone:** Innovative, Secure, Accessible, and Reliable.
 
 ## Visual Identity
@@ -21,7 +12,6 @@ Tectonic is an EVM-compatible stablecoin infrastructure platform inspired by the
 ### Logos and Assets
 
 All official logos are stored in the `/public` directory of this repository.
-- **Stability Nexus Logo:** `/public/stability.svg` - Used when representing the overarching organization, community, or core team.
 - **Tectonic Logo:** `/public/Logo.svg` - Used specifically for the Tectonic Protocol, the Web UI, and stablecoin-specific products.
 - **Hero Image:** `/public/tectonic-hero.png` - Primary banner for social media and landing pages.
 
@@ -53,17 +43,5 @@ The UI utilizes modern, sans-serif fonts to maintain readability across dense fi
 
 When writing documentation, UI copy, or community announcements, strictly adhere to the following capitalization and spelling rules:
 - **Tectonic Protocol** (Not "tectonic protocol" or "Tectonic protocol")
-- **StablePay** (One word, CamelCase)
 - **EquityCoin** (One word, CamelCase)
-- **Force Redemption** (Capitalized when referring to the specific protocol mechanism)
-- **Stability Nexus** (Always two words)
-
-## Community Links
-
-Always link to the official community channels using the standard badges or text links:
-- **Telegram:** [https://t.me/StabilityNexus](https://t.me/StabilityNexus)
-- **X (Twitter):** [https://x.com/StabilityNexus](https://x.com/StabilityNexus)
-- **Discord:** [https://discord.gg/YzDKeEfWtS](https://discord.gg/YzDKeEfWtS)
-- **Medium:** [https://news.stability.nexus/](https://news.stability.nexus/)
-- **YouTube:** [https://www.youtube.com/@StabilityNexus](https://www.youtube.com/@StabilityNexus)
-- **LinkedIn:** [https://www.linkedin.com/company/stability-nexus/](https://www.linkedin.com/company/stability-nexus/)
+- **Trigger Redemption** (Capitalized when referring to the specific protocol mechanism)
