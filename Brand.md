@@ -2,10 +2,6 @@
 
 This document outlines the brand guidelines, visual identity, and communication tone for the **Tectonic Protocol**.
 
-## Core Identity
-
-- **Mission:** To empower users with EquityCoins and reliable Trigger Redemption mechanics.
-- **Tone:** Innovative, Secure, Accessible, and Reliable.
 
 ## Visual Identity
 
