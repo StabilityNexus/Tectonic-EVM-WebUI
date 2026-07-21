@@ -59,11 +59,9 @@ Tectonic is an EVM-compatible stablecoin infrastructure platform.
 The web interface serves as the primary gateway for users to:
 
 - Explore protocol deployments
-- Learn about StablePay
 - Monitor EquityCoins
 - Understand Trigger Redemption mechanisms
 - Access ecosystem resources
-- Connect with the Stability Nexus community
 
 The application is built with Next.js and TypeScript, providing a fast, responsive, and accessible user experience.
 
@@ -97,7 +95,7 @@ Tectonic-EVM-WebUI/
 │   │   └── page.tsx                # Deployment dashboard with mint/redeem modal
 │   ├── equity/
 │   │   └── page.tsx                # Equity coins hub with yield tracking
-│   ├── force-redemption/
+│   ├── trigger-redemption/
 │   │   └── page.tsx                # Trigger redemption monitor & crisis management
 │   ├── stablepay/
 │   │   └── page.tsx                # StablePay feature with payment flow demo
@@ -177,7 +175,6 @@ Add any future protocol-specific variables here.
 - [x] EquityCoin overview
 - [x] Trigger Redemption page
 - [ ] Protocol analytics
-- [ ] Governance dashboard
 - [ ] Public deployment URL
 - [ ] Multi-chain explorer
 
@@ -197,7 +194,7 @@ We welcome community contributions.
 5. Submit a Pull Request.
 
 <p align="center">
-  <strong>Built with ❤️ by Stability Nexus.</strong>
+  <strong>Built with ❤️ by Tectonic.</strong>
 </p>
 
 <p align="right">
