@@ -37,7 +37,7 @@
 
 ---
 
-A modern web interface for the Tectonic Protocol, enabling users to explore deployments, equity coins, stablecoin mechanics, force redemption operations, and ecosystem information through an intuitive Next.js application.
+A web interface for interacting with Solidity implementations of the Tectonic protocol deployed to EVM-compatible chain, enabling users to explore deployments, equity coins, stablecoin mechanics, Trigger redemption operations, and ecosystem information through an intuitive Next.js application.
 
 ## Table of Contents
 
@@ -50,19 +50,18 @@ A modern web interface for the Tectonic Protocol, enabling users to explore depl
 - [Build & Deployment](#build--deployment)
 - [Environment Variables](#environment-variables)
 - [Roadmap](#roadmap)
-- [Community and Support](#community-and-support)
 - [Contributing](#contributing)
 
 ## Overview
 
-Tectonic is an EVM-compatible stablecoin infrastructure platform inspired by the principles of the Djed Stablecoin Protocol.
+Tectonic is an EVM-compatible stablecoin infrastructure platform.
 
 The web interface serves as the primary gateway for users to:
 
 - Explore protocol deployments
 - Learn about StablePay
 - Monitor EquityCoins
-- Understand Force Redemption mechanisms
+- Understand Trigger Redemption mechanisms
 - Access ecosystem resources
 - Connect with the Stability Nexus community
 
@@ -74,7 +73,7 @@ The application is built with Next.js and TypeScript, providing a fast, responsi
 - Deployment explorer
 - EquityCoin information dashboard
 - StablePay ecosystem section
-- Force Redemption information hub
+- Trigger Redemption information hub
 - Community integration
 - Mobile-friendly UI
 - Fast static deployment support
@@ -99,7 +98,7 @@ Tectonic-EVM-WebUI/
 │   ├── equity/
 │   │   └── page.tsx                # Equity coins hub with yield tracking
 │   ├── force-redemption/
-│   │   └── page.tsx                # Force redemption monitor & crisis management
+│   │   └── page.tsx                # Trigger redemption monitor & crisis management
 │   ├── stablepay/
 │   │   └── page.tsx                # StablePay feature with payment flow demo
 │   ├── layout.tsx
@@ -176,24 +175,12 @@ Add any future protocol-specific variables here.
 - [x] StablePay section
 - [x] Deployment dashboard
 - [x] EquityCoin overview
-- [x] Force Redemption page
+- [x] Trigger Redemption page
 - [ ] Protocol analytics
 - [ ] Governance dashboard
 - [ ] Public deployment URL
 - [ ] Multi-chain explorer
 
-## Community and Support
-
-Join the Stability Nexus ecosystem:
-
-- Telegram
-- Discord
-- X (Twitter)
-- Stable Viewpoints
-- LinkedIn
-- YouTube
-
-Use the badge links at the top of this README to connect with the community channels.
 
 ## Contributing
 
