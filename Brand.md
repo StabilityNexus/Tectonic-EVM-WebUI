@@ -40,4 +40,4 @@ The UI utilizes modern, sans-serif fonts to maintain readability across dense fi
 When writing documentation, UI copy, or community announcements, strictly adhere to the following capitalization and spelling rules:
 - **Tectonic Protocol** (Not "tectonic protocol" or "Tectonic protocol")
 - **EquityCoin** (One word, CamelCase)
-- **Trigger Redemption** (Capitalized when referring to the specific protocol mechanism)
+- **StableCoin** (One word, CamelCase)
