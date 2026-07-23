@@ -55,6 +55,9 @@ export const metadata: Metadata = {
   },
 };
 
+import '@rainbow-me/rainbowkit/styles.css';
+import { Providers } from "./Providers";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -65,7 +68,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
