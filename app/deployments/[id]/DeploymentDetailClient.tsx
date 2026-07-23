@@ -9,27 +9,122 @@ import { statusCfg, pct } from "@/lib/deployments-ui";
 import { DEPLOYMENTS } from "@/lib/deployments-data";
 import type { Deployment } from "@/lib/deployments-data";
 import { useTranslations } from "@/lib/i18n";
+import { parseEther, formatEther } from "viem";
+import {
+  useReadContract,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useChainId,
+} from "wagmi";
+import { tectonicAbi } from "@/lib/abi/Tectonic";
+
+// Mappings for different networks
+const CONTRACT_ADDRESSES: Record<number, `0x${string}`> = {
+  31337: "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512", // Anvil
+  11155111: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Sepolia
+};
+const FALLBACK_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
+
+function getContractAddress(chainId?: number): `0x${string}` {
+  return chainId ? CONTRACT_ADDRESSES[chainId] || FALLBACK_ADDRESS : FALLBACK_ADDRESS;
+}
 
 /* ─── Shared mint/redeem form ─── */
 function MintRedeemForm({
   mode,
+  isEquity,
   inputAsset,
   outputToken,
-  estimateFn,
+  contractAddress,
+  scPriceMint,
+  scPriceRedeem,
+  ecPriceMint,
+  ecPriceRedeem,
 }: {
   mode: "mint" | "redeem";
+  isEquity: boolean;
   inputAsset: string;
   outputToken: string;
-  estimateFn: (net: number) => string;
+  contractAddress: `0x${string}`;
+  scPriceMint: bigint;
+  scPriceRedeem: bigint;
+  ecPriceMint: bigint;
+  ecPriceRedeem: bigint;
 }) {
-  const [amount, setAmount] = useState("10");
-  const net = parseFloat(amount || "0") * (1 - 0.003);
-  const estimate = estimateFn(net);
+  const [amount, setAmount] = useState("");
   const isMint = mode === "mint";
   const t = useTranslations("common");
- 
+
+  // Determine the price based on mode and token
+  let price = BigInt(0);
+  if (isMint && !isEquity) price = scPriceMint;
+  if (!isMint && !isEquity) price = scPriceRedeem;
+  if (isMint && isEquity) price = ecPriceMint;
+  if (!isMint && isEquity) price = ecPriceRedeem;
+
+  const priceFormatted = Number(formatEther(price || BigInt(1)));
+  
+  // Calculate estimate based on price
+  const valNum = parseFloat(amount || "0");
+  let estimateNum = 0;
+  if (priceFormatted > 0) {
+    if (isMint) {
+      estimateNum = valNum / priceFormatted; // e.g. 1000 WETH / 0.25 = 4000 TUSD
+    } else {
+      estimateNum = valNum * priceFormatted; // e.g. 4000 TUSD * 0.25 = 1000 WETH
+    }
+  }
+
+  // Deduct 0.3% fee for display
+  const feePct = 0.003;
+  estimateNum = estimateNum * (1 - feePct);
+
+  // Wagmi hooks
+  const { data: hash, writeContract, isPending } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!amount || isNaN(valNum) || valNum <= 0) return;
+    const weiAmount = parseEther(amount);
+
+    if (isMint && !isEquity) {
+      writeContract({
+        address: contractAddress,
+        abi: tectonicAbi,
+        functionName: "mint",
+        value: weiAmount,
+      });
+    } else if (isMint && isEquity) {
+      writeContract({
+        address: contractAddress,
+        abi: tectonicAbi,
+        functionName: "mintEquityCoins",
+        value: weiAmount,
+      });
+    } else if (!isMint && !isEquity) {
+      writeContract({
+        address: contractAddress,
+        abi: tectonicAbi,
+        functionName: "redeem",
+        args: [weiAmount],
+      });
+    } else if (!isMint && isEquity) {
+      writeContract({
+        address: contractAddress,
+        abi: tectonicAbi,
+        functionName: "redeemEquityCoins",
+        args: [weiAmount],
+      });
+    }
+  };
+
+  let btnText = isMint ? `${t("mint")} ${outputToken}` : `${t("redeem")} ${inputAsset}`;
+  if (isPending) btnText = "Confirm in wallet...";
+  if (isConfirming) btnText = "Processing...";
+
   return (
-    <div className="space-y-4 pt-2">
+    <form onSubmit={handleSubmit} className="space-y-4 pt-2">
       {/* input row */}
       <div>
         <label className="block text-xs text-gray-400 mb-1.5">
@@ -38,9 +133,11 @@ function MintRedeemForm({
         <div className="relative">
           <input
             type="number"
+            step="any"
             value={amount}
-            onChange={e => setAmount(e.target.value)}
-            className="w-full rounded-xl border border-[#e7dac4] bg-[#fafaf8] px-4 py-3 pr-20 text-sm text-[#1a1a1a] focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition"
+            onChange={(e) => setAmount(e.target.value)}
+            disabled={isPending || isConfirming}
+            className="w-full rounded-xl border border-[#e7dac4] bg-[#fafaf8] px-4 py-3 pr-20 text-sm text-[#1a1a1a] focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition disabled:opacity-50"
             placeholder="0.00"
           />
           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-500">
@@ -48,7 +145,7 @@ function MintRedeemForm({
           </span>
         </div>
       </div>
- 
+
       {/* summary box */}
       <div className="rounded-xl border border-[#e7dac4] bg-[#fafaf8] px-4 py-3 space-y-2">
         <div className="flex justify-between text-xs text-gray-400">
@@ -58,27 +155,45 @@ function MintRedeemForm({
         <div className="border-t border-[#efe2c9] pt-2 flex justify-between text-sm font-bold">
           <span className="text-[#1a1a1a]">{t("youReceive")}</span>
           <span className="text-amber-500">
-            {estimate} {outputToken}
+            ~{estimateNum > 0 ? estimateNum.toLocaleString(undefined, { maximumFractionDigits: 6 }) : "0.00"} {outputToken}
           </span>
         </div>
       </div>
- 
+
       {/* action button */}
       <button
-        className={`w-full py-3 rounded-full text-sm font-bold tracking-wide transition hover:-translate-y-0.5 shadow-sm ${
+        type="submit"
+        disabled={isPending || isConfirming || !amount}
+        className={`w-full py-3 rounded-full text-sm font-bold tracking-wide transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed ${
           isMint
-            ? "bg-amber-400 hover:bg-amber-500 text-[#1a1a1a] shadow-amber-100"
-            : "border-2 border-amber-300 bg-white hover:bg-amber-50 text-[#1a1a1a]"
+            ? "bg-amber-400 hover:bg-amber-500 hover:-translate-y-0.5 text-[#1a1a1a] shadow-amber-100"
+            : "border-2 border-amber-300 bg-white hover:bg-amber-50 hover:-translate-y-0.5 text-[#1a1a1a]"
         }`}
       >
-        {isMint ? `${t("mint")} ${outputToken}` : `${t("redeem")} ${inputAsset}`}
+        {btnText}
       </button>
-    </div>
+      
+      {isSuccess && (
+        <div className="mt-2 text-center text-xs font-bold text-emerald-600 bg-emerald-50 py-2 rounded-lg border border-emerald-200">
+          Transaction confirmed!
+        </div>
+      )}
+    </form>
   );
 }
 
 /* ─── StableCoin card ─── */
-function StableCoinCard({ d }: { d: Deployment }) {
+function StableCoinCard({
+  d,
+  contractAddress,
+  scPriceMint,
+  scPriceRedeem,
+}: {
+  d: Deployment;
+  contractAddress: `0x${string}`;
+  scPriceMint: bigint;
+  scPriceRedeem: bigint;
+}) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
   const c = statusCfg(d.status);
   const crashTolerance = Math.round(((d.reserveRatio - 100) / d.reserveRatio) * 100);
@@ -135,21 +250,17 @@ function StableCoinCard({ d }: { d: Deployment }) {
         </div>
 
         <div className="pb-6">
-          {tab === "mint" ? (
-            <MintRedeemForm
-              mode="mint"
-              inputAsset={d.reserveAsset}
-              outputToken={d.stablecoin}
-              estimateFn={net => `~${(net * 3800).toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
-            />
-          ) : (
-            <MintRedeemForm
-              mode="redeem"
-              inputAsset={d.stablecoin}
-              outputToken={d.reserveAsset}
-              estimateFn={net => `~${(net / 3800).toFixed(6)}`}
-            />
-          )}
+          <MintRedeemForm
+            mode={tab}
+            isEquity={false}
+            inputAsset={tab === "mint" ? d.reserveAsset : d.stablecoin}
+            outputToken={tab === "mint" ? d.stablecoin : d.reserveAsset}
+            contractAddress={contractAddress}
+            scPriceMint={scPriceMint}
+            scPriceRedeem={scPriceRedeem}
+            ecPriceMint={BigInt(0)}
+            ecPriceRedeem={BigInt(0)}
+          />
         </div>
       </div>
     </div>
@@ -157,7 +268,17 @@ function StableCoinCard({ d }: { d: Deployment }) {
 }
 
 /* ─── EquityCoin card ─── */
-function EquityCoinCard({ d }: { d: Deployment }) {
+function EquityCoinCard({
+  d,
+  contractAddress,
+  ecPriceMint,
+  ecPriceRedeem,
+}: {
+  d: Deployment;
+  contractAddress: `0x${string}`;
+  ecPriceMint: bigint;
+  ecPriceRedeem: bigint;
+}) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
   const tCommon = useTranslations("common");
   const tDetail = useTranslations("deploymentDetail");
@@ -212,21 +333,17 @@ function EquityCoinCard({ d }: { d: Deployment }) {
         </div>
 
         <div className="pb-6">
-          {tab === "mint" ? (
-            <MintRedeemForm
-              mode="mint"
-              inputAsset={d.reserveAsset}
-              outputToken={d.equityCoin}
-              estimateFn={net => `~${(net / 24.5).toFixed(4)}`}
-            />
-          ) : (
-            <MintRedeemForm
-              mode="redeem"
-              inputAsset={d.equityCoin}
-              outputToken={d.reserveAsset}
-              estimateFn={net => `~${(net * 24.5 / 3800).toFixed(6)}`}
-            />
-          )}
+          <MintRedeemForm
+            mode={tab}
+            isEquity={true}
+            inputAsset={tab === "mint" ? d.reserveAsset : d.equityCoin}
+            outputToken={tab === "mint" ? d.equityCoin : d.reserveAsset}
+            contractAddress={contractAddress}
+            scPriceMint={BigInt(0)}
+            scPriceRedeem={BigInt(0)}
+            ecPriceMint={ecPriceMint}
+            ecPriceRedeem={ecPriceRedeem}
+          />
         </div>
       </div>
     </div>
@@ -241,7 +358,39 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
   const d = DEPLOYMENTS.find(x => x.id === id);
   if (!d) return notFound();
 
-  const c = statusCfg(d.status);
+  // Wagmi Read Contracts
+  const chainId = useChainId();
+  const contractAddress = getContractAddress(chainId);
+
+  const { data: scPriceMint } = useReadContract({
+    address: contractAddress,
+    abi: tectonicAbi,
+    functionName: "scPriceMint",
+  });
+  const { data: scPriceRedeem } = useReadContract({
+    address: contractAddress,
+    abi: tectonicAbi,
+    functionName: "scPriceRedeem",
+  });
+  const { data: ecPriceMint } = useReadContract({
+    address: contractAddress,
+    abi: tectonicAbi,
+    functionName: "ecPriceMint",
+  });
+  const { data: ecPriceRedeem } = useReadContract({
+    address: contractAddress,
+    abi: tectonicAbi,
+    functionName: "ecPriceRedeem",
+  });
+  const { data: ratioVal } = useReadContract({
+    address: contractAddress,
+    abi: tectonicAbi,
+    functionName: "ratio",
+  });
+
+  // Inject real reserve ratio if available
+  const displayRatio = ratioVal ? Number(ratioVal) / 100 : d.reserveRatio;
+  const c = statusCfg(displayRatio > 100 ? "healthy" : d.status);
 
   return (
     <>
@@ -288,8 +437,18 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
 
           {/* ── TOP: two action cards ── */}
           <div className="grid md:grid-cols-2 gap-6 items-start">
-            <StableCoinCard d={d} />
-            <EquityCoinCard d={d} />
+            <StableCoinCard
+              d={d}
+              contractAddress={contractAddress}
+              scPriceMint={scPriceMint as bigint}
+              scPriceRedeem={scPriceRedeem as bigint}
+            />
+            <EquityCoinCard
+              d={d}
+              contractAddress={contractAddress}
+              ecPriceMint={ecPriceMint as bigint}
+              ecPriceRedeem={ecPriceRedeem as bigint}
+            />
           </div>
 
           {/* ── BOTTOM: Deployment Health ── */}
@@ -312,12 +471,12 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
               <div>
                 <p className="text-xs text-gray-400 mb-2">{tDetail("reserveRatio")}</p>
                 <p className={`text-2xl font-black mb-3 ${c.tc}`}>
-                  {d.reserveRatio}% <span className="text-base font-semibold text-gray-400">{tDetail("minSafe")}</span>
+                  {displayRatio}% <span className="text-base font-semibold text-gray-400">{tDetail("minSafe")}</span>
                 </p>
                 <div className="h-2.5 w-full rounded-full bg-[#efe2c9] overflow-hidden">
                   <div
                     className={`h-2.5 rounded-full transition-all duration-700 ${c.barColor}`}
-                    style={{ width: pct(d.reserveRatio) }}
+                    style={{ width: pct(displayRatio) }}
                   />
                 </div>
                 <div className="flex justify-between text-[10px] mt-1.5">
