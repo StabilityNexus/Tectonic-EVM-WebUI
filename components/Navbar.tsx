@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useDisconnect } from 'wagmi';
+import { useTranslations } from "@/lib/i18n";
 
 const NAV_ITEMS = [
   { href: "/deployments", label: "Deployments" },
@@ -17,6 +18,7 @@ function CustomConnectButton() {
   const { disconnect } = useDisconnect();
   const { address, connector } = useAccount();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("common");
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -70,7 +72,7 @@ function CustomConnectButton() {
                     className="btn-primary btn-hero group relative flex h-10 items-center justify-center rounded-full px-5 hover:pl-4 hover:pr-9 text-base leading-none transition-all duration-300 ease-out whitespace-nowrap shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/40"
                   >
                     <span>
-                      Connect Wallet
+                      {t("connectWallet", { defaultValue: "Connect Wallet" })}
                     </span>
                     <svg className="absolute right-3.5 opacity-0 -translate-x-2 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100"
                       width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -84,7 +86,7 @@ function CustomConnectButton() {
               if (chain.unsupported) {
                 return (
                   <button onClick={openChainModal} type="button" className="btn-primary btn-hero h-10 rounded-full px-5 text-sm font-bold !bg-red-500 hover:!bg-red-600 shadow-md">
-                    Wrong network
+                    {t("wrongNetwork", { defaultValue: "Wrong network" })}
                   </button>
                 );
               }
@@ -111,7 +113,7 @@ function CustomConnectButton() {
                     <div className={`absolute right-0 mt-2 w-72 rounded-2xl border border-amber-200/60 bg-white/95 backdrop-blur-xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-50 origin-top-right transition-all duration-200 ease-out ${dropdownOpen ? 'opacity-100 scale-100 translate-y-0 visible pointer-events-auto' : 'opacity-0 scale-95 -translate-y-2 invisible pointer-events-none'}`}>
                       <div className="mb-4 border-b border-amber-100 pb-4 flex items-center justify-between">
                         <div>
-                          <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">Wallet</p>
+                          <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">{t("wallet", { defaultValue: "Wallet" })}</p>
                           <p className="text-sm font-bold text-slate-800 flex items-center gap-2">
                             {connector?.name || 'Connected Wallet'}
                           </p>
@@ -119,7 +121,7 @@ function CustomConnectButton() {
                       </div>
                       <div className="mb-4 border-b border-amber-100 pb-4 flex items-center justify-between">
                         <div>
-                          <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">Network</p>
+                          <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">{t("network", { defaultValue: "Network" })}</p>
                           <p className="text-sm font-bold text-slate-800 flex items-center gap-2">
                             {chain.hasIcon && chain.iconUrl && (
                               /* eslint-disable-next-line @next/next/no-img-element */
@@ -128,21 +130,22 @@ function CustomConnectButton() {
                             {chain.name}
                           </p>
                         </div>
-                        <button onClick={() => { setDropdownOpen(false); openChainModal(); }} className="text-[10px] font-bold text-amber-600 hover:text-amber-700 uppercase tracking-wider bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-200/50 transition-colors">Switch</button>
+                        <button type="button" onClick={() => { setDropdownOpen(false); openChainModal(); }} className="text-[10px] font-bold text-amber-600 hover:text-amber-700 uppercase tracking-wider bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-200/50 transition-colors">{t("switch", { defaultValue: "Switch" })}</button>
                       </div>
                       <div className="mb-4 border-b border-amber-100 pb-4">
-                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">Connected Address</p>
+                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">{t("connectedAddress", { defaultValue: "Connected Address" })}</p>
                         <p className="text-sm font-mono font-bold text-slate-800 break-all bg-slate-50 p-2.5 rounded-lg border border-slate-100">
                           {address}
                         </p>
                       </div>
                       <div className="mb-5">
-                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">Available Balance</p>
+                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">{t("availableBalance", { defaultValue: "Available Balance" })}</p>
                         <p className="text-2xl font-black text-slate-900">
                           {account.displayBalance}
                         </p>
                       </div>
                       <button
+                        type="button"
                         onClick={() => {
                           disconnect();
                           setDropdownOpen(false);
@@ -154,7 +157,7 @@ function CustomConnectButton() {
                           <polyline points="16 17 21 12 16 7"></polyline>
                           <line x1="21" y1="12" x2="9" y2="12"></line>
                         </svg>
-                        Disconnect Wallet
+                        {t("disconnectWallet", { defaultValue: "Disconnect Wallet" })}
                       </button>
                     </div>
                   </div>
@@ -219,7 +222,7 @@ export default function Navbar() {
           </div>
 
           {/* hamburger */}
-          <button onClick={() => setMenuOpen(o => !o)}
+          <button type="button" onClick={() => setMenuOpen(o => !o)}
             className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 rounded-lg transition hover:bg-slate-100 md:hidden"
             aria-label="Menu" aria-expanded={menuOpen}>
             <span className={`block h-0.5 w-5 bg-slate-700 transition-all duration-200 ${menuOpen ? "translate-y-2 rotate-45" : ""}`}/>

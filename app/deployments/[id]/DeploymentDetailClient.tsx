@@ -25,8 +25,9 @@ const CONTRACT_ADDRESSES: Record<number, `0x${string}`> = {
 };
 const FALLBACK_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
 
-function getContractAddress(chainId?: number): `0x${string}` {
-  return chainId ? CONTRACT_ADDRESSES[chainId] || FALLBACK_ADDRESS : FALLBACK_ADDRESS;
+function getContractAddress(chainId?: number): `0x${string}` | undefined {
+  if (!chainId) return undefined;
+  return CONTRACT_ADDRESSES[chainId];
 }
 
 /* ─── Shared mint/redeem form ─── */
@@ -45,24 +46,24 @@ function MintRedeemForm({
   isEquity: boolean;
   inputAsset: string;
   outputToken: string;
-  contractAddress: `0x${string}`;
-  scPriceMint: bigint;
-  scPriceRedeem: bigint;
-  ecPriceMint: bigint;
-  ecPriceRedeem: bigint;
+  contractAddress?: `0x${string}`;
+  scPriceMint?: bigint;
+  scPriceRedeem?: bigint;
+  ecPriceMint?: bigint;
+  ecPriceRedeem?: bigint;
 }) {
   const [amount, setAmount] = useState("");
   const isMint = mode === "mint";
   const t = useTranslations("common");
 
   // Determine the price based on mode and token
-  let price = BigInt(0);
+  let price: bigint | undefined;
   if (isMint && !isEquity) price = scPriceMint;
   if (!isMint && !isEquity) price = scPriceRedeem;
   if (isMint && isEquity) price = ecPriceMint;
   if (!isMint && isEquity) price = ecPriceRedeem;
 
-  const priceFormatted = Number(formatEther(price || BigInt(1)));
+  const priceFormatted = price ? Number(formatEther(price)) : 0;
   
   // Calculate estimate based on price
   const valNum = parseFloat(amount || "0");
@@ -85,7 +86,7 @@ function MintRedeemForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount || isNaN(valNum) || valNum <= 0) return;
+    if (!amount || isNaN(valNum) || valNum <= 0 || !contractAddress) return;
     const weiAmount = parseEther(amount);
 
     if (isMint && !isEquity) {
@@ -120,8 +121,8 @@ function MintRedeemForm({
   };
 
   let btnText = isMint ? `${t("mint")} ${outputToken}` : `${t("redeem")} ${inputAsset}`;
-  if (isPending) btnText = "Confirm in wallet...";
-  if (isConfirming) btnText = "Processing...";
+  if (isPending) btnText = t("confirmInWallet", { defaultValue: "Confirm in wallet..." });
+  if (isConfirming) btnText = t("processing", { defaultValue: "Processing..." });
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 pt-2">
@@ -175,7 +176,7 @@ function MintRedeemForm({
       
       {isSuccess && (
         <div className="mt-2 text-center text-xs font-bold text-emerald-600 bg-emerald-50 py-2 rounded-lg border border-emerald-200">
-          Transaction confirmed!
+          {t("transactionConfirmed", { defaultValue: "Transaction confirmed!" })}
         </div>
       )}
     </form>
@@ -190,9 +191,9 @@ function StableCoinCard({
   scPriceRedeem,
 }: {
   d: Deployment;
-  contractAddress: `0x${string}`;
-  scPriceMint: bigint;
-  scPriceRedeem: bigint;
+  contractAddress?: `0x${string}`;
+  scPriceMint?: bigint;
+  scPriceRedeem?: bigint;
 }) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
   const c = statusCfg(d.status);
@@ -275,9 +276,9 @@ function EquityCoinCard({
   ecPriceRedeem,
 }: {
   d: Deployment;
-  contractAddress: `0x${string}`;
-  ecPriceMint: bigint;
-  ecPriceRedeem: bigint;
+  contractAddress?: `0x${string}`;
+  ecPriceMint?: bigint;
+  ecPriceRedeem?: bigint;
 }) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
   const tCommon = useTranslations("common");
@@ -440,14 +441,14 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
             <StableCoinCard
               d={d}
               contractAddress={contractAddress}
-              scPriceMint={scPriceMint as bigint}
-              scPriceRedeem={scPriceRedeem as bigint}
+              scPriceMint={scPriceMint as bigint | undefined}
+              scPriceRedeem={scPriceRedeem as bigint | undefined}
             />
             <EquityCoinCard
               d={d}
               contractAddress={contractAddress}
-              ecPriceMint={ecPriceMint as bigint}
-              ecPriceRedeem={ecPriceRedeem as bigint}
+              ecPriceMint={ecPriceMint as bigint | undefined}
+              ecPriceRedeem={ecPriceRedeem as bigint | undefined}
             />
           </div>
 
