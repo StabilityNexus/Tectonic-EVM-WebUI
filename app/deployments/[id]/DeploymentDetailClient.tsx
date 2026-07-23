@@ -355,10 +355,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
   const tDetail = useTranslations("deploymentDetail");
   const tFooter = useTranslations("footer");
 
-  const d = DEPLOYMENTS.find(x => x.id === id);
-  if (!d) return notFound();
-
-  // Wagmi Read Contracts
+  // Wagmi Read Contracts (MUST be called before any early returns)
   const chainId = useChainId();
   const contractAddress = getContractAddress(chainId);
 
@@ -387,6 +384,9 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
     abi: tectonicAbi,
     functionName: "ratio",
   });
+
+  const d = DEPLOYMENTS.find(x => x.id === id);
+  if (!d) return notFound();
 
   // Inject real reserve ratio if available
   const displayRatio = ratioVal ? Number(ratioVal) / 100 : d.reserveRatio;

@@ -122,6 +122,7 @@ function CustomConnectButton() {
                           <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">Network</p>
                           <p className="text-sm font-bold text-slate-800 flex items-center gap-2">
                             {chain.hasIcon && chain.iconUrl && (
+                              /* eslint-disable-next-line @next/next/no-img-element */
                               <img src={chain.iconUrl} alt={chain.name ?? 'Network'} className="w-5 h-5 rounded-full" />
                             )}
                             {chain.name}
