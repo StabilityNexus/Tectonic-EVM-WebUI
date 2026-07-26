@@ -83,16 +83,38 @@ function CustomConnectButton() {
                 );
               }
 
+              const networkSelectorButton = (
+                <button
+                  onClick={openChainModal}
+                  type="button"
+                  className="flex items-center gap-2 rounded-full px-4 py-2 h-10 text-sm font-black transition-all duration-200 hover:shadow-md hover:shadow-amber-200/50 border border-amber-300/60 shadow-sm"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(254,243,199,0.95), rgba(255,237,213,0.9))",
+                    backdropFilter: "blur(8px)",
+                  }}
+                >
+                  {chain.hasIcon && chain.iconUrl && (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={chain.iconUrl} alt={chain.name ?? t("network", { defaultValue: "Network" })} className="w-5 h-5 rounded-full" />
+                  )}
+                  <span className="text-slate-800 font-mono text-xs font-black">{chain.name ?? t("wrongNetwork", { defaultValue: "Wrong Network" })}</span>
+                </button>
+              );
+
               if (chain.unsupported) {
                 return (
-                  <button onClick={openChainModal} type="button" className="btn-primary btn-hero h-10 rounded-full px-5 text-sm font-bold !bg-red-500 hover:!bg-red-600 shadow-md">
-                    {t("wrongNetwork", { defaultValue: "Wrong network" })}
-                  </button>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    {networkSelectorButton}
+                    <button onClick={openChainModal} type="button" className="btn-primary btn-hero h-10 rounded-full px-5 text-sm font-bold !bg-red-500 hover:!bg-red-600 shadow-md whitespace-nowrap">
+                      {t("wrongNetwork", { defaultValue: "Wrong network" })}
+                    </button>
+                  </div>
                 );
               }
 
               return (
                 <div style={{ display: 'flex', gap: 12 }}>
+                  {networkSelectorButton}
                   <div className="relative" ref={dropdownRef}>
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -118,19 +140,6 @@ function CustomConnectButton() {
                             {connector?.name || 'Connected Wallet'}
                           </p>
                         </div>
-                      </div>
-                      <div className="mb-4 border-b border-amber-100 pb-4 flex items-center justify-between">
-                        <div>
-                          <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">{t("network", { defaultValue: "Network" })}</p>
-                          <p className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                            {chain.hasIcon && chain.iconUrl && (
-                              /* eslint-disable-next-line @next/next/no-img-element */
-                              <img src={chain.iconUrl} alt={chain.name ?? 'Network'} className="w-5 h-5 rounded-full" />
-                            )}
-                            {chain.name}
-                          </p>
-                        </div>
-                        <button type="button" onClick={() => { setDropdownOpen(false); openChainModal(); }} className="text-[10px] font-bold text-amber-600 hover:text-amber-700 uppercase tracking-wider bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-200/50 transition-colors">{t("switch", { defaultValue: "Switch" })}</button>
                       </div>
                       <div className="mb-4 border-b border-amber-100 pb-4">
                         <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">{t("connectedAddress", { defaultValue: "Connected Address" })}</p>
