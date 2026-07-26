@@ -8,7 +8,15 @@
     "redeem": "Redeem",
     "triggerRedemptions": "Trigger Redemptions",
     "stablecoinSupply": "StableCoin Supply",
-    "technicalPaper": "Technical Paper"
+    "technicalPaper": "Technical Paper",
+    "connectWallet": "Connect Wallet",
+    "disconnectWallet": "Disconnect Wallet",
+    "wrongNetwork": "Wrong Network",
+    "wallet": "Wallet",
+    "network": "Network",
+    "switch": "Switch",
+    "connectedAddress": "Connected Address",
+    "availableBalance": "Available Balance"
   },
   "home": {
     "kicker": "Next Generation StableCoin Protocol",
