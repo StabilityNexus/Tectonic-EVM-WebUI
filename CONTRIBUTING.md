@@ -34,6 +34,9 @@ To get your local environment set up for development, follow these steps:
 
    The application should now be running locally at `http://localhost:3000`.
 
+4. **Testing Web3 Interactions:**
+   If you are testing smart contract interactions (like wallet connections, balances, or transactions), be sure to run a local blockchain node and import the test private keys. See the **[Web3 Local Testing](README.md#web3-local-testing-hardhat--foundry)** section in the README for full details.
+
 ## Coding Style
 
 We maintain a consistent codebase to make it easier for everyone to read and contribute. Please adhere to the following guidelines:
