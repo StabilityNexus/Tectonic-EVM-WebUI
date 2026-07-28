@@ -33,6 +33,15 @@ The UI utilizes modern, sans-serif fonts to maintain readability across dense fi
 
 - **Primary Font:** Geist (loaded natively via `next/font/google` for optimal performance and zero layout shift)
 - **Fallback Stack:** `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`
+- **Weights:**
+  - Regular (400): Standard body text.
+  - Medium (500): Buttons and interactive elements.
+  - Bold (700): Headings and emphasized data points.
+- **Sizes & Line Heights:**
+  - `text-xs` (12px, 1.33 lh): Metadata, secondary labels.
+  - `text-sm` (14px, 1.42 lh): Default body copy, table data.
+  - `text-base` (16px, 1.5 lh): Primary buttons, prominent text.
+  - `text-xl` to `text-3xl`: Main page titles, primary numerical values.
 - **Usage:** Headings should be bold and authoritative; data tables should use tabular numerals for clean alignment.
 
 ## Terminology & Copywriting
