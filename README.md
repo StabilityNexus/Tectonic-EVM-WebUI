@@ -133,6 +133,23 @@ Open:
 http://localhost:3000
 ```
 
+### Web3 Local Testing (Hardhat / Foundry)
+
+When testing smart contract interactions locally, you need to run a local blockchain node (Anvil or Hardhat Node) alongside this Web UI.
+
+1. **Start the local blockchain** (in your smart contracts directory):
+   ```bash
+   # If using Foundry
+   anvil
+   
+   # Or if using Hardhat
+   npx hardhat node
+   ```
+2. **Fund your wallet**: The local node generates pre-funded test accounts with 10,000 ETH. Since your personal MetaMask address has 0 ETH on the local network, you must import one of the test private keys to interact with the dApp.
+   - Example private key: `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`
+   - In MetaMask: `Accounts` -> `Add account or hardware wallet` -> `Import account` -> Paste the private key.
+3. Make sure MetaMask is connected to `Localhost 8545`. If your balance still shows 0 or transactions fail, try resetting the network cache in MetaMask (`Settings` -> `Advanced` -> `Clear activity tab data`).
+
 ## Build & Deployment
 
 ### Production Build
