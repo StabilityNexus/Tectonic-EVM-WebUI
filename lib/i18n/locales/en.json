@@ -16,7 +16,10 @@
     "network": "Network",
     "switch": "Switch",
     "connectedAddress": "Connected Address",
-    "availableBalance": "Available Balance"
+    "availableBalance": "Available Balance",
+    "confirmInWallet": "Confirm in wallet...",
+    "processing": "Processing...",
+    "transactionConfirmed": "Transaction confirmed!"
   },
   "home": {
     "kicker": "Next Generation StableCoin Protocol",
