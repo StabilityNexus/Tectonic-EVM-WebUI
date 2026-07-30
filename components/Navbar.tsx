@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useAccount, useDisconnect, useBalance } from 'wagmi';
 import { useTranslations } from "@/lib/i18n";
 
 const NAV_ITEMS = [
@@ -17,6 +17,7 @@ function CustomConnectButton() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { disconnect } = useDisconnect();
   const { address, connector } = useAccount();
+  const { data: balanceData, isError, isLoading } = useBalance({ address });
   const dropdownRef = useRef<HTMLDivElement>(null);
   const t = useTranslations("common");
 
@@ -144,14 +145,24 @@ function CustomConnectButton() {
                       <div className="mb-4 border-b border-amber-100 pb-4">
                         <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">{t("connectedAddress", { defaultValue: "Connected Address" })}</p>
                         <p className="text-sm font-mono font-bold text-slate-800 break-all bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                          {address}
+                          {account.address}
                         </p>
                       </div>
                       <div className="mb-5">
                         <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.15em] mb-1.5">{t("availableBalance", { defaultValue: "Available Balance" })}</p>
-                        <p className="text-2xl font-black text-slate-900">
-                          {account.displayBalance}
-                        </p>
+                        <div className="text-2xl font-black text-slate-900">
+                          {account.displayBalance ? (
+                            account.displayBalance
+                          ) : isLoading ? (
+                            <span className="text-sm text-slate-500 font-medium tracking-normal">Loading...</span>
+                          ) : isError ? (
+                            <span className="text-sm text-red-500 font-medium tracking-normal">Error fetching balance</span>
+                          ) : balanceData ? (
+                            `${Number(balanceData.formatted).toFixed(4)} ${balanceData.symbol}`
+                          ) : (
+                            <span className="text-sm text-slate-500 font-medium tracking-normal">Unavailable</span>
+                          )}
+                        </div>
                       </div>
                       <button
                         type="button"

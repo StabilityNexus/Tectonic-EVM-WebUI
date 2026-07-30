@@ -268,10 +268,6 @@ export default function Home() {
               {tHome("description")}
             </p>
 
-            <div className="flex flex-col gap-4 sm:flex-row sm:justify-start">
-              <button className="btn-primary text-lg">{tHome("startBuilding")}</button>
-              <button className="btn-secondary text-lg">{tHome("learnMore")}</button>
-            </div>
           </div>
 
           <div className="relative mx-auto mt-8 w-full max-w-sm md:mt-0 md:absolute hero-visual md:w-[min(85vw,950px)] hero-visual-lg lg:w-[min(90vw,1200px)] lg:max-w-none">
