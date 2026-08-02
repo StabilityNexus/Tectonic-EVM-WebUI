@@ -22,6 +22,9 @@ import { tectonicAbi } from "@/lib/abi/Tectonic";
 const CONTRACT_ADDRESSES: Record<number, `0x${string}`> = {
   31337: "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512", // Anvil
   11155111: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Sepolia
+  80002: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Amoy (Placeholder)
+  61: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Ethereum Classic (Placeholder)
+  8453: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Base Mainnet (Placeholder)
 };
 const FALLBACK_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
 

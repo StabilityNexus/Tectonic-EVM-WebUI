@@ -53,6 +53,9 @@ export const metadata: Metadata = {
     title: "Tectonic | Decentralized Stable Money",
     description: "Tectonic is a decentralized stablecoin protocol. Combining reserve backing, equity and redemption triggering, it provides the solid foundation for decentralized money on chain. Its stability properties have been thoroughly researched, mathematically proven and formally verified.",
   },
+  icons: {
+    icon: "/Logo.svg",
+  },
 };
 
 import '@rainbow-me/rainbowkit/styles.css';
