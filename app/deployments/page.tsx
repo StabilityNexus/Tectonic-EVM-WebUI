@@ -13,10 +13,11 @@ import { useTranslations } from "@/lib/i18n";
 
 const CHAINS = [
   { id:"all",      label:"All Networks", short:"ALL"  },
-  { id:"Ethereum", label:"Ethereum",     short:"ETH"  },
+  { id:"Hardhat",  label:"Local",        short:"LOCAL"},
+  { id:"Sepolia",  label:"Sepolia",      short:"SEP"  },
   { id:"Polygon",  label:"Polygon",      short:"MATIC"},
+  { id:"Classic",  label:"Classic",      short:"ETC"  },
   { id:"Base",     label:"Base",         short:"BASE" },
-  { id:"BSC",      label:"BSC",          short:"BNB"  },
 ];
 
 const PEG_ASSETS = [
@@ -64,7 +65,7 @@ function ContractCard({ d }: { d: Deployment }) {
           {/* chain badge + status */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-full flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0"
+              <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0 ${d.chainTextColor}`}
                 style={{ background: d.chainColor }}>
                 {d.chainShort.slice(0, 3)}
               </div>
@@ -130,6 +131,7 @@ function ContractCard({ d }: { d: Deployment }) {
    MAIN PAGE
 ───────────────────────────────────────────────────────────────────────────── */
 export default function DeploymentsPage() {
+  const tDeploy = useTranslations("deployments");
   const [activeChain,  setActiveChain]  = useState("all");
   const [activePeg,    setActivePeg]    = useState("all");
   const [search,       setSearch]       = useState("");
@@ -170,9 +172,9 @@ export default function DeploymentsPage() {
       <div className="pt-[68px] border-b border-[#e7dac4] bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex items-end justify-between flex-wrap gap-4">
           <div>
-            <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Protocol Overview</p>
-            <h1 className="text-2xl md:text-3xl font-bold text-[#1a1a1a]">Tectonic Deployments</h1>
-            <p className="text-gray-500 text-sm mt-1">Live reserve ratios, contract health, and protocol actions</p>
+            <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Overview</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-[#1a1a1a]">Tectonic Coins</h1>
+            <p className="text-gray-500 text-sm mt-1">See live statistics and mint or redeem Tectonic coins on various blockchains.</p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1">
@@ -199,20 +201,6 @@ export default function DeploymentsPage() {
       <main className="min-h-screen bg-[#fbf6ec] pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-          {/* stat row — white cards with amber accent values */}
-          <div className="py-5 grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { label:"Total TVL",     value:`$${tvl.toFixed(1)}M`, accent:"text-amber-600"  },
-              { label:"Stablecoins",   value:"8.4M",                accent:"text-[#1a1a1a]"  },
-              { label:"EquityCoins",   value:"120K",                accent:"text-[#1a1a1a]"  },
-              { label:"Reserve Ratio", value:"312%",                accent:"text-emerald-600" },
-            ].map(m => (
-              <SiteCard key={m.label} className="px-4 py-3.5">
-                <div className="text-xs text-gray-400 font-medium mb-1">{m.label}</div>
-                <div className={`text-xl font-bold ${m.accent}`}>{m.value}</div>
-              </SiteCard>
-            ))}
-          </div>
 
           {/* ── SECTION 1: Deployments ─────────────────────────────────── */}
           <section className="py-6">

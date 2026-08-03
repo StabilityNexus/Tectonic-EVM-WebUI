@@ -22,6 +22,9 @@ import { tectonicAbi } from "@/lib/abi/Tectonic";
 const CONTRACT_ADDRESSES: Record<number, `0x${string}`> = {
   31337: "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512", // Anvil
   11155111: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Sepolia
+  80002: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Amoy (Placeholder)
+  61: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Ethereum Classic (Placeholder)
+  8453: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Base Mainnet (Placeholder)
 };
 const FALLBACK_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
 
@@ -41,6 +44,8 @@ function MintRedeemForm({
   scPriceRedeem,
   ecPriceMint,
   ecPriceRedeem,
+  isPlaceholder,
+  isMismatch,
 }: {
   mode: "mint" | "redeem";
   isEquity: boolean;
@@ -51,6 +56,8 @@ function MintRedeemForm({
   scPriceRedeem?: bigint;
   ecPriceMint?: bigint;
   ecPriceRedeem?: bigint;
+  isPlaceholder?: boolean;
+  isMismatch?: boolean;
 }) {
   const [amount, setAmount] = useState("");
   const isMint = mode === "mint";
@@ -162,19 +169,34 @@ function MintRedeemForm({
       </div>
 
       {/* action button */}
-      <button
-        type="submit"
-        disabled={isPending || isConfirming || !amount}
-        className={`w-full py-3 rounded-full text-sm font-bold tracking-wide transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed ${
-          isMint
-            ? "bg-amber-400 hover:bg-amber-500 hover:-translate-y-0.5 text-[#1a1a1a] shadow-amber-100"
-            : "border-2 border-amber-300 bg-white hover:bg-amber-50 hover:-translate-y-0.5 text-[#1a1a1a]"
-        }`}
-      >
-        {btnText}
-      </button>
+      {isPlaceholder ? (
+        <div className="w-full py-3 text-center bg-[#fafaf8] rounded-xl border border-dashed border-[#e7dac4]">
+          <p className="text-sm font-bold text-gray-500 mb-0.5">Coming Soon</p>
+          <p className="text-xs text-gray-400">Contracts not yet deployed.</p>
+        </div>
+      ) : isMismatch ? (
+        <button
+          type="button"
+          disabled
+          className="w-full py-3 rounded-full text-sm font-bold tracking-wide transition shadow-sm border-2 border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+        >
+          Switch Network to Mint/Redeem
+        </button>
+      ) : (
+        <button
+          type="submit"
+          disabled={isPending || isConfirming || !amount}
+          className={`w-full py-3 rounded-full text-sm font-bold tracking-wide transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed ${
+            isMint
+              ? "bg-amber-400 hover:bg-amber-500 hover:-translate-y-0.5 text-[#1a1a1a] shadow-amber-100"
+              : "border-2 border-amber-300 bg-white hover:bg-amber-50 hover:-translate-y-0.5 text-[#1a1a1a]"
+          }`}
+        >
+          {btnText}
+        </button>
+      )}
       
-      {isSuccess && (
+      {isSuccess && !isPlaceholder && !isMismatch && (
         <div className="mt-2 text-center text-xs font-bold text-emerald-600 bg-emerald-50 py-2 rounded-lg border border-emerald-200">
           {t("transactionConfirmed", { defaultValue: "Transaction confirmed!" })}
         </div>
@@ -189,11 +211,15 @@ function StableCoinCard({
   contractAddress,
   scPriceMint,
   scPriceRedeem,
+  isPlaceholder,
+  isMismatch,
 }: {
   d: Deployment;
   contractAddress?: `0x${string}`;
   scPriceMint?: bigint;
   scPriceRedeem?: bigint;
+  isPlaceholder?: boolean;
+  isMismatch?: boolean;
 }) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
   const c = statusCfg(d.status);
@@ -261,6 +287,8 @@ function StableCoinCard({
             scPriceRedeem={scPriceRedeem}
             ecPriceMint={BigInt(0)}
             ecPriceRedeem={BigInt(0)}
+            isPlaceholder={isPlaceholder}
+            isMismatch={isMismatch}
           />
         </div>
       </div>
@@ -274,11 +302,15 @@ function EquityCoinCard({
   contractAddress,
   ecPriceMint,
   ecPriceRedeem,
+  isPlaceholder,
+  isMismatch,
 }: {
   d: Deployment;
   contractAddress?: `0x${string}`;
   ecPriceMint?: bigint;
   ecPriceRedeem?: bigint;
+  isPlaceholder?: boolean;
+  isMismatch?: boolean;
 }) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
   const tCommon = useTranslations("common");
@@ -344,6 +376,8 @@ function EquityCoinCard({
             scPriceRedeem={BigInt(0)}
             ecPriceMint={ecPriceMint}
             ecPriceRedeem={ecPriceRedeem}
+            isPlaceholder={isPlaceholder}
+            isMismatch={isMismatch}
           />
         </div>
       </div>
@@ -357,6 +391,10 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
   const tFooter = useTranslations("footer");
 
   // Wagmi Read Contracts (MUST be called before any early returns)
+  // Find deployment info BEFORE using wagmi hooks
+  const d = DEPLOYMENTS.find(x => x.id === id);
+
+  // Wagmi Read Contracts (MUST be called before any early returns)
   const chainId = useChainId();
   const contractAddress = getContractAddress(chainId);
 
@@ -364,30 +402,36 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
     address: contractAddress,
     abi: tectonicAbi,
     functionName: "scPriceMint",
+    query: { enabled: !d?.isPlaceholder }
   });
   const { data: scPriceRedeem } = useReadContract({
     address: contractAddress,
     abi: tectonicAbi,
     functionName: "scPriceRedeem",
+    query: { enabled: !d?.isPlaceholder }
   });
   const { data: ecPriceMint } = useReadContract({
     address: contractAddress,
     abi: tectonicAbi,
     functionName: "ecPriceMint",
+    query: { enabled: !d?.isPlaceholder }
   });
   const { data: ecPriceRedeem } = useReadContract({
     address: contractAddress,
     abi: tectonicAbi,
     functionName: "ecPriceRedeem",
+    query: { enabled: !d?.isPlaceholder }
   });
   const { data: ratioVal } = useReadContract({
     address: contractAddress,
     abi: tectonicAbi,
     functionName: "ratio",
+    query: { enabled: !d?.isPlaceholder }
   });
 
-  const d = DEPLOYMENTS.find(x => x.id === id);
   if (!d) return notFound();
+  
+  const isMismatch = chainId !== d.chainId;
 
   // Inject real reserve ratio if available
   const displayRatio = ratioVal ? Number(ratioVal) / 100 : d.reserveRatio;
@@ -424,7 +468,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
               </div>
             </div>
             <span
-              className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border ${c.badgeBg} ${c.badgeBorder} ${c.badgeText}`}
+              className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border ${c.badgeBg} ${c.badgeBorder} ${d.chainTextColor}`}
             >
               <span className={`h-2 w-2 rounded-full ${c.dotColor}`} />
               {c.label}
@@ -443,12 +487,16 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
               contractAddress={contractAddress}
               scPriceMint={scPriceMint as bigint | undefined}
               scPriceRedeem={scPriceRedeem as bigint | undefined}
+              isPlaceholder={d.isPlaceholder}
+              isMismatch={isMismatch}
             />
             <EquityCoinCard
               d={d}
               contractAddress={contractAddress}
               ecPriceMint={ecPriceMint as bigint | undefined}
               ecPriceRedeem={ecPriceRedeem as bigint | undefined}
+              isPlaceholder={d.isPlaceholder}
+              isMismatch={isMismatch}
             />
           </div>
 

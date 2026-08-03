@@ -51,7 +51,6 @@ function Typewriter({ text, className = "", speed = 45 }: { text: string; classN
   return (
     <h2 ref={ref} className={className}>
       <span>{visibleText}</span>
-      <span className="ml-1 inline-block animate-pulse">▌</span>
     </h2>
   );
 }
@@ -83,7 +82,6 @@ function HeroTypewriter({
   return (
     <span className={className}>
       <span className="whitespace-pre-line">{visibleText}</span>
-      <span className="ml-1 inline-block animate-pulse">▌</span>
     </span>
   );
 }
