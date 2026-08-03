@@ -13,10 +13,11 @@ import { useTranslations } from "@/lib/i18n";
 
 const CHAINS = [
   { id:"all",      label:"All Networks", short:"ALL"  },
-  { id:"Ethereum", label:"Ethereum",     short:"ETH"  },
+  { id:"Hardhat",  label:"Local",        short:"LOCAL"},
+  { id:"Sepolia",  label:"Sepolia",      short:"SEP"  },
   { id:"Polygon",  label:"Polygon",      short:"MATIC"},
+  { id:"Classic",  label:"Classic",      short:"ETC"  },
   { id:"Base",     label:"Base",         short:"BASE" },
-  { id:"BSC",      label:"BSC",          short:"BNB"  },
 ];
 
 const PEG_ASSETS = [
@@ -64,7 +65,7 @@ function ContractCard({ d }: { d: Deployment }) {
           {/* chain badge + status */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-full flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0"
+              <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0 ${d.chainTextColor}`}
                 style={{ background: d.chainColor }}>
                 {d.chainShort.slice(0, 3)}
               </div>
@@ -130,6 +131,7 @@ function ContractCard({ d }: { d: Deployment }) {
    MAIN PAGE
 ───────────────────────────────────────────────────────────────────────────── */
 export default function DeploymentsPage() {
+  const tDeploy = useTranslations("deployments");
   const [activeChain,  setActiveChain]  = useState("all");
   const [activePeg,    setActivePeg]    = useState("all");
   const [search,       setSearch]       = useState("");
