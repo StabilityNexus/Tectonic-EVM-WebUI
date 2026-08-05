@@ -14,12 +14,13 @@ This document lists the individuals fulfilling the key roles of [Maintainer](htt
 
 | Name | GitHub Username | Discord Username | Area / Focus                        |
 | ---- | --------------- | ---------------- | ----------------------------------- |
-| Sarthak | [@DengreSarthak](https://github.com/DengreSarthak) | sarthak_09385 | Mentor / Maintainer |
-| Yogesh | [@yogesh0509](https://github.com/yogesh0509) | yogesh0509 | Mentor / Maintainer |
+| Bruno | [@Zahnentferner](https://github.com/Zahnentferner) | b.wp |  |
+| Sarthak | [@DengreSarthak](https://github.com/DengreSarthak) | sarthak_09385 |  |
+| Yogesh | [@yogesh0509](https://github.com/yogesh0509) | yogesh0509 |  |
 
 ## Maintainers
 
 | Name | GitHub Username | Discord Username | Area / Focus                     |
 | ---- | --------------- | ---------------- | -------------------------------- |
-| Ankit | [@ankitkr104](https://github.com/ankitkr104) | ankit_94329 | GSoC Maintainer (Student Developer) |
-| Sachin | [@sach2004](https://github.com/sach2004) | sach0605 | GSoC Maintainer (Student Developer) |
+| Bruno | [@Zahnentferner](https://github.com/Zahnentferner) | b.wp |  |
+| Ankit | [@ankitkr104](https://github.com/ankitkr104) | ankit_94329 |  |
