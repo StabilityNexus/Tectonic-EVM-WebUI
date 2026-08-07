@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { ComparisonTable } from "@/components/ComparisonTable";
 import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
@@ -299,38 +300,7 @@ export default function Home() {
             <p className="mx-auto max-w-2xl text-gray-700 text-lg">{tHome("whyTectonicDesc")}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-            {features.map((f, i) => (
-              <div key={f.title} className="w-full h-full">
-                <div
-                  ref={(el) => { featureRefs.current[i] = el }}
-                  style={{ transitionDelay: `${i * 120}ms` }}
-                  className="relative rounded-xl border border-[#e7dac4] bg-[#fbf6ec] p-6 transform transition-all duration-700 opacity-0 translate-y-6 hover:-translate-y-1 hover:shadow-lg h-full"
-                >
-                  {/* inner white panel for contrast */}
-                  <div className="relative bg-white rounded-lg pt-20 px-6 pb-6 min-h-[220px] shadow-sm flex flex-col justify-between h-full">
-                    <div className="absolute top-4 left-4 w-14 h-14 rounded-full bg-white border border-[#efe2c9] flex items-center justify-center text-2xl shadow-sm">
-                      <span className="leading-none">{f.emoji}</span>
-                    </div>
-
-                    <h3 className="text-lg md:text-xl font-semibold mb-2 text-gray-900">{f.title}</h3>
-                    <p className="text-gray-700 text-sm leading-relaxed">{f.desc}</p>
-
-                    <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <a href="#" className="text-yellow-600 font-medium hover:underline">{tHome("learnMoreLink")}</a>
-                    </div>
-
-                    <svg className="absolute right-4 bottom-4 opacity-20" width="72" height="36" viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                      <path d="M2 30 C20 10, 60 10, 78 30" stroke="#e6d7c1" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                      <circle cx="14" cy="28" r="1.2" fill="#e6d7c1" />
-                      <circle cx="38" cy="20" r="1.2" fill="#e6d7c1" />
-                      <circle cx="62" cy="12" r="1.2" fill="#e6d7c1" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ComparisonTable />
 
           <div className="mt-16 flex justify-center">
             <a href="#" className="inline-block rounded-full border border-[#e7dac4] px-6 py-3 text-lg tracking-wide text-gray-900 font-medium hover:bg-[#fffaf0] animate-fade-up transition-transform duration-200 hover:-translate-y-1 hover:scale-105">{tHome("learnMoreLink")}</a>
