@@ -271,12 +271,14 @@ export default function DeploymentsPage() {
         <div className="relative mx-auto max-w-7xl px-2 pt-4 pb-0 md:px-6">
           <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
             {/* brand */}
-            <div className="max-w-sm">
-              <div className="logo-hover-wrap mb-4 flex items-center gap-3 text-slate-900">
-                <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={160} height={44} className="logo-hover-zoom h-9 w-auto object-contain" />
-                <span className="text-xl font-black tracking-[0.22em]">TECTONIC</span>
+            <div className="max-w-sm flex flex-col items-start">
+              <div className="flex flex-col items-center text-center">
+                <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
+                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
+                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
+                </div>
+                <p className="max-w-xs text-sm leading-6 text-slate-600">Next-generation stablecoin protocol.</p>
               </div>
-              <p className="max-w-xs text-sm leading-6 text-slate-600">Next-generation stablecoin protocol.</p>
             </div>
 
             {/* Protocol */}
@@ -293,9 +295,8 @@ export default function DeploymentsPage() {
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Community</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                {["Discord","Twitter"].map(l=>(
-                  <li key={l}><a href={l==="Discord"?"https://discord.com/channels/995968619034984528/1503320626096635935":"#"} target={l==="Discord"?"_blank":undefined} rel={l==="Discord"?"noopener noreferrer":undefined} className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>
-                ))}
+                <li><a href="https://discord.gg/YzDKeEfWtS" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
+                <li><a href="https://t.me/StabilityNexus" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Telegram</a></li>
               </ul>
             </div>
 
@@ -303,16 +304,19 @@ export default function DeploymentsPage() {
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Resources</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                {["Technical Paper"].map(l=>(
+                {["Technical Paper", "KYA / Terms"].map(l=>(
                   <li key={l}><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>
                 ))}
               </ul>
             </div>
           </div>
+        </div>
 
-          <div className="mt-24 border-t border-amber-200/80 pt-6">
-            <p className="text-center text-sm text-slate-600">© 2026 Tectonic Protocol. All rights reserved.</p>
-          </div>
+        <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
+          <p className="text-sm text-slate-600 text-center md:text-left">© 2026 Tectonic Protocol. All rights reserved.</p>
+          <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
+          </a>
         </div>
       </footer>
     </>
