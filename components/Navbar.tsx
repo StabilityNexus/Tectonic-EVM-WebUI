@@ -218,7 +218,7 @@ export default function Navbar() {
             className="logo-hover-zoom h-9 w-auto object-contain sm:h-10"
             priority
           />
-          <span className="hidden text-xl leading-none font-extrabold tracking-[0.22em] text-slate-900 sm:block">
+          <span className="hidden text-xl leading-none font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] sm:block">
             TECTONIC
           </span>
         </Link>
