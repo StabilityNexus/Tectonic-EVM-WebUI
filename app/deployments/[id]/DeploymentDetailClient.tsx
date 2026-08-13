@@ -231,7 +231,7 @@ function StableCoinCard({
     <div className="rounded-2xl border border-[#e7dac4] bg-white shadow-[0_4px_24px_rgba(15,23,42,0.07)] overflow-hidden flex flex-col">
       {/* header */}
       <div className="px-6 pt-6 pb-4 text-center border-b border-[#f0ece4]">
-        <p className="text-[10px] font-black tracking-[0.2em] text-amber-500 uppercase mb-1">{tDetail("stablecoin")}</p>
+        <p className="text-sm font-black tracking-[0.15em] text-amber-500 mb-1 [font-variant:small-caps]">{tDetail("stablecoin")}</p>
         <p className="text-3xl font-black text-[#1a1a1a]">{d.stablecoin}</p>
       </div>
 
@@ -320,7 +320,7 @@ function EquityCoinCard({
     <div className="rounded-2xl border border-[#e7dac4] bg-white shadow-[0_4px_24px_rgba(15,23,42,0.07)] overflow-hidden flex flex-col">
       {/* header */}
       <div className="px-6 pt-6 pb-4 text-center border-b border-[#f0ece4]">
-        <p className="text-[10px] font-black tracking-[0.2em] text-violet-500 uppercase mb-1">{tDetail("equityCoin")}</p>
+        <p className="text-sm font-black tracking-[0.15em] text-violet-500 mb-1 [font-variant:small-caps]">{tDetail("equityCoin")}</p>
         <p className="text-3xl font-black text-[#1a1a1a]">{d.equityCoin}</p>
       </div>
 
@@ -582,17 +582,19 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
         <div className="pointer-events-none absolute right-0 top-10 h-44 w-44 rounded-full bg-orange-200/30 blur-3xl" />
         <div className="relative mx-auto max-w-5xl px-2 pt-4 pb-0 md:px-6">
           <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
-            <div className="max-w-sm">
-              <div className="logo-hover-wrap mb-4 flex items-center gap-3 text-slate-900">
-                <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={140} height={40} className="logo-hover-zoom h-8 w-auto object-contain" />
-                <span className="text-lg font-black tracking-[0.22em]">TECTONIC</span>
+            <div className="max-w-sm flex flex-col items-start">
+              <div className="flex flex-col items-center text-center">
+                <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
+                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
+                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
+                </div>
+                <p className="max-w-xs text-sm leading-6 text-slate-600">{tFooter("desc")}</p>
               </div>
-              <p className="max-w-xs text-sm leading-6 text-slate-600">{tFooter("desc")}</p>
             </div>
             {[
               { title: tFooter("protocol"),  links: [["Docs","#"],["Contracts","#"],["GitHub","https://github.com/StabilityNexus/Tectonic-EVM-WebUI"]] },
-              { title: tFooter("community"), links: [["Discord","https://discord.com/channels/995968619034984528/1503320626096635935"],["Twitter","#"]] },
-              { title: tFooter("resources"), links: [[tFooter("technicalPaper"),"#"]] },
+              { title: tFooter("community"), links: [["Discord","https://discord.gg/YzDKeEfWtS"],["Telegram","https://t.me/StabilityNexus"]] },
+              { title: tFooter("resources"), links: [[tFooter("technicalPaper"),"#"], ["KYA / Terms", "#"]] },
             ].map(col => (
               <div key={col.title}>
                 <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{col.title}</h4>
@@ -613,9 +615,13 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
               </div>
             ))}
           </div>
-          <div className="mt-16 border-t border-amber-200/80 pt-6">
-            <p className="text-center text-sm text-slate-600">{tFooter("rights")}</p>
           </div>
+
+        <div className="mt-16 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
+          <p className="text-sm text-slate-600 text-center md:text-left">{tFooter("rights")}</p>
+          <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
+          </a>
         </div>
       </footer>
     </>

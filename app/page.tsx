@@ -556,21 +556,21 @@ export default function Home() {
 
             <div className="flex justify-center md:justify-end">
               <div className="inline-flex flex-col gap-4 rounded-3xl bg-white p-3 shadow-lg">
-                <a href="#" className="btn-primary flex items-center gap-3 px-4 py-3">
+                <a href="https://discord.gg/YzDKeEfWtS" target="_blank" rel="noopener noreferrer" className="btn-primary flex items-center gap-3 px-4 py-3">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                     <path d="M20 3H4a1 1 0 00-1 1v16l4-4h13a1 1 0 001-1V4a1 1 0 00-1-1z" fill="currentColor" />
                   </svg>
                   DISCORD
                 </a>
 
-                <a href="#" className="btn-secondary flex items-center gap-3 px-4 py-3">
+                <a href="https://t.me/StabilityNexus" target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center gap-3 px-4 py-3">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                    <path d="M22 5.92a8.3 8.3 0 01-2.36.65A4.1 4.1 0 0021.4 4c-.8.48-1.68.82-2.62 1A4.13 4.13 0 0012 8.4v.5A11.7 11.7 0 013 6.16a4.03 4.03 0 001.28 5.48 4.08 4.08 0 01-1.86-.51v.05c0 1.9 1.34 3.5 3.12 3.87a4.1 4.1 0 01-1.85.07 4.12 4.12 0 003.85 2.86A8.3 8.3 0 012 19.54 11.68 11.68 0 008.29 21c7.55 0 11.68-6.26 11.68-11.68l-.01-.53A8.18 8.18 0 0022 5.92z" fill="currentColor"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.84 1.18-5.18 3.44-.49.33-.93.5-1.33.49-.44-.01-1.28-.24-1.9-.45-.77-.25-1.38-.39-1.33-.82.03-.22.34-.44.93-.68 3.63-1.58 6.05-2.62 7.25-3.12 3.45-1.43 4.16-1.68 4.63-1.69.1 0 .33.02.46.12.11.08.14.2.15.28.01.1-.01.23-.03.32z" fill="currentColor"/>
                   </svg>
-                  TWITTER
+                  TELEGRAM
                 </a>
 
-                <a href="#" className="btn-secondary flex items-center gap-3 px-4 py-3">
+                <a href="https://github.com/StabilityNexus/Tectonic-EVM-WebUI" target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center gap-3 px-4 py-3">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                     <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .8.1-.6.4-1.1.7-1.4-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 3 .1 3.3.7.9 1.2 2 1.2 3.3 0 4.5-2.7 5.4-5.3 5.8.4.4.8 1 1 2v3c0 .3.2.7.8.6A10.5 10.5 0 0023.5 12C23.5 5.7 18.3.5 12 .5z" fill="currentColor"/>
                   </svg>
@@ -590,20 +590,16 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-7xl px-2 pt-4 pb-0 md:px-6">
           <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
-            <div className="max-w-sm">
-              <div className="logo-hover-wrap mb-4 flex items-center gap-3 text-slate-900">
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`}
-                  alt="Tectonic logo"
-                  width={160}
-                  height={44}
-                  className="logo-hover-zoom h-9 w-auto object-contain"
-                />
-                <span className="text-xl font-black tracking-[0.22em]">TECTONIC</span>
+            <div className="max-w-sm flex flex-col items-start">
+              <div className="flex flex-col items-center text-center">
+                <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
+                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
+                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
+                </div>
+                <p className="max-w-xs text-sm leading-6 text-slate-600">
+                  {tFooter("desc")}
+                </p>
               </div>
-              <p className="max-w-xs text-sm leading-6 text-slate-600">
-                {tFooter("desc")}
-              </p>
             </div>
 
             <div>
@@ -618,8 +614,8 @@ export default function Home() {
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{tFooter("community")}</h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                <li><a href="https://discord.com/channels/995968619034984528/1503320626096635935" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Twitter</a></li>
+                <li><a href="https://discord.gg/YzDKeEfWtS" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
+                <li><a href="https://t.me/StabilityNexus" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Telegram</a></li>
               </ul>
             </div>
 
@@ -627,15 +623,19 @@ export default function Home() {
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{tFooter("resources")}</h4>
               <ul className="space-y-3 text-sm text-slate-700">
                 <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{tFooter("technicalPaper")}</a></li>
+                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">KYA / Terms</a></li>
               </ul>
             </div>
           </div>
+        </div>
 
-          <div className="mt-24 border-t border-amber-200/80 pt-6">
-            <p className="text-center text-sm text-slate-600">
-              {tFooter("rights")}
-            </p>
-          </div>
+        <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
+          <p className="text-sm text-slate-600 text-center md:text-left">
+            {tFooter("rights")}
+          </p>
+          <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
+          </a>
         </div>
       </footer>
     </div>
