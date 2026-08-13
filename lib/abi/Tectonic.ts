@@ -38,28 +38,34 @@ export const tectonicAbi = [
 
   // WRITES
   {
-    inputs: [],
+    inputs: [{ internalType: "address", name: "receiver", type: "address" }],
     name: "mint",
     outputs: [],
     stateMutability: "payable",
     type: "function",
   },
   {
-    inputs: [],
+    inputs: [{ internalType: "address", name: "receiver", type: "address" }],
     name: "mintEquityCoins",
     outputs: [],
     stateMutability: "payable",
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+    inputs: [
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "address", name: "receiver", type: "address" }
+    ],
     name: "redeem",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+    inputs: [
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "address", name: "receiver", type: "address" }
+    ],
     name: "redeemEquityCoins",
     outputs: [],
     stateMutability: "nonpayable",
