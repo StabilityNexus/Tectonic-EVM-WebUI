@@ -9,12 +9,13 @@ import { statusCfg, pct } from "@/lib/deployments-ui";
 import { DEPLOYMENTS } from "@/lib/deployments-data";
 import type { Deployment } from "@/lib/deployments-data";
 import { useTranslations } from "@/lib/i18n";
-import { parseEther, formatEther } from "viem";
+import { parseEther, formatEther, parseGwei } from "viem";
 import {
   useReadContract,
   useWriteContract,
   useWaitForTransactionReceipt,
   useChainId,
+  useAccount,
 } from "wagmi";
 import { tectonicAbi } from "@/lib/abi/Tectonic";
 
@@ -22,7 +23,7 @@ import { tectonicAbi } from "@/lib/abi/Tectonic";
 const CONTRACT_ADDRESSES: Record<number, `0x${string}`> = {
   31337: "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512", // Anvil
   11155111: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Sepolia
-  80002: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Amoy (Placeholder)
+  80002: "0xfD14ac4867954173552dFB72be1321Ce1AC35834", // Amoy
   61: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Ethereum Classic (Placeholder)
   8453: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Base Mainnet (Placeholder)
 };
@@ -88,41 +89,54 @@ function MintRedeemForm({
   estimateNum = estimateNum * (1 - feePct);
 
   // Wagmi hooks
-  const { data: hash, writeContract, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
+  const { address: userAddress } = useAccount();
+  const { data: hash, writeContract, isPending, error: writeError } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess, error: receiptError } = useWaitForTransactionReceipt({ hash });
+  const currentChainId = useChainId();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount || isNaN(valNum) || valNum <= 0 || !contractAddress) return;
+    if (!amount || isNaN(valNum) || valNum <= 0 || !contractAddress || !userAddress) return;
     const weiAmount = parseEther(amount);
+
+    const txOptions = currentChainId === 80002 ? {
+      maxPriorityFeePerGas: parseGwei("30"),
+      maxFeePerGas: parseGwei("30")
+    } : {};
 
     if (isMint && !isEquity) {
       writeContract({
         address: contractAddress,
         abi: tectonicAbi,
         functionName: "mint",
+        args: [userAddress],
         value: weiAmount,
+        ...txOptions
       });
     } else if (isMint && isEquity) {
       writeContract({
         address: contractAddress,
         abi: tectonicAbi,
         functionName: "mintEquityCoins",
+        args: [userAddress],
         value: weiAmount,
+        ...txOptions
       });
     } else if (!isMint && !isEquity) {
       writeContract({
         address: contractAddress,
         abi: tectonicAbi,
         functionName: "redeem",
-        args: [weiAmount],
+        args: [weiAmount, userAddress],
+        ...txOptions
       });
     } else if (!isMint && isEquity) {
       writeContract({
         address: contractAddress,
         abi: tectonicAbi,
         functionName: "redeemEquityCoins",
-        args: [weiAmount],
+        args: [weiAmount, userAddress],
+        ...txOptions
       });
     }
   };
@@ -199,6 +213,11 @@ function MintRedeemForm({
       {isSuccess && !isPlaceholder && !isMismatch && (
         <div className="mt-2 text-center text-xs font-bold text-emerald-600 bg-emerald-50 py-2 rounded-lg border border-emerald-200">
           {t("transactionConfirmed", { defaultValue: "Transaction confirmed!" })}
+        </div>
+      )}
+      {(writeError || receiptError) && (
+        <div className="mt-2 text-center text-xs font-bold text-red-600 bg-red-50 py-2 px-3 rounded-lg border border-red-200 break-words">
+          {writeError?.message || receiptError?.message}
         </div>
       )}
     </form>
