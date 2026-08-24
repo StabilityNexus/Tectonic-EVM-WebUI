@@ -942,37 +942,4 @@ body {
   margin-left: 0.25em;
 }
 
-/* Hero visual placement: anchor the image to bottom-right and allow it to extend past the section */
-.hero-visual {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-  width: min(85vw, 950px);
-  max-width: none;
-  transform: translateX(0) translateY(0);
-}
 
-@media (min-width: 768px) {
-  .hero-visual {
-    right: -2.5rem; /* push slightly into the right gutter */
-    bottom: -3rem; /* push slightly below the fold */
-    width: min(85vw, 950px);
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero-visual {
-    right: -4rem;
-    bottom: -5rem;
-    width: min(90vw, 1200px);
-  }
-}
-
-/* ensure the image inside the container preserves its object-fit and does not add extra padding */
-.hero-visual img,
-.hero-visual .next-image {
-  object-fit: contain;
-  object-position: right bottom;
-  padding: 0;
-}

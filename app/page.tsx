@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import Navbar from "@/components/Navbar";
+import HeroGlobe from "@/components/HeroGlobe";
 import { useTranslations } from "@/lib/i18n";
 
 function Typewriter({ text, className = "", speed = 45 }: { text: string; className?: string; speed?: number }) {
@@ -269,17 +270,8 @@ export default function Home() {
 
           </div>
 
-          <div className="relative mx-auto mt-8 w-full max-w-sm md:mt-0 md:absolute hero-visual md:w-[min(85vw,950px)] hero-visual-lg lg:w-[min(90vw,1200px)] lg:max-w-none">
-            <div className="relative aspect-[4/3] w-full drop-shadow-2xl md:aspect-[5/4]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/tectonic-hero.png`}
-                alt="Tectonic hero illustration"
-                fill
-                priority
-                sizes="(max-width: 768px) 90vw, (max-width: 1024px) 85vw, 90vw"
-                className="object-contain object-right-bottom p-0 scale-x-[-1]"
-              />
-            </div>
+          <div className="mx-auto w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[500px]">
+            <HeroGlobe />
           </div>
         </div>
 
