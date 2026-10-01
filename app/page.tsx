@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import Navbar from "@/components/Navbar";
+import HeroGlobe from "@/components/HeroGlobe";
 import { useTranslations } from "@/lib/i18n";
 
 function Typewriter({ text, className = "", speed = 45 }: { text: string; className?: string; speed?: number }) {
@@ -269,24 +270,11 @@ export default function Home() {
 
           </div>
 
-          <div className="relative mx-auto mt-8 w-full max-w-sm md:mt-0 md:absolute hero-visual md:w-[min(85vw,950px)] hero-visual-lg lg:w-[min(90vw,1200px)] lg:max-w-none">
-            <div className="relative aspect-[4/3] w-full drop-shadow-2xl md:aspect-[5/4]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/tectonic-hero.png`}
-                alt="Tectonic hero illustration"
-                fill
-                priority
-                sizes="(max-width: 768px) 90vw, (max-width: 1024px) 85vw, 90vw"
-                className="object-contain object-right-bottom p-0 scale-x-[-1]"
-              />
-            </div>
+          <div className="mx-auto w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[500px]">
+            <HeroGlobe />
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="text-orange-600">↓</div>
-        </div>
       </section>
 
       {/* Features Section (styled to match provided design) */}
@@ -594,7 +582,7 @@ export default function Home() {
               <div className="flex flex-col items-center text-center">
                 <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
                   <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
-                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
+                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent leading-none">TECTONIC</span>
                 </div>
                 <p className="max-w-xs text-sm leading-6 text-slate-600">
                   {tFooter("desc")}
