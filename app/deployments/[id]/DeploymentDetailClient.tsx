@@ -145,10 +145,10 @@ function MintRedeemForm({
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             disabled={isPending || isConfirming}
-            className="w-full rounded-xl border border-[#e7dac4] bg-[#fafaf8] px-4 py-3 pr-20 text-sm text-[#1a1a1a] focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition disabled:opacity-50"
+            className="w-full rounded-xl border border-[#e7dac4] bg-[#fafaf8] px-4 py-3 pr-16 sm:pr-20 text-sm text-[#1a1a1a] focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition disabled:opacity-50"
             placeholder="0.00"
           />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-500">
+          <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-[10px] sm:text-xs font-bold text-amber-500 max-w-[4.5rem] truncate">
             {inputAsset}
           </span>
         </div>
@@ -156,13 +156,13 @@ function MintRedeemForm({
 
       {/* summary box */}
       <div className="rounded-xl border border-[#e7dac4] bg-[#fafaf8] px-4 py-3 space-y-2">
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>{t("fee")}</span>
+        <div className="flex justify-between gap-3 text-xs text-gray-400">
+          <span className="flex-shrink-0">{t("fee")}</span>
           <span className="text-[#1a1a1a] font-medium">0.3%</span>
         </div>
-        <div className="border-t border-[#efe2c9] pt-2 flex justify-between text-sm font-bold">
-          <span className="text-[#1a1a1a]">{t("youReceive")}</span>
-          <span className="text-amber-500">
+        <div className="border-t border-[#efe2c9] pt-2 flex flex-wrap items-start justify-between gap-2 text-sm font-bold">
+          <span className="text-[#1a1a1a] flex-shrink-0">{t("youReceive")}</span>
+          <span className="text-amber-500 text-right break-words min-w-0">
             ~{estimateNum > 0 ? estimateNum.toLocaleString(undefined, { maximumFractionDigits: 6 }) : "0.00"} {outputToken}
           </span>
         </div>
@@ -230,29 +230,29 @@ function StableCoinCard({
   return (
     <div className="rounded-2xl border border-[#e7dac4] bg-white shadow-[0_4px_24px_rgba(15,23,42,0.07)] overflow-hidden flex flex-col">
       {/* header */}
-      <div className="px-6 pt-6 pb-4 text-center border-b border-[#f0ece4]">
+      <div className="px-4 sm:px-6 pt-5 sm:pt-6 pb-4 text-center border-b border-[#f0ece4]">
         <p className="text-sm font-black tracking-[0.15em] text-amber-500 mb-1 [font-variant:small-caps]">{tDetail("stablecoin")}</p>
-        <p className="text-3xl font-black text-[#1a1a1a]">{d.stablecoin}</p>
+        <p className="text-2xl sm:text-3xl font-black text-[#1a1a1a] break-words">{d.stablecoin}</p>
       </div>
 
       {/* stats row */}
       <div className="grid grid-cols-3 divide-x divide-[#f0ece4] border-b border-[#f0ece4]">
-        <div className="px-4 py-3 text-center">
+        <div className="px-2 sm:px-4 py-3 text-center min-w-0">
           <p className="text-[10px] text-gray-400 mb-1">{tDetail("supply")}</p>
-          <p className="text-sm font-bold text-[#1a1a1a]">{d.stableSupply}</p>
+          <p className="text-xs sm:text-sm font-bold text-[#1a1a1a] break-words">{d.stableSupply}</p>
         </div>
-        <div className="px-4 py-3 text-center">
-          <p className="text-[10px] text-gray-400 mb-1">{tDetail("crashTolerance")}</p>
-          <p className="text-sm font-bold text-emerald-500">{crashTolerance}%</p>
+        <div className="px-2 sm:px-4 py-3 text-center min-w-0">
+          <p className="text-[10px] text-gray-400 mb-1 leading-tight">{tDetail("crashTolerance")}</p>
+          <p className="text-xs sm:text-sm font-bold text-emerald-500">{crashTolerance}%</p>
         </div>
-        <div className="px-4 py-3 text-center">
-          <p className="text-[10px] text-gray-400 mb-1">{tDetail("reserveRatio")}</p>
-          <p className={`text-sm font-bold ${c.tc}`}>{d.reserveRatio}%</p>
+        <div className="px-2 sm:px-4 py-3 text-center min-w-0">
+          <p className="text-[10px] text-gray-400 mb-1 leading-tight">{tDetail("reserveRatio")}</p>
+          <p className={`text-xs sm:text-sm font-bold ${c.tc}`}>{d.reserveRatio}%</p>
         </div>
       </div>
 
       {/* mint / redeem toggle */}
-      <div className="px-6 pt-5 flex-1 flex flex-col">
+      <div className="px-4 sm:px-6 pt-5 flex-1 flex flex-col">
         <div className="flex rounded-xl border border-[#e7dac4] overflow-hidden mb-1">
           <button
             onClick={() => setTab("mint")}
@@ -319,29 +319,29 @@ function EquityCoinCard({
   return (
     <div className="rounded-2xl border border-[#e7dac4] bg-white shadow-[0_4px_24px_rgba(15,23,42,0.07)] overflow-hidden flex flex-col">
       {/* header */}
-      <div className="px-6 pt-6 pb-4 text-center border-b border-[#f0ece4]">
+      <div className="px-4 sm:px-6 pt-5 sm:pt-6 pb-4 text-center border-b border-[#f0ece4]">
         <p className="text-sm font-black tracking-[0.15em] text-violet-500 mb-1 [font-variant:small-caps]">{tDetail("equityCoin")}</p>
-        <p className="text-3xl font-black text-[#1a1a1a]">{d.equityCoin}</p>
+        <p className="text-2xl sm:text-3xl font-black text-[#1a1a1a] break-words">{d.equityCoin}</p>
       </div>
 
       {/* stats row */}
       <div className="grid grid-cols-3 divide-x divide-[#f0ece4] border-b border-[#f0ece4]">
-        <div className="px-4 py-3 text-center">
+        <div className="px-2 sm:px-4 py-3 text-center min-w-0">
           <p className="text-[10px] text-gray-400 mb-1">{tDetail("supply")}</p>
-          <p className="text-sm font-bold text-[#1a1a1a]">{d.equitySupply}</p>
+          <p className="text-xs sm:text-sm font-bold text-[#1a1a1a] break-words">{d.equitySupply}</p>
         </div>
-        <div className="px-4 py-3 text-center">
-          <p className="text-[10px] text-gray-400 mb-1">{tDetail("annualYield")}</p>
-          <p className="text-sm font-bold text-amber-500">{d.equityYield}%</p>
+        <div className="px-2 sm:px-4 py-3 text-center min-w-0">
+          <p className="text-[10px] text-gray-400 mb-1 leading-tight">{tDetail("annualYield")}</p>
+          <p className="text-xs sm:text-sm font-bold text-amber-500">{d.equityYield}%</p>
         </div>
-        <div className="px-4 py-3 text-center">
+        <div className="px-2 sm:px-4 py-3 text-center min-w-0">
           <p className="text-[10px] text-gray-400 mb-1">{tDetail("leverage")}</p>
-          <p className="text-sm font-bold text-violet-500">{d.equityLeverage}</p>
+          <p className="text-xs sm:text-sm font-bold text-violet-500">{d.equityLeverage}</p>
         </div>
       </div>
 
       {/* mint / redeem toggle */}
-      <div className="px-6 pt-5 flex-1 flex flex-col">
+      <div className="px-4 sm:px-6 pt-5 flex-1 flex flex-col">
         <div className="flex rounded-xl border border-[#e7dac4] overflow-hidden mb-1">
           <button
             onClick={() => setTab("mint")}
@@ -451,18 +451,18 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
             {tDetail("back")}
           </Link>
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-start sm:items-center gap-3 min-w-0">
               <div
-                className="h-11 w-11 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md"
+                className="h-11 w-11 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md flex-shrink-0"
                 style={{ background: d.chainColor }}
               >
                 {d.chainShort.slice(0, 3)}
               </div>
-              <div>
-                <h1 className="text-2xl md:text-3xl font-black text-[#1a1a1a] leading-tight">
+              <div className="min-w-0">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#1a1a1a] leading-tight break-words">
                   {d.name}
                 </h1>
-                <p className="text-sm text-gray-400 mt-0.5">
+                <p className="text-sm text-gray-400 mt-0.5 break-words">
                   {tDetail("backedBy", { reserve: d.reserveAsset, peg: d.pegAsset, chain: d.chain })}
                 </p>
               </div>
@@ -470,7 +470,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
             <span
               className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border ${c.badgeBg} ${c.badgeBorder} ${d.chainTextColor}`}
             >
-              <span className={`h-2 w-2 rounded-full ${c.dotColor}`} />
+              <span className={`h-2 w-2 rounded-full flex-shrink-0 ${c.dotColor}`} />
               {c.label}
             </span>
           </div>
@@ -502,25 +502,25 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
 
           {/* ── BOTTOM: Deployment Health ── */}
           <div className="rounded-2xl border border-[#e7dac4] bg-white shadow-[0_4px_24px_rgba(15,23,42,0.07)] overflow-hidden">
-            <div className="px-6 py-4 border-b border-[#f0ece4]">
+            <div className="px-4 sm:px-6 py-4 border-b border-[#f0ece4]">
               <p className="text-[10px] font-black tracking-[0.2em] text-amber-500 uppercase">
                 {tDetail("health")}
               </p>
             </div>
-            <div className="px-6 py-6 grid sm:grid-cols-3 gap-8">
+            <div className="px-4 sm:px-6 py-6 grid sm:grid-cols-3 gap-6 sm:gap-8">
 
               {/* Total Reserve */}
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs text-gray-400 mb-2">{tDetail("totalReserve")}</p>
-                <p className="text-3xl font-black text-[#1a1a1a]">{d.totalReserve}</p>
+                <p className="text-2xl sm:text-3xl font-black text-[#1a1a1a] break-words">{d.totalReserve}</p>
                 <p className="text-xs text-gray-400 mt-1">{tDetail("inReserve", { reserve: d.reserveAsset })}</p>
               </div>
 
               {/* Reserve Ratio slider */}
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs text-gray-400 mb-2">{tDetail("reserveRatio")}</p>
-                <p className={`text-2xl font-black mb-3 ${c.tc}`}>
-                  {displayRatio}% <span className="text-base font-semibold text-gray-400">{tDetail("minSafe")}</span>
+                <p className={`text-xl sm:text-2xl font-black mb-3 ${c.tc}`}>
+                  {displayRatio}% <span className="text-sm sm:text-base font-semibold text-gray-400">{tDetail("minSafe")}</span>
                 </p>
                 <div className="h-2.5 w-full rounded-full bg-[#efe2c9] overflow-hidden">
                   <div
@@ -576,16 +576,16 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
       </main>
 
       {/* ── footer ── */}
-      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-6 pt-14 pb-4">
+      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-4 sm:px-6 pt-14 pb-4">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-80" />
         <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl" />
         <div className="pointer-events-none absolute right-0 top-10 h-44 w-44 rounded-full bg-orange-200/30 blur-3xl" />
         <div className="relative mx-auto max-w-5xl px-2 pt-4 pb-0 md:px-6">
-          <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
-            <div className="max-w-sm flex flex-col items-start">
+          <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
+            <div className="max-w-sm flex flex-col items-start sm:col-span-2 md:col-span-1">
               <div className="flex flex-col items-center text-center">
                 <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
-                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
+                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" style={{ width: "auto" }} />
                   <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
                 </div>
                 <p className="max-w-xs text-sm leading-6 text-slate-600">{tFooter("desc")}</p>
@@ -617,10 +617,10 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
           </div>
           </div>
 
-        <div className="mt-16 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
+        <div className="relative mx-auto mt-16 flex max-w-5xl flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 px-2 pt-6 md:px-6 w-full">
           <p className="text-sm text-slate-600 text-center md:text-left">{tFooter("rights")}</p>
           <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-10 sm:h-12 rounded-lg" unoptimized />
           </a>
         </div>
       </footer>

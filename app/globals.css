@@ -649,7 +649,8 @@ body {
   padding: 0; /* inner container supplies padding */
   min-height: auto;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 /* Reduce the visual color area of primary buttons inside the navbar only */
@@ -690,8 +691,8 @@ body {
   min-width: 0 !important;
 }
 
-/* Ensure the inner nav container never allows wrapping and brand doesn't shrink */
-.glassy-navbar > div {
+/* Top bar row: keep brand + actions on one line */
+.glassy-navbar > div:first-child {
   display: flex;
   flex-wrap: nowrap !important;
   align-items: center;
@@ -710,7 +711,12 @@ body {
   .glassy-navbar .navbar-letter { padding: 0 1px !important; line-height: 1 !important; }
   .glassy-navbar .btn-primary { padding: 0.35rem 0.75rem !important; font-size: 0.825rem !important; }
   /* hide desktop-only links explicitly on small screens */
-  .glassy-navbar > div .hidden { display: none !important; }
+  .glassy-navbar > div:first-child .hidden { display: none !important; }
+  /* Mobile drawer CTAs should use full width, not the desktop pill min-width */
+  .glassy-navbar #mobile-nav-drawer .btn-primary.btn-hero {
+    min-width: 0 !important;
+    width: 100%;
+  }
 }
 
 .glassy-navbar a:hover {
@@ -762,9 +768,15 @@ body {
 }
 
 .hero-kicker {
-  letter-spacing: 0.24em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   animation: hero-kicker-fade 1.4s ease-out both;
+}
+
+@media (min-width: 640px) {
+  .hero-kicker {
+    letter-spacing: 0.24em;
+  }
 }
 
 @keyframes hero-breathe {
@@ -801,13 +813,28 @@ body {
 @keyframes hero-kicker-fade {
   0% {
     opacity: 0;
-    letter-spacing: 0.42em;
+    letter-spacing: 0.2em;
     transform: translateY(10px);
   }
   100% {
     opacity: 1;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.12em;
     transform: translateY(0);
+  }
+}
+
+@media (min-width: 640px) {
+  @keyframes hero-kicker-fade {
+    0% {
+      opacity: 0;
+      letter-spacing: 0.42em;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      letter-spacing: 0.24em;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -942,22 +969,24 @@ body {
   margin-left: 0.25em;
 }
 
-/* Hero visual placement: anchor the image to bottom-right and allow it to extend past the section */
+/* Hero visual: stacked on mobile, anchored bottom-right from tablet up */
 .hero-visual {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  position: relative;
   z-index: 10;
-  width: min(85vw, 950px);
-  max-width: none;
+  width: 100%;
+  max-width: 24rem;
+  margin-inline: auto;
   transform: translateX(0) translateY(0);
 }
 
 @media (min-width: 768px) {
   .hero-visual {
-    right: -2.5rem; /* push slightly into the right gutter */
-    bottom: -3rem; /* push slightly below the fold */
+    position: absolute;
+    right: -2.5rem;
+    bottom: -3rem;
+    margin-inline: 0;
     width: min(85vw, 950px);
+    max-width: none;
   }
 }
 

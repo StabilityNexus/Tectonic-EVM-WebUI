@@ -30,16 +30,16 @@ export default function EquityPage() {
           { label:"Avg Leverage", value:"3.25×",  color:"text-blue-600",   sub:"Reserve exposure" },
           { label:"Total Supply", value:"120K",   color:"text-slate-800",  sub:"All deployments"  },
         ].map(s => (
-          <div key={s.label} className="rounded-2xl bg-white border border-amber-100 p-5 shadow-sm">
+          <div key={s.label} className="rounded-2xl bg-white border border-amber-100 p-4 sm:p-5 shadow-sm min-w-0">
             <div className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">{s.label}</div>
-            <div className={`text-3xl font-black leading-none ${s.color}`}>{s.value}</div>
+            <div className={`text-2xl sm:text-3xl font-black leading-none ${s.color}`}>{s.value}</div>
             <div className="text-xs text-slate-400 mt-1.5">{s.sub}</div>
           </div>
         ))}
       </div>
 
       {/* explainer */}
-      <div className="rounded-3xl border border-amber-100 bg-white p-6 shadow-sm mb-6">
+      <div className="rounded-2xl sm:rounded-3xl border border-amber-100 bg-white p-4 sm:p-6 shadow-sm mb-6">
         <h3 className="font-black text-slate-900 text-lg mb-3">How equity coins work</h3>
         <div className="grid sm:grid-cols-3 gap-4">
           {[
@@ -62,21 +62,24 @@ export default function EquityPage() {
         {EQUITY_COINS.map(eq => {
           const c = statusCfg(eq.status);
           return (
-            <div key={eq.name} className={`rounded-2xl bg-white border ${c.cardBorder} shadow-sm overflow-hidden`}>
+            <div key={eq.name} className={`rounded-2xl bg-white border ${c.cardBorder} shadow-sm overflow-hidden min-w-0`}>
               {/* card header */}
-              <div className={`px-5 py-4 ${c.headerBg} border-b ${c.cardBorder} flex items-center justify-between`}>
-                <div className="flex items-center gap-2.5">
-                  <div className="h-8 w-8 rounded-full flex items-center justify-center text-white text-[9px] font-extrabold shadow-sm"
+              <div className={`px-4 sm:px-5 py-4 ${c.headerBg} border-b ${c.cardBorder} flex items-start sm:items-center justify-between gap-2`}>
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="h-8 w-8 rounded-full flex items-center justify-center text-white text-[9px] font-extrabold shadow-sm flex-shrink-0"
                     style={{ background: eq.chainColor }}>{eq.chain.slice(0, 3).toUpperCase()}</div>
-                  <span className="font-black text-slate-900">{eq.name}</span>
+                  <span className="font-black text-slate-900 break-words">{eq.name}</span>
                 </div>
-                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${c.badgeBg} ${c.badgeBorder} ${c.badgeText}`}><span className={`h-1.5 w-1.5 rounded-full inline-block ${c.dotColor}`} /> {c.label}</span>
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full flex-shrink-0 inline-flex items-center gap-1 ${c.badgeBg} ${c.badgeBorder} ${c.badgeText}`}>
+                  <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${c.dotColor}`} />
+                  {c.label}
+                </span>
               </div>
 
-              <div className="px-5 py-5">
+              <div className="px-4 sm:px-5 py-5">
                 {/* price */}
                 <div className="text-center py-3 mb-4">
-                  <div className={`text-4xl font-black ${eq.status === "danger" ? "text-red-500" : "text-violet-600"}`}>{eq.price}</div>
+                  <div className={`text-3xl sm:text-4xl font-black ${eq.status === "danger" ? "text-red-500" : "text-violet-600"}`}>{eq.price}</div>
                   <div className={`text-xs font-semibold mt-1 ${eq.priceChange.startsWith("+") ? "text-emerald-500" : "text-red-500"}`}>
                     {eq.priceChange} today
                   </div>
@@ -90,7 +93,7 @@ export default function EquityPage() {
                     ["APR",      eq.apr,        "text-emerald-600"],
                     ["Supply",   eq.supply,     "text-slate-800"  ],
                   ].map(([k, v, col]) => (
-                    <div key={k} className="rounded-xl bg-slate-50 p-3 text-center">
+                    <div key={k} className="rounded-xl bg-slate-50 p-3 text-center min-w-0">
                       <div className={`text-base font-black ${col}`}>{v}</div>
                       <div className="text-[10px] text-slate-400 font-semibold uppercase mt-0.5">{k}</div>
                     </div>
@@ -116,12 +119,53 @@ export default function EquityPage() {
         })}
       </div>
 
-      {/* per-deployment yield table */}
+      {/* per-deployment yield — mobile cards + desktop table */}
       <div className="mt-8 rounded-2xl bg-white border border-amber-100 shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+        <div className="px-4 sm:px-5 py-4 border-b border-slate-100 bg-slate-50/60">
           <h3 className="font-bold text-xs uppercase tracking-wider text-slate-500">Yield by Deployment</h3>
         </div>
-        <div className="overflow-x-auto">
+
+        {/* Mobile card layout */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {DEPLOYMENTS.map(d => {
+            const c = statusCfg(d.status);
+            return (
+              <div key={d.id} className="px-4 py-4 space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-slate-900">{d.name}</div>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <div className="h-3.5 w-3.5 rounded-full flex-shrink-0" style={{ background: d.chainColor }} />
+                      <span className="text-xs text-slate-600">{d.chain}</span>
+                    </div>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${c.badgeBg} ${c.badgeText}`}>{c.label}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <div className="text-slate-400 font-semibold mb-0.5">Total Reserve</div>
+                    <div className="font-medium text-slate-800">{d.totalReserve}</div>
+                  </div>
+                  <div>
+                    <div className="text-slate-400 font-semibold mb-0.5">Equity Yield</div>
+                    <div className="font-black text-amber-600">{d.equityYield}%</div>
+                  </div>
+                  <div>
+                    <div className="text-slate-400 font-semibold mb-0.5">Reserve Ratio</div>
+                    <div className={`font-black ${c.tc}`}>{d.reserveRatio}%</div>
+                  </div>
+                  <div>
+                    <div className="text-slate-400 font-semibold mb-0.5">Equity Supply</div>
+                    <div className="font-medium text-slate-800">{d.equitySupply}</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100">

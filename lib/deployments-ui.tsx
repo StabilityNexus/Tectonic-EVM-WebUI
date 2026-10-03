@@ -122,7 +122,7 @@ export function ReserveWidget({
       className={`rounded-xl border ${c.cardBorder} bg-white p-4 flex flex-col gap-2.5 shadow-sm`}
     >
       {label && (
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide break-words">
           {label}
         </div>
       )}
@@ -158,14 +158,14 @@ export function PageShell({
       <Navbar />
       <div className="pt-[68px] border-b border-[#e7dac4] bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex items-start justify-between flex-wrap gap-4">
-          <div>
+          <div className="min-w-0 flex-1">
             <Link
               href="/deployments"
               className="text-xs font-semibold text-amber-600 hover:text-amber-700 transition flex items-center gap-1 mb-3"
             >
               ← Back to Deployments
             </Link>
-            <h1 className="text-2xl md:text-3xl font-bold text-[#1a1a1a]">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#1a1a1a] break-words">
               {title}
             </h1>
             <p className="text-gray-500 text-sm mt-1 max-w-xl">{subtitle}</p>
@@ -177,16 +177,16 @@ export function PageShell({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">{children}</div>
       </main>
       {/* footer — identical to homepage */}
-      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-6 pt-14 pb-4">
+      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-4 sm:px-6 pt-14 pb-4">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-80" />
         <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl" />
         <div className="pointer-events-none absolute right-0 top-10 h-44 w-44 rounded-full bg-orange-200/30 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-2 pt-4 pb-0 md:px-6">
-          <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
-            <div className="max-w-sm flex flex-col items-start">
+          <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
+            <div className="max-w-sm flex flex-col items-start sm:col-span-2 md:col-span-1">
               <div className="flex flex-col items-center text-center">
                 <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
-                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
+                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" style={{ width: "auto" }} />
                   <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">
                     TECTONIC
                   </span>
@@ -250,12 +250,12 @@ export function PageShell({
           </div>
         </div>
 
-        <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
+        <div className="relative mx-auto mt-16 sm:mt-24 flex max-w-7xl flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 px-2 pt-6 md:px-6 w-full">
           <p className="text-sm text-slate-600 text-center md:text-left">
             © 2026 Tectonic Protocol. All rights reserved.
           </p>
           <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-10 sm:h-12 rounded-lg" unoptimized />
           </a>
         </div>
       </footer>

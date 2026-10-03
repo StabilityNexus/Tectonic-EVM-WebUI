@@ -45,9 +45,9 @@ function SiteCard({ children, className = "" }: { children: React.ReactNode; cla
 function StatusBadge({ status }: { status: RatioStatus }) {
   const c = statusCfg(status);
   return (
-    <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${c.badgeBg} ${c.badgeBorder} ${c.badgeText}`}>
+    <span className={`inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-full border flex-shrink-0 ${c.badgeBg} ${c.badgeBorder} ${c.badgeText}`}>
       <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${c.dotColor}`} />
-      {c.label}
+      <span className="leading-tight text-right max-w-[7.5rem] sm:max-w-none whitespace-normal">{c.label}</span>
     </span>
   );
 }
@@ -63,26 +63,26 @@ function ContractCard({ d }: { d: Deployment }) {
         {/* header */}
         <div className={`px-4 pt-4 pb-3 border-b border-[#efe2c9] ${c.headerBg}`}>
           {/* chain badge + status */}
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <div className="flex items-center gap-2 min-w-0">
               <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0 ${d.chainTextColor}`}
                 style={{ background: d.chainColor }}>
                 {d.chainShort.slice(0, 3)}
               </div>
-              <span className="text-xs text-gray-400">{d.chain}</span>
+              <span className="text-xs text-gray-400 truncate">{d.chain}</span>
             </div>
             <StatusBadge status={d.status} />
           </div>
           {/* title line */}
-          <h3 className="text-base font-bold text-[#1a1a1a] leading-tight">{d.name}</h3>
+          <h3 className="text-base font-bold text-[#1a1a1a] leading-tight break-words">{d.name}</h3>
           {/* subtitle: Backed by X · Pegged to Y */}
-          <p className="text-xs text-gray-400 mt-0.5">
+          <p className="text-xs text-gray-400 mt-0.5 break-words">
             Backed by {d.reserveAsset} · Pegged to {d.pegAsset}
           </p>
         </div>
 
         {/* stats — mentor's exact order */}
-        <div className="px-4 py-3 flex flex-col flex-1">
+        <div className="px-4 py-3 flex flex-col flex-1 min-w-0">
           {([
             ["Reserve Ratio",   <span className={`font-bold ${c.tc}`} key="rr">{d.reserveRatio}%</span>],
             ["Total Reserve",   d.totalReserve],
@@ -91,9 +91,9 @@ function ContractCard({ d }: { d: Deployment }) {
             ["EquityCoin Leverage", <span className="font-bold text-[#1a1a1a]" key="lev">{d.equityLeverage}</span>],
             ["EquityCoin Yield", <span className="font-bold text-amber-600" key="y">{d.equityYield}%</span>],
           ] as [string, React.ReactNode][]).map(([lbl, val]) => (
-            <div key={lbl} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0 text-sm">
-              <span className="text-gray-400">{lbl}</span>
-              <span className="text-[#1a1a1a] font-medium">{val}</span>
+            <div key={lbl} className="flex items-start justify-between gap-3 py-1.5 border-b border-gray-50 last:border-0 text-sm">
+              <span className="text-gray-400 flex-shrink-0">{lbl}</span>
+              <span className="text-[#1a1a1a] font-medium text-right break-words min-w-0">{val}</span>
             </div>
           ))}
         </div>
@@ -171,10 +171,10 @@ export default function DeploymentsPage() {
       {/* ── page header — white with amber accent label ───────────────── */}
       <div className="pt-[68px] border-b border-[#e7dac4] bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex items-end justify-between flex-wrap gap-4">
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Overview</p>
             <h1 className="text-2xl md:text-3xl font-bold text-[#1a1a1a]">Tectonic Coins</h1>
-            <p className="text-gray-500 text-sm mt-1">See live statistics and mint or redeem Tectonic coins on various blockchains.</p>
+            <p className="text-gray-500 text-sm mt-1 max-w-xl">See live statistics and mint or redeem Tectonic coins on various blockchains.</p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1">
@@ -183,13 +183,13 @@ export default function DeploymentsPage() {
             </span>
             {dangerList.length > 0 && (
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded-full px-3 py-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                <span className="h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0" />
                 {dangerList.length} Trigger Redemptions Active
               </span>
             )}
             {warningList.length > 0 && (
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-300 rounded-full px-3 py-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-500 flex-shrink-0" />
                 {warningList.length} Warning
               </span>
             )}
@@ -210,32 +210,32 @@ export default function DeploymentsPage() {
             </div>
 
             {/* ── Filters ──────────────────────────────────────────────── */}
-            <div className="mb-5 flex flex-wrap gap-3 items-center">
+            <div className="mb-5 flex flex-col sm:flex-row sm:flex-wrap gap-3 items-stretch sm:items-center">
               {/* search */}
-              <div className="relative">
+              <div className="relative w-full sm:w-auto">
                 <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" aria-hidden>
                   <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
                   <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
                 <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search…"
-                  className="w-44 rounded-lg border border-[#e7dac4] bg-white py-2 pl-8 pr-3 text-sm text-[#1a1a1a] focus:border-amber-400 focus:outline-none shadow-sm" />
+                  className="w-full sm:w-44 rounded-lg border border-[#e7dac4] bg-white py-2 pl-8 pr-3 text-sm text-[#1a1a1a] focus:border-amber-400 focus:outline-none shadow-sm" />
               </div>
 
               {/* network dropdown */}
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-semibold text-gray-400 whitespace-nowrap">Network</label>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 sm:gap-2 min-w-0">
+                <label className="text-xs font-semibold text-gray-400 whitespace-nowrap flex-shrink-0">Network</label>
                 <select value={activeChain} onChange={e => setActiveChain(e.target.value)}
-                  className="rounded-lg border border-[#e7dac4] bg-white py-2 pl-3 pr-8 text-sm text-[#1a1a1a] font-medium focus:border-amber-400 focus:outline-none shadow-sm cursor-pointer appearance-none"
+                  className="min-w-0 w-full sm:w-auto rounded-lg border border-[#e7dac4] bg-white py-2 pl-3 pr-8 text-sm text-[#1a1a1a] font-medium focus:border-amber-400 focus:outline-none shadow-sm cursor-pointer appearance-none"
                   style={{ backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b8a99a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 10px center" }}>
                   {CHAINS.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                 </select>
               </div>
 
               {/* peg asset dropdown */}
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-semibold text-gray-400 whitespace-nowrap">Peg Asset</label>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 sm:gap-2 min-w-0">
+                <label className="text-xs font-semibold text-gray-400 whitespace-nowrap flex-shrink-0">Peg Asset</label>
                 <select value={activePeg} onChange={e => setActivePeg(e.target.value)}
-                  className="rounded-lg border border-[#e7dac4] bg-white py-2 pl-3 pr-8 text-sm text-[#1a1a1a] font-medium focus:border-amber-400 focus:outline-none shadow-sm cursor-pointer appearance-none"
+                  className="min-w-0 w-full sm:w-auto rounded-lg border border-[#e7dac4] bg-white py-2 pl-3 pr-8 text-sm text-[#1a1a1a] font-medium focus:border-amber-400 focus:outline-none shadow-sm cursor-pointer appearance-none"
                   style={{ backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b8a99a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 10px center" }}>
                   {PEG_ASSETS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
                 </select>
@@ -263,18 +263,18 @@ export default function DeploymentsPage() {
       </main>
 
       {/* footer — identical to homepage */}
-      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-6 pt-14 pb-4">
+      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-4 sm:px-6 pt-14 pb-4">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-80" />
         <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl" />
         <div className="pointer-events-none absolute right-0 top-10 h-44 w-44 rounded-full bg-orange-200/30 blur-3xl" />
 
         <div className="relative mx-auto max-w-7xl px-2 pt-4 pb-0 md:px-6">
-          <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
+          <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
             {/* brand */}
-            <div className="max-w-sm flex flex-col items-start">
+            <div className="max-w-sm flex flex-col items-start sm:col-span-2 md:col-span-1">
               <div className="flex flex-col items-center text-center">
                 <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
-                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
+                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" style={{ width: "auto" }} />
                   <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
                 </div>
                 <p className="max-w-xs text-sm leading-6 text-slate-600">Next-generation stablecoin protocol.</p>
@@ -312,10 +312,10 @@ export default function DeploymentsPage() {
           </div>
         </div>
 
-        <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
+        <div className="relative mx-auto mt-16 sm:mt-24 flex max-w-7xl flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 px-2 pt-6 md:px-6 w-full">
           <p className="text-sm text-slate-600 text-center md:text-left">© 2026 Tectonic Protocol. All rights reserved.</p>
           <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-10 sm:h-12 rounded-lg" unoptimized />
           </a>
         </div>
       </footer>

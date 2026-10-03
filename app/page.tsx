@@ -169,11 +169,11 @@ export default function Home() {
   const featureRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   const deployments = [
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Ethereum', chainShort: 'ETH', reserve: '132%', ratio: 132, supply: '22.41M tUSD', tvl: '$45.2M', status: 'Active', accent: 'text-slate-600', badge: 'bg-slate-100 text-slate-700', chainColor: 'bg-indigo-100 text-indigo-700', symbolBg: 'bg-indigo-50', symbolColor: 'text-indigo-700' },
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Polygon', chainShort: 'POL', reserve: '128%', ratio: 128, supply: '18.76M tUSD', tvl: '$18.7M', status: 'Active', accent: 'text-violet-600', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-violet-100 text-violet-700', symbolBg: 'bg-violet-50', symbolColor: 'text-violet-600' },
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'BSC', chainShort: 'BNB', reserve: '135%', ratio: 135, supply: '22.11M tUSD', tvl: '$22.1M', status: 'Active', accent: 'text-amber-500', badge: 'bg-amber-100 text-amber-700', chainColor: 'bg-amber-100 text-amber-700', symbolBg: 'bg-amber-50', symbolColor: 'text-amber-500' },
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Base', chainShort: 'ETH', reserve: '130%', ratio: 130, supply: '12.91M tUSD', tvl: '$12.9M', status: 'Active', accent: 'text-blue-600', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-blue-100 text-blue-700', symbolBg: 'bg-blue-50', symbolColor: 'text-blue-600' },
-    { name: 'Tectonic USD', symbol: 'tUSD', chain: 'Ethereum Classic', chainShort: 'ETC', reserve: '127%', ratio: 127, supply: '8.32M tUSD', tvl: '$8.3M', status: 'Active', accent: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-emerald-100 text-emerald-700', symbolBg: 'bg-emerald-50', symbolColor: 'text-emerald-700' },
+    { id: 'tusd-local', name: 'Tectonic USD', symbol: 'tUSD', chain: 'Ethereum', chainShort: 'ETH', reserve: '132%', ratio: 132, supply: '22.41M tUSD', tvl: '$45.2M', status: 'Active', accent: 'text-slate-600', badge: 'bg-slate-100 text-slate-700', chainColor: 'bg-indigo-100 text-indigo-700', symbolBg: 'bg-indigo-50', symbolColor: 'text-indigo-700' },
+    { id: 'usdp-amoy', name: 'Tectonic USD', symbol: 'tUSD', chain: 'Polygon', chainShort: 'POL', reserve: '128%', ratio: 128, supply: '18.76M tUSD', tvl: '$18.7M', status: 'Active', accent: 'text-violet-600', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-violet-100 text-violet-700', symbolBg: 'bg-violet-50', symbolColor: 'text-violet-600' },
+    { id: 'tusd-sepolia', name: 'Tectonic USD', symbol: 'tUSD', chain: 'Sepolia', chainShort: 'SEP', reserve: '135%', ratio: 135, supply: '22.11M tUSD', tvl: '$22.1M', status: 'Active', accent: 'text-amber-500', badge: 'bg-amber-100 text-amber-700', chainColor: 'bg-amber-100 text-amber-700', symbolBg: 'bg-amber-50', symbolColor: 'text-amber-500' },
+    { id: 'tusd-base', name: 'Tectonic USD', symbol: 'tUSD', chain: 'Base', chainShort: 'ETH', reserve: '130%', ratio: 130, supply: '12.91M tUSD', tvl: '$12.9M', status: 'Active', accent: 'text-blue-600', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-blue-100 text-blue-700', symbolBg: 'bg-blue-50', symbolColor: 'text-blue-600' },
+    { id: 'tusd-classic', name: 'Tectonic USD', symbol: 'tUSD', chain: 'Ethereum Classic', chainShort: 'ETC', reserve: '127%', ratio: 127, supply: '8.32M tUSD', tvl: '$8.3M', status: 'Active', accent: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700', chainColor: 'bg-emerald-100 text-emerald-700', symbolBg: 'bg-emerald-50', symbolColor: 'text-emerald-700' },
   ];
 
   const protocolStats = [
@@ -191,7 +191,7 @@ export default function Home() {
         if (e.matches) {
           videoRef.current.pause();
         } else {
-          videoRef.current.play().catch(() => {});
+          videoRef.current.play().catch(() => { });
         }
       }
     };
@@ -221,27 +221,27 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-hidden pt-0">
+    <div className="min-h-screen bg-white text-gray-900 pt-0">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center gradient-orbital overflow-visible pt-24 pb-16">
+      <section className="relative min-h-[100svh] flex items-center gradient-orbital overflow-hidden md:overflow-visible pt-24 pb-16">
         {/* Enhanced Orbital Background with Animated Glows */}
         <div className="orbital-container">
           <div className="glow-orb glow-orb-1"></div>
           <div className="glow-orb glow-orb-2"></div>
           <div className="glow-orb glow-orb-3"></div>
-          
+
         </div>
 
-        <div className="z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="text-left">
-            <div className="mb-8 inline-block">
-              <span className="hero-kicker text-sm font-semibold text-yellow-500">{tHome("kicker")}</span>
+        <div className="z-10 mx-auto grid w-full max-w-7xl items-center gap-8 px-4 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+          <div className="text-left min-w-0">
+            <div className="mb-6 sm:mb-8 inline-block max-w-full">
+              <span className="hero-kicker text-[0.65rem] sm:text-sm font-semibold text-yellow-500 break-words">{tHome("kicker")}</span>
             </div>
 
-            <h1 className="hero-title mb-6 max-w-6xl text-5xl font-bold leading-tight text-gray-900 md:text-7xl">
-              <span className="hero-title-line hero-title-line-first max-w-5xl md:text-[4.6rem] md:leading-[1.02]">
+            <h1 className="hero-title mb-6 max-w-6xl text-[1.75rem] sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.15] text-gray-900">
+              <span className="hero-title-line hero-title-line-first max-w-5xl lg:text-[4.6rem] lg:leading-[1.02]">
                 <HeroTypewriter
                   text={tHome("title")}
                   className="block"
@@ -263,13 +263,13 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="mb-12 max-w-2xl text-lg text-gray-600 md:text-xl">
+            <p className="mb-8 sm:mb-12 max-w-2xl text-base text-gray-600 sm:text-lg md:text-xl">
               {tHome("description")}
             </p>
 
           </div>
 
-          <div className="relative mx-auto mt-8 w-full max-w-sm md:mt-0 md:absolute hero-visual md:w-[min(85vw,950px)] hero-visual-lg lg:w-[min(90vw,1200px)] lg:max-w-none">
+          <div className="hero-visual mt-4 md:mt-0">
             <div className="relative aspect-[4/3] w-full drop-shadow-2xl md:aspect-[5/4]">
               <Image
                 src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/tectonic-hero.png`}
@@ -290,14 +290,14 @@ export default function Home() {
       </section>
 
       {/* Features Section (styled to match provided design) */}
-      <section id="learn" className="py-20 px-6 bg-[#fbf6ec]">
+      <section id="learn" className="py-16 sm:py-20 px-4 sm:px-6 bg-[#fbf6ec]">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8 text-center">
-            <h2 className="text-5xl font-sans mb-3 text-gray-900">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-sans mb-3 text-gray-900">
               <span className="mr-2">{tHome("why")}</span>
               <span className="text-yellow-600">{tHome("tectonicQ")}</span>
             </h2>
-            <p className="mx-auto max-w-2xl text-gray-700 text-lg">{tHome("whyTectonicDesc")}</p>
+            <p className="mx-auto max-w-2xl text-gray-700 text-base sm:text-lg">{tHome("whyTectonicDesc")}</p>
           </div>
 
           <ComparisonTable />
@@ -309,10 +309,10 @@ export default function Home() {
       </section>
 
       {/* StableCoin Panel (inserted after learn) */}
-      <section className="py-12 px-6 bg-white">
+      <section className="py-12 px-4 sm:px-6 bg-white">
         <div className="mx-auto max-w-7xl px-0">
           <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div className="rounded-2xl flex items-center justify-center bg-white">
+            <div className="rounded-2xl flex items-center justify-center bg-white min-w-0">
               <video
                 ref={videoRef}
                 src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/effect.mp4`}
@@ -325,15 +325,15 @@ export default function Home() {
               />
             </div>
 
-            <div>
-              <div className="min-h-[180px] md:min-h-[225px]">
-                <Typewriter 
-                  text={tHome("futurePayments")} 
-                  className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 whitespace-pre-line leading-tight" 
-                  speed={120} 
+            <div className="min-w-0">
+              <div className="min-h-[140px] sm:min-h-[180px] md:min-h-[225px]">
+                <Typewriter
+                  text={tHome("futurePayments")}
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-gray-900 whitespace-pre-line leading-tight"
+                  speed={120}
                 />
               </div>
-              <p className="mt-6 max-w-xl text-xl leading-9 text-gray-700">
+              <p className="mt-6 max-w-xl text-base sm:text-lg md:text-xl leading-7 sm:leading-9 text-gray-700">
                 {tHome("futurePaymentsDesc")}
               </p>
             </div>
@@ -343,12 +343,12 @@ export default function Home() {
 
       {/* Deployments Panel */}
       <section id="explore" className="bg-[#fdf7ef] pt-12 pb-20">
-        <div className="-mt-14 w-full border-y-2 border-amber-200 bg-white py-12 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(251,191,36,0.14)]">
-          <div className="mx-auto max-w-[1440px] px-6">
+        <div className="-mt-14 w-full border-y-2 border-amber-200 bg-white py-10 sm:py-12 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(251,191,36,0.14)]">
+          <div className="mx-auto max-w-[1440px] px-4 sm:px-6">
             <div className="grid gap-6 text-center sm:grid-cols-2 lg:grid-cols-3">
               {protocolStats.map((stat) => (
                 <div key={stat.label} className="px-2 py-2">
-                  <div className="text-3xl font-bold tracking-tight text-slate-900 md:text-[2rem]">
+                  <div className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 md:text-[2rem]">
                     <CountUpValue
                       end={stat.value}
                       decimals={stat.decimals ?? 0}
@@ -363,21 +363,76 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mx-auto mt-10 max-w-[1440px] px-6">
+        <div className="mx-auto mt-10 max-w-[1440px] px-4 sm:px-6">
           <div className="mb-8 max-w-3xl">
-            <div className="mb-3 inline-flex items-center gap-2 text-sm font-semibold tracking-[0.22em] text-amber-600 uppercase">
+            <div className="mb-3 inline-flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-[0.22em] text-amber-600 uppercase">
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-amber-600">◎</span>
               {tHome("activeDeployments")}
             </div>
-            <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">{tHome("liveOnLeadingChains")}</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">{tHome("liveOnLeadingChains")}</h2>
             <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
               {tHome("liveOnLeadingChainsDesc")}
             </p>
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
-            <div className="overflow-hidden rounded-3xl border border-amber-100 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-              <table className="w-full table-fixed border-collapse text-left">
+          <div className="grid gap-8 lg:gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
+            {/* Mobile Card Layout - hidden on lg+ */}
+            <div className="lg:hidden space-y-3">
+              {deployments.map((deployment, index) => (
+                <Link key={`${deployment.chain}-${index}`} href={`/deployments/${deployment.id}`}
+                  className="block rounded-2xl border border-amber-100 bg-white p-4 shadow-sm hover:shadow-md transition-shadow group">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className={`flex h-9 w-9 items-center justify-center rounded-full flex-shrink-0 ${deployment.symbolBg} text-xs font-bold ${deployment.symbolColor}`}>
+                        {index % 3 === 0 ? '◈' : index % 3 === 1 ? '◌' : '⬢'}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold leading-4 text-slate-900">{deployment.name}</div>
+                        <div className="text-xs text-slate-500">{deployment.symbol}</div>
+                      </div>
+                    </div>
+                    <span className="text-sm text-slate-400 flex-shrink-0">›</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 text-xs mb-3">
+                    <div>
+                      <div className="text-slate-500 font-semibold mb-0.5">Chain</div>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`flex h-4 w-4 items-center justify-center rounded-full ${deployment.chainColor} text-[9px] font-bold`}>{deployment.chainShort}</span>
+                        <span className="text-slate-700 font-medium">{deployment.chain}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-slate-500 font-semibold mb-0.5">Asset</div>
+                      <div className="text-slate-700 font-medium">{deployment.chainShort}</div>
+                    </div>
+                    <div>
+                      <div className="text-slate-500 font-semibold mb-0.5">Reserve Ratio</div>
+                      <div className="text-emerald-600 font-semibold">{deployment.reserve}</div>
+                    </div>
+                    <div>
+                      <div className="text-slate-500 font-semibold mb-0.5">Supply</div>
+                      <div className="text-slate-700 font-medium">{deployment.supply}</div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-slate-500 text-xs font-semibold mb-1.5">Reserve Bar</div>
+                    <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
+                      <div className="h-1.5 rounded-full bg-emerald-500" style={{ width: `${Math.max(60, deployment.ratio - 55)}%` }} />
+                    </div>
+                  </div>
+
+                  <div className="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-600">
+                    TVL: <span className="font-semibold text-slate-800">{deployment.tvl}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Desktop Table Layout - visible on lg+ */}
+            <div className="hidden lg:block overflow-hidden rounded-3xl border border-amber-100 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+              <table className="w-full border-collapse text-left">
                 <colgroup>
                   <col className="w-[26%]" />
                   <col className="w-[17%]" />
@@ -387,80 +442,80 @@ export default function Home() {
                   <col className="w-[11%]" />
                   <col className="w-[6%]" />
                 </colgroup>
-                  <thead>
-                    <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      <th className="px-6 py-5">{tHome("activeDeployments").split(" ")[1] || "Deployment"}</th>
-                      <th className="px-6 py-5">Chain</th>
-                      <th className="px-6 py-5">Reserve Asset</th>
-                      <th className="px-6 py-5">{tDetail("reserveRatio")}</th>
-                      <th className="px-6 py-5">{tCommon("stablecoinSupply")}</th>
-                      <th className="px-6 py-5">TVL</th>
-                      <th className="px-5 py-5"></th>
+                <thead>
+                  <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    <th className="px-6 py-5">{tHome("activeDeployments").split(" ")[1] || "Deployment"}</th>
+                    <th className="px-6 py-5">Chain</th>
+                    <th className="px-6 py-5">Reserve Asset</th>
+                    <th className="px-6 py-5">{tDetail("reserveRatio")}</th>
+                    <th className="px-6 py-5">{tCommon("stablecoinSupply")}</th>
+                    <th className="px-6 py-5">TVL</th>
+                    <th className="px-5 py-5"></th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {deployments.map((deployment, index) => (
+                    <tr key={`${deployment.chain}-${index}`} className="group transition-colors hover:bg-amber-50/40">
+                      <td className="px-6 py-6 align-middle">
+                        <div className="flex items-center gap-4">
+                          <div className={`flex h-10 w-10 items-center justify-center rounded-full ${deployment.symbolBg} text-sm font-bold ${deployment.symbolColor}`}>
+                            {index % 3 === 0 ? '◈' : index % 3 === 1 ? '◌' : '⬢'}
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold leading-5 text-slate-900">{deployment.name}</div>
+                            <div className="text-xs leading-4 text-slate-500">{deployment.symbol}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-6 align-middle">
+                        <div className="flex items-center gap-2 text-sm font-medium text-slate-700 whitespace-nowrap">
+                          <span className={`flex h-5 w-5 items-center justify-center rounded-full ${deployment.chainColor} text-[10px] font-bold`}>{deployment.chainShort}</span>
+                          {deployment.chain}
+                        </div>
+                      </td>
+                      <td className="px-6 py-6 align-middle">
+                        <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 whitespace-nowrap">
+                          <span className={`flex h-5 w-5 items-center justify-center rounded-full ${deployment.chainColor} text-[10px] font-bold`}>{deployment.chainShort}</span>
+                          {deployment.chainShort}
+                        </div>
+                      </td>
+                      <td className="px-6 py-6 align-middle">
+                        <div className="w-full max-w-[130px]">
+                          <div className="mb-2 text-sm font-semibold text-emerald-600">{deployment.reserve}</div>
+                          <div className="h-2 rounded-full bg-slate-200">
+                            <div className="h-2 rounded-full bg-emerald-500" style={{ width: `${Math.max(60, deployment.ratio - 55)}%` }} />
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.supply}</td>
+                      <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.tvl}</td>
+                      <td className="px-5 py-6 align-middle text-right text-slate-400">
+                        <Link href={`/deployments/${deployment.id}`} className="inline-flex h-8 w-8 items-center justify-center rounded-full transition group-hover:bg-white group-hover:text-slate-700">›</Link>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {deployments.map((deployment, index) => (
-                      <tr key={`${deployment.chain}-${index}`} className="group transition-colors hover:bg-amber-50/40">
-                        <td className="px-6 py-6 align-middle">
-                          <div className="flex items-center gap-4">
-                            <div className={`flex h-10 w-10 items-center justify-center rounded-full ${deployment.symbolBg} text-sm font-bold ${deployment.symbolColor}`}>
-                              {index % 3 === 0 ? '◈' : index % 3 === 1 ? '◌' : '⬢'}
-                            </div>
-                            <div>
-                              <div className="text-sm font-semibold leading-5 text-slate-900">{deployment.name}</div>
-                              <div className="text-xs leading-4 text-slate-500">{deployment.symbol}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-6 align-middle">
-                          <div className="flex items-center gap-2 text-sm font-medium text-slate-700 whitespace-nowrap">
-                            <span className={`flex h-5 w-5 items-center justify-center rounded-full ${deployment.chainColor} text-[10px] font-bold`}>{deployment.chainShort}</span>
-                            {deployment.chain}
-                          </div>
-                        </td>
-                        <td className="px-6 py-6 align-middle">
-                          <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 whitespace-nowrap">
-                            <span className={`flex h-5 w-5 items-center justify-center rounded-full ${deployment.chainColor} text-[10px] font-bold`}>{deployment.chainShort}</span>
-                            {deployment.chainShort}
-                          </div>
-                        </td>
-                        <td className="px-6 py-6 align-middle">
-                          <div className="w-full max-w-[130px]">
-                            <div className="mb-2 text-sm font-semibold text-emerald-600">{deployment.reserve}</div>
-                            <div className="h-2 rounded-full bg-slate-200">
-                              <div className="h-2 rounded-full bg-emerald-500" style={{ width: `${Math.max(60, deployment.ratio - 55)}%` }} />
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.supply}</td>
-                        <td className="px-6 py-6 align-middle text-sm font-semibold text-slate-800 whitespace-nowrap">{deployment.tvl}</td>
-                        <td className="px-5 py-6 align-middle text-right text-slate-400">
-                           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full transition group-hover:bg-white group-hover:text-slate-700">›</span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
-            <aside className="relative overflow-hidden rounded-[2rem] border border-amber-100/80 bg-gradient-to-b from-white via-white/90 to-amber-50/40 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] ring-1 ring-amber-100/60 backdrop-blur-xl">
+            <aside className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-amber-100/80 bg-gradient-to-b from-white via-white/90 to-amber-50/40 p-6 sm:p-8 shadow-[0_24px_70px_rgba(15,23,42,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] ring-1 ring-amber-100/60 backdrop-blur-xl">
               <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-amber-200/35 blur-3xl"></div>
               <div className="pointer-events-none absolute -left-10 bottom-0 h-24 w-24 rounded-full bg-white/60 blur-2xl"></div>
               <div className="pointer-events-none absolute inset-x-6 top-6 h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent"></div>
 
-              <div className="relative mb-8 flex h-28 w-28 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-amber-50 via-white to-amber-100 text-amber-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_16px_36px_rgba(251,191,36,0.18)] ring-1 ring-white/80">
+              <div className="relative mb-6 sm:mb-8 flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-amber-50 via-white to-amber-100 text-amber-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_16px_36px_rgba(251,191,36,0.18)] ring-1 ring-white/80">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                   <path d="M12 2l7 3v6c0 5-3.4 9.6-7 11-3.6-1.4-7-6-7-11V5l7-3z" stroke="currentColor" strokeWidth="1.6" />
                   <path d="M9.5 12.2l1.9 1.9 3.6-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
 
-              <h3 className="max-w-xs text-2xl font-bold tracking-tight text-slate-900 drop-shadow-sm">{tHome("stabilityPaymentsTitle")}</h3>
-              <p className="mt-5 max-w-sm text-base leading-8 text-slate-600">
+              <h3 className="max-w-xs text-xl sm:text-2xl font-bold tracking-tight text-slate-900 drop-shadow-sm">{tHome("stabilityPaymentsTitle")}</h3>
+              <p className="mt-4 sm:mt-5 max-w-sm text-sm sm:text-base leading-7 sm:leading-8 text-slate-600">
                 {tHome("stabilityPaymentsDesc")}
               </p>
 
-              <a href="#" className="mt-10 inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-white/90 px-4 py-2 text-base font-semibold text-amber-600 shadow-[0_12px_28px_rgba(251,191,36,0.12)] transition hover:-translate-y-0.5 hover:bg-white hover:text-amber-700 hover:shadow-[0_16px_34px_rgba(251,191,36,0.18)]">
+              <a href="#" className="mt-8 sm:mt-10 inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-white/90 px-4 py-2 text-sm sm:text-base font-semibold text-amber-600 shadow-[0_12px_28px_rgba(251,191,36,0.12)] transition hover:-translate-y-0.5 hover:bg-white hover:text-amber-700 hover:shadow-[0_16px_34px_rgba(251,191,36,0.18)]">
                 {tHome("learnMoreAboutTectonic")}
                 <span aria-hidden>→</span>
               </a>
@@ -477,7 +532,7 @@ export default function Home() {
                 className="w-4 h-4 flex-shrink-0 opacity-0 -translate-x-1 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:translate-x-0"
                 viewBox="0 0 24 24" fill="none" aria-hidden
               >
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
           </div>
@@ -485,41 +540,41 @@ export default function Home() {
       </section>
 
       {/* Protocol Overview — horizontal flow */}
-      <section id="build" className="py-20 px-6 bg-[#fbf6ec]">
-        <div className="mx-auto max-w-7xl rounded-[2rem] border border-amber-100 bg-white p-8 shadow-[0_22px_60px_rgba(15,23,42,0.08)] md:p-12">
-          <h2 className="text-center text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">{tHome("howItWorks")}</h2>
+      <section id="build" className="py-16 sm:py-20 px-4 sm:px-6 bg-[#fbf6ec]">
+        <div className="mx-auto max-w-7xl rounded-[1.5rem] sm:rounded-[2rem] border border-amber-100 bg-white p-5 sm:p-8 shadow-[0_22px_60px_rgba(15,23,42,0.08)] md:p-12">
+          <h2 className="text-center text-3xl sm:text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">{tHome("howItWorks")}</h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-base leading-7 text-slate-600 md:text-lg">
             {tHome("howItWorksDesc")}
           </p>
 
-          <div className="mt-12 rounded-[1.75rem] border border-amber-100 bg-gradient-to-b from-[#fffdf8] to-[#fff7eb] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] md:p-8">
-            <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] md:items-stretch">
+          <div className="mt-10 sm:mt-12 rounded-[1.25rem] sm:rounded-[1.75rem] border border-amber-100 bg-gradient-to-b from-[#fffdf8] to-[#fff7eb] p-4 sm:p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] md:p-8">
+            <div className="grid gap-3 sm:gap-4 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] lg:items-stretch">
 
-              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col">
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col min-w-0">
                 <div className="mx-auto mb-4 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">1</div>
                 <h3 className="text-base font-semibold text-slate-900">{tHome("howItWorksSteps.1.title")}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600 flex-1">{tHome("howItWorksSteps.1.desc")}</p>
               </div>
 
-              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1 flex-shrink-0">→</div>
+              <div className="flex items-center justify-center text-2xl sm:text-3xl font-light text-amber-300 lg:px-1 flex-shrink-0 rotate-90 lg:rotate-0" aria-hidden>→</div>
 
-              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col">
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col min-w-0">
                 <div className="mx-auto mb-4 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">2</div>
                 <h3 className="text-base font-semibold text-slate-900">{tHome("howItWorksSteps.2.title")}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600 flex-1">{tHome("howItWorksSteps.2.desc")}</p>
               </div>
 
-              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1 flex-shrink-0">→</div>
+              <div className="flex items-center justify-center text-2xl sm:text-3xl font-light text-amber-300 lg:px-1 flex-shrink-0 rotate-90 lg:rotate-0" aria-hidden>→</div>
 
-              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col">
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col min-w-0">
                 <div className="mx-auto mb-4 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">3</div>
                 <h3 className="text-base font-semibold text-slate-900">{tHome("howItWorksSteps.3.title")}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600 flex-1">{tHome("howItWorksSteps.3.desc")}</p>
               </div>
 
-              <div className="flex items-center justify-center text-3xl font-light text-amber-300 md:px-1 flex-shrink-0">→</div>
+              <div className="flex items-center justify-center text-2xl sm:text-3xl font-light text-amber-300 lg:px-1 flex-shrink-0 rotate-90 lg:rotate-0" aria-hidden>→</div>
 
-              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col">
+              <div className="rounded-2xl border border-amber-100 bg-white/80 p-5 text-center shadow-[0_10px_28px_rgba(15,23,42,0.06)] backdrop-blur-sm flex flex-col min-w-0">
                 <div className="mx-auto mb-4 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-2xl text-amber-600 shadow-inner">4</div>
                 <h3 className="text-base font-semibold text-slate-900">{tHome("howItWorksSteps.4.title")}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600 flex-1">{tHome("howItWorksSteps.4.desc")}</p>
@@ -538,41 +593,41 @@ export default function Home() {
       </section>
 
       {/* Community Section */}
-      <section className="relative py-20 px-6 bg-white border-t border-yellow-200 overflow-hidden">
+      <section className="relative py-16 sm:py-20 px-4 sm:px-6 bg-white border-t border-yellow-200 overflow-hidden">
         {/* subtle theme-consistent blobs */}
         <div className="pointer-events-none absolute -left-12 -top-8 h-40 w-40 rounded-full bg-yellow-200 opacity-30 blur-2xl"></div>
         <div className="pointer-events-none absolute -right-12 top-20 h-44 w-44 rounded-full bg-indigo-100 opacity-20 blur-2xl"></div>
 
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-            <div className="md:col-span-2">
-              <div className="relative inline-block mb-4" style={{display: 'inline-block'}}>
-                <h2 className="community-title text-4xl md:text-5xl font-semibold relative z-10 tracking-tight">{tHome("joinCommunity")}</h2>
+            <div className="md:col-span-2 min-w-0">
+              <div className="relative inline-block mb-4 max-w-full">
+                <h2 className="community-title text-3xl sm:text-4xl md:text-5xl font-semibold relative z-10 tracking-tight">{tHome("joinCommunity")}</h2>
               </div>
-              <p className="text-gray-700 text-lg md:text-xl leading-relaxed">
+              <p className="text-gray-700 text-base sm:text-lg md:text-xl leading-relaxed">
                 {tHome("joinCommunityDesc")}
               </p>
             </div>
 
-            <div className="flex justify-center md:justify-end">
-              <div className="inline-flex flex-col gap-4 rounded-3xl bg-white p-3 shadow-lg">
-                <a href="https://discord.gg/YzDKeEfWtS" target="_blank" rel="noopener noreferrer" className="btn-primary flex items-center gap-3 px-4 py-3">
+            <div className="flex justify-center md:justify-end w-full">
+              <div className="inline-flex w-full max-w-xs flex-col gap-4 rounded-3xl bg-white p-3 shadow-lg">
+                <a href="https://discord.gg/YzDKeEfWtS" target="_blank" rel="noopener noreferrer" className="btn-primary flex items-center justify-center gap-3 px-4 py-3">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                     <path d="M20 3H4a1 1 0 00-1 1v16l4-4h13a1 1 0 001-1V4a1 1 0 00-1-1z" fill="currentColor" />
                   </svg>
                   DISCORD
                 </a>
 
-                <a href="https://t.me/StabilityNexus" target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center gap-3 px-4 py-3">
+                <a href="https://t.me/StabilityNexus" target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center justify-center gap-3 px-4 py-3">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.84 1.18-5.18 3.44-.49.33-.93.5-1.33.49-.44-.01-1.28-.24-1.9-.45-.77-.25-1.38-.39-1.33-.82.03-.22.34-.44.93-.68 3.63-1.58 6.05-2.62 7.25-3.12 3.45-1.43 4.16-1.68 4.63-1.69.1 0 .33.02.46.12.11.08.14.2.15.28.01.1-.01.23-.03.32z" fill="currentColor"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.84 1.18-5.18 3.44-.49.33-.93.5-1.33.49-.44-.01-1.28-.24-1.9-.45-.77-.25-1.38-.39-1.33-.82.03-.22.34-.44.93-.68 3.63-1.58 6.05-2.62 7.25-3.12 3.45-1.43 4.16-1.68 4.63-1.69.1 0 .33.02.46.12.11.08.14.2.15.28.01.1-.01.23-.03.32z" fill="currentColor" />
                   </svg>
                   TELEGRAM
                 </a>
 
-                <a href="https://github.com/StabilityNexus/Tectonic-EVM-WebUI" target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center gap-3 px-4 py-3">
+                <a href="https://github.com/StabilityNexus/Tectonic-EVM-WebUI" target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center justify-center gap-3 px-4 py-3">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                    <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .8.1-.6.4-1.1.7-1.4-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 3 .1 3.3.7.9 1.2 2 1.2 3.3 0 4.5-2.7 5.4-5.3 5.8.4.4.8 1 1 2v3c0 .3.2.7.8.6A10.5 10.5 0 0023.5 12C23.5 5.7 18.3.5 12 .5z" fill="currentColor"/>
+                    <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .8.1-.6.4-1.1.7-1.4-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 3 .1 3.3.7.9 1.2 2 1.2 3.3 0 4.5-2.7 5.4-5.3 5.8.4.4.8 1 1 2v3c0 .3.2.7.8.6A10.5 10.5 0 0023.5 12C23.5 5.7 18.3.5 12 .5z" fill="currentColor" />
                   </svg>
                   GITHUB
                 </a>
@@ -583,17 +638,17 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-6 pt-14 pb-4">
+      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-4 sm:px-6 pt-14 pb-4">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-80"></div>
         <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl"></div>
         <div className="pointer-events-none absolute right-0 top-10 h-44 w-44 rounded-full bg-orange-200/30 blur-3xl"></div>
 
         <div className="relative mx-auto max-w-7xl px-2 pt-4 pb-0 md:px-6">
-          <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
-            <div className="max-w-sm flex flex-col items-start">
+          <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
+            <div className="max-w-sm flex flex-col items-start sm:col-span-2 md:col-span-1">
               <div className="flex flex-col items-center text-center">
                 <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
-                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
+                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" style={{ width: "auto" }} />
                   <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
                 </div>
                 <p className="max-w-xs text-sm leading-6 text-slate-600">
@@ -629,12 +684,12 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
+        <div className="relative mx-auto mt-16 sm:mt-24 flex max-w-7xl flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 px-2 pt-6 md:px-6 w-full">
           <p className="text-sm text-slate-600 text-center md:text-left">
             {tFooter("rights")}
           </p>
           <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-10 sm:h-12 rounded-lg" unoptimized />
           </a>
         </div>
       </footer>
