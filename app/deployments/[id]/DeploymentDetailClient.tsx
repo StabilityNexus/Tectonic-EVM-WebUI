@@ -9,7 +9,8 @@ import { statusCfg, pct } from "@/lib/deployments-ui";
 import { DEPLOYMENTS } from "@/lib/deployments-data";
 import type { Deployment } from "@/lib/deployments-data";
 import { useTranslations } from "@/lib/i18n";
-import { parseEther, formatEther } from "viem";
+import { formatEther } from "viem";
+import { amountToWei } from "@/lib/amount";
 import {
   useReadContract,
   useWriteContract,
@@ -60,6 +61,7 @@ function MintRedeemForm({
   isMismatch?: boolean;
 }) {
   const [amount, setAmount] = useState("");
+  const [amountError, setAmountError] = useState(false);
   const isMint = mode === "mint";
   const t = useTranslations("common");
 
@@ -93,8 +95,15 @@ function MintRedeemForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount || isNaN(valNum) || valNum <= 0 || !contractAddress) return;
-    const weiAmount = parseEther(amount);
+    if (!contractAddress) return;
+    // A number input accepts values parseEther won't take, exponent notation
+    // among them, so the conversion has to be able to fail without throwing.
+    const weiAmount = amountToWei(amount);
+    if (weiAmount === undefined) {
+      setAmountError(true);
+      return;
+    }
+    setAmountError(false);
 
     if (isMint && !isEquity) {
       writeContract({
@@ -143,7 +152,10 @@ function MintRedeemForm({
             type="number"
             step="any"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => {
+              setAmount(e.target.value);
+              setAmountError(false);
+            }}
             disabled={isPending || isConfirming}
             className="w-full rounded-xl border border-[#e7dac4] bg-[#fafaf8] px-4 py-3 pr-20 text-sm text-[#1a1a1a] focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition disabled:opacity-50"
             placeholder="0.00"
@@ -152,6 +164,9 @@ function MintRedeemForm({
             {inputAsset}
           </span>
         </div>
+        {amountError && (
+          <p className="mt-1.5 text-xs font-semibold text-red-600">{t("invalidAmount")}</p>
+        )}
       </div>
 
       {/* summary box */}
