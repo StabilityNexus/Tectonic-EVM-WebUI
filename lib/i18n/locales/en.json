@@ -4,6 +4,7 @@
     "burn": "Burn",
     "fee": "Fee",
     "youReceive": "You Receive",
+    "invalidAmount": "Enter a valid amount",
     "mint": "Mint",
     "redeem": "Redeem",
     "triggerRedemptions": "Trigger Redemptions",
