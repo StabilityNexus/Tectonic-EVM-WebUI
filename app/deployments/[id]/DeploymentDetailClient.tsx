@@ -33,7 +33,11 @@ function getContractAddress(chainId?: number): `0x${string}` | undefined {
   return CONTRACT_ADDRESSES[chainId];
 }
 
-/* ─── Shared mint/redeem form ─── */
+type PriceReadStatus = {
+  isLoading: boolean;
+  isError: boolean;
+};
+/* â”€â”€â”€ Shared mint/redeem form â”€â”€â”€ */
 function MintRedeemForm({
   mode,
   isEquity,
@@ -44,6 +48,10 @@ function MintRedeemForm({
   scPriceRedeem,
   ecPriceMint,
   ecPriceRedeem,
+  scPriceMintStatus,
+  scPriceRedeemStatus,
+  ecPriceMintStatus,
+  ecPriceRedeemStatus,
   isPlaceholder,
   isMismatch,
 }: {
@@ -56,6 +64,10 @@ function MintRedeemForm({
   scPriceRedeem?: bigint;
   ecPriceMint?: bigint;
   ecPriceRedeem?: bigint;
+  scPriceMintStatus?: PriceReadStatus;
+  scPriceRedeemStatus?: PriceReadStatus;
+  ecPriceMintStatus?: PriceReadStatus;
+  ecPriceRedeemStatus?: PriceReadStatus;
   isPlaceholder?: boolean;
   isMismatch?: boolean;
 }) {
@@ -63,30 +75,53 @@ function MintRedeemForm({
   const isMint = mode === "mint";
   const t = useTranslations("common");
 
-  // Determine the price based on mode and token
+  // Select the price and status for the active operation.
   let price: bigint | undefined;
-  if (isMint && !isEquity) price = scPriceMint;
-  if (!isMint && !isEquity) price = scPriceRedeem;
-  if (isMint && isEquity) price = ecPriceMint;
-  if (!isMint && isEquity) price = ecPriceRedeem;
-
-  const priceFormatted = price ? Number(formatEther(price)) : 0;
-  
-  // Calculate estimate based on price
-  const valNum = parseFloat(amount || "0");
-  let estimateNum = 0;
-  if (priceFormatted > 0) {
-    if (isMint) {
-      estimateNum = valNum / priceFormatted; // e.g. 1000 WETH / 0.25 = 4000 TUSD
-    } else {
-      estimateNum = valNum * priceFormatted; // e.g. 4000 TUSD * 0.25 = 1000 WETH
-    }
+  let priceStatus: PriceReadStatus | undefined;
+  if (isMint && !isEquity) {
+    price = scPriceMint;
+    priceStatus = scPriceMintStatus;
+  } else if (!isMint && !isEquity) {
+    price = scPriceRedeem;
+    priceStatus = scPriceRedeemStatus;
+  } else if (isMint && isEquity) {
+    price = ecPriceMint;
+    priceStatus = ecPriceMintStatus;
+  } else {
+    price = ecPriceRedeem;
+    priceStatus = ecPriceRedeemStatus;
   }
-
-  // Deduct 0.3% fee for display
-  const feePct = 0.003;
-  estimateNum = estimateNum * (1 - feePct);
-
+  const isPriceLoading = Boolean(priceStatus?.isLoading);
+  const isPriceError = Boolean(priceStatus?.isError);
+  const priceFormatted =
+    typeof price === "bigint" && price > BigInt(0)
+      ? Number(formatEther(price))
+      : 0;
+  const hasPrice =
+    typeof price === "bigint" &&
+    price > BigInt(0) &&
+    !isPriceLoading &&
+    !isPriceError &&
+    Number.isFinite(priceFormatted) &&
+    priceFormatted > 0;
+  const valNum = Number(amount);
+  const isAmountValid =
+    amount.trim() !== "" &&
+    Number.isFinite(valNum) &&
+    valNum > 0;
+  let estimateNum = 0;
+  if (hasPrice && isAmountValid) {
+    estimateNum = isMint
+      ? valNum / priceFormatted
+      : valNum * priceFormatted;
+    // Preserve the existing 0.3% fee adjustment.
+    estimateNum *= 1 - 0.003;
+  }
+  const hasValidEstimate =
+    hasPrice &&
+    isAmountValid &&
+    Number.isFinite(estimateNum) &&
+    estimateNum > 0;
   // Wagmi hooks
   const { data: hash, writeContract, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
@@ -163,7 +198,15 @@ function MintRedeemForm({
         <div className="border-t border-[#efe2c9] pt-2 flex justify-between text-sm font-bold">
           <span className="text-[#1a1a1a]">{t("youReceive")}</span>
           <span className="text-amber-500">
-            ~{estimateNum > 0 ? estimateNum.toLocaleString(undefined, { maximumFractionDigits: 6 }) : "0.00"} {outputToken}
+            {isPriceLoading
+              ? t("estimateLoading")
+              : isPriceError || !hasPrice
+                ? t("estimateUnavailable")
+                : !isAmountValid
+                  ? "Enter an amount"
+                  : hasValidEstimate
+                    ? `~${estimateNum.toLocaleString(undefined, { maximumFractionDigits: 6 })} ${outputToken}`
+                    : t("estimateUnavailable")}
           </span>
         </div>
       </div>
@@ -205,12 +248,14 @@ function MintRedeemForm({
   );
 }
 
-/* ─── StableCoin card ─── */
+/* â”€â”€â”€ StableCoin card â”€â”€â”€ */
 function StableCoinCard({
   d,
   contractAddress,
   scPriceMint,
   scPriceRedeem,
+  scPriceMintStatus,
+  scPriceRedeemStatus,
   isPlaceholder,
   isMismatch,
 }: {
@@ -218,6 +263,8 @@ function StableCoinCard({
   contractAddress?: `0x${string}`;
   scPriceMint?: bigint;
   scPriceRedeem?: bigint;
+  scPriceMintStatus: PriceReadStatus;
+  scPriceRedeemStatus: PriceReadStatus;
   isPlaceholder?: boolean;
   isMismatch?: boolean;
 }) {
@@ -285,6 +332,8 @@ function StableCoinCard({
             contractAddress={contractAddress}
             scPriceMint={scPriceMint}
             scPriceRedeem={scPriceRedeem}
+            scPriceMintStatus={scPriceMintStatus}
+            scPriceRedeemStatus={scPriceRedeemStatus}
             ecPriceMint={BigInt(0)}
             ecPriceRedeem={BigInt(0)}
             isPlaceholder={isPlaceholder}
@@ -296,12 +345,14 @@ function StableCoinCard({
   );
 }
 
-/* ─── EquityCoin card ─── */
+/* â”€â”€â”€ EquityCoin card â”€â”€â”€ */
 function EquityCoinCard({
   d,
   contractAddress,
   ecPriceMint,
   ecPriceRedeem,
+  ecPriceMintStatus,
+  ecPriceRedeemStatus,
   isPlaceholder,
   isMismatch,
 }: {
@@ -309,6 +360,8 @@ function EquityCoinCard({
   contractAddress?: `0x${string}`;
   ecPriceMint?: bigint;
   ecPriceRedeem?: bigint;
+  ecPriceMintStatus: PriceReadStatus;
+  ecPriceRedeemStatus: PriceReadStatus;
   isPlaceholder?: boolean;
   isMismatch?: boolean;
 }) {
@@ -376,6 +429,8 @@ function EquityCoinCard({
             scPriceRedeem={BigInt(0)}
             ecPriceMint={ecPriceMint}
             ecPriceRedeem={ecPriceRedeem}
+            ecPriceMintStatus={ecPriceMintStatus}
+            ecPriceRedeemStatus={ecPriceRedeemStatus}
             isPlaceholder={isPlaceholder}
             isMismatch={isMismatch}
           />
@@ -385,7 +440,7 @@ function EquityCoinCard({
   );
 }
 
-/* ─── Main page ─── */
+/* â”€â”€â”€ Main page â”€â”€â”€ */
 export default function DeploymentDetailClient({ id }: { id: string }) {
   const tDetail = useTranslations("deploymentDetail");
   const tFooter = useTranslations("footer");
@@ -398,25 +453,25 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
   const chainId = useChainId();
   const contractAddress = getContractAddress(chainId);
 
-  const { data: scPriceMint } = useReadContract({
+  const { data: scPriceMint, isLoading: isScPriceMintLoading, isError: isScPriceMintError } = useReadContract({
     address: contractAddress,
     abi: tectonicAbi,
     functionName: "scPriceMint",
     query: { enabled: !d?.isPlaceholder }
   });
-  const { data: scPriceRedeem } = useReadContract({
+  const { data: scPriceRedeem, isLoading: isScPriceRedeemLoading, isError: isScPriceRedeemError } = useReadContract({
     address: contractAddress,
     abi: tectonicAbi,
     functionName: "scPriceRedeem",
     query: { enabled: !d?.isPlaceholder }
   });
-  const { data: ecPriceMint } = useReadContract({
+  const { data: ecPriceMint, isLoading: isEcPriceMintLoading, isError: isEcPriceMintError } = useReadContract({
     address: contractAddress,
     abi: tectonicAbi,
     functionName: "ecPriceMint",
     query: { enabled: !d?.isPlaceholder }
   });
-  const { data: ecPriceRedeem } = useReadContract({
+  const { data: ecPriceRedeem, isLoading: isEcPriceRedeemLoading, isError: isEcPriceRedeemError } = useReadContract({
     address: contractAddress,
     abi: tectonicAbi,
     functionName: "ecPriceRedeem",
@@ -441,7 +496,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
     <>
       <Navbar />
 
-      {/* ── page header ── */}
+      {/* â”€â”€ page header â”€â”€ */}
       <div className="pt-[68px] border-b border-[#e7dac4] bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-7">
           <Link
@@ -480,13 +535,15 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
       <main className="min-h-screen bg-[#f7f4ef] pb-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
-          {/* ── TOP: two action cards ── */}
+          {/* â”€â”€ TOP: two action cards â”€â”€ */}
           <div className="grid md:grid-cols-2 gap-6 items-start">
             <StableCoinCard
               d={d}
               contractAddress={contractAddress}
               scPriceMint={scPriceMint as bigint | undefined}
               scPriceRedeem={scPriceRedeem as bigint | undefined}
+              scPriceMintStatus={{ isLoading: isScPriceMintLoading, isError: isScPriceMintError }}
+              scPriceRedeemStatus={{ isLoading: isScPriceRedeemLoading, isError: isScPriceRedeemError }}
               isPlaceholder={d.isPlaceholder}
               isMismatch={isMismatch}
             />
@@ -495,12 +552,14 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
               contractAddress={contractAddress}
               ecPriceMint={ecPriceMint as bigint | undefined}
               ecPriceRedeem={ecPriceRedeem as bigint | undefined}
+              ecPriceMintStatus={{ isLoading: isEcPriceMintLoading, isError: isEcPriceMintError }}
+              ecPriceRedeemStatus={{ isLoading: isEcPriceRedeemLoading, isError: isEcPriceRedeemError }}
               isPlaceholder={d.isPlaceholder}
               isMismatch={isMismatch}
             />
           </div>
 
-          {/* ── BOTTOM: Deployment Health ── */}
+          {/* â”€â”€ BOTTOM: Deployment Health â”€â”€ */}
           <div className="rounded-2xl border border-[#e7dac4] bg-white shadow-[0_4px_24px_rgba(15,23,42,0.07)] overflow-hidden">
             <div className="px-6 py-4 border-b border-[#f0ece4]">
               <p className="text-[10px] font-black tracking-[0.2em] text-amber-500 uppercase">
@@ -575,7 +634,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
         </div>
       </main>
 
-      {/* ── footer ── */}
+      {/* â”€â”€ footer â”€â”€ */}
       <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-6 pt-14 pb-4">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-80" />
         <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl" />

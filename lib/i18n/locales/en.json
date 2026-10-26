@@ -2,6 +2,8 @@
   "common": {
     "deposit": "Deposit",
     "burn": "Burn",
+    "estimateLoading": "Loading price data...",
+    "estimateUnavailable": "Estimate unavailable: price data could not be loaded.",
     "fee": "Fee",
     "youReceive": "You Receive",
     "mint": "Mint",
