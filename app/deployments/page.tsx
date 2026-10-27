@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -10,32 +11,39 @@ import { DEPLOYMENTS } from "@/lib/deployments-data";
 import { statusCfg, pct } from "@/lib/deployments-ui";
 import { useTranslations } from "@/lib/i18n";
 
-
 const CHAINS = [
-  { id:"all",      label:"All Networks", short:"ALL"  },
-  { id:"Hardhat",  label:"Local",        short:"LOCAL"},
-  { id:"Sepolia",  label:"Sepolia",      short:"SEP"  },
-  { id:"Polygon",  label:"Polygon",      short:"MATIC"},
-  { id:"Classic",  label:"Classic",      short:"ETC"  },
-  { id:"Base",     label:"Base",         short:"BASE" },
+  { id: "all", label: "All Networks", short: "ALL" },
+  { id: "Hardhat", label: "Local", short: "LOCAL" },
+  { id: "Sepolia", label: "Sepolia", short: "SEP" },
+  { id: "Polygon", label: "Polygon", short: "MATIC" },
+  { id: "Classic", label: "Classic", short: "ETC" },
+  { id: "Base", label: "Base", short: "BASE" },
 ];
 
 const PEG_ASSETS = [
-  { id:"all", label:"All" },
-  { id:"USD", label:"USD" },
-  { id:"EUR", label:"EUR" },
-  { id:"AUD", label:"AUD" },
-  { id:"INR", label:"INR" },
-  { id:"BRL", label:"BRL" },
-  { id:"RUB", label:"RUB" },
-  { id:"CNY", label:"CNY" },
-  { id:"ZAR", label:"ZAR" },
+  { id: "all", label: "All" },
+  { id: "USD", label: "USD" },
+  { id: "EUR", label: "EUR" },
+  { id: "AUD", label: "AUD" },
+  { id: "INR", label: "INR" },
+  { id: "BRL", label: "BRL" },
+  { id: "RUB", label: "RUB" },
+  { id: "CNY", label: "CNY" },
+  { id: "ZAR", label: "ZAR" },
 ];
 
 /* ─── Site card wrapper ─── */
-function SiteCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function SiteCard({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className={`rounded-xl border border-[#e7dac4] bg-white shadow-sm ${className}`}>
+    <div
+      className={`rounded-xl border border-[#e7dac4] bg-white shadow-sm ${className}`}
+    >
       {children}
     </div>
   );
@@ -44,9 +52,14 @@ function SiteCard({ children, className = "" }: { children: React.ReactNode; cla
 /* ─── Status badge ─── */
 function StatusBadge({ status }: { status: RatioStatus }) {
   const c = statusCfg(status);
+
   return (
-    <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${c.badgeBg} ${c.badgeBorder} ${c.badgeText}`}>
-      <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${c.dotColor}`} />
+    <span
+      className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${c.badgeBg} ${c.badgeBorder} ${c.badgeText}`}
+    >
+      <span
+        className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${c.dotColor}`}
+      />
       {c.label}
     </span>
   );
@@ -56,25 +69,33 @@ function StatusBadge({ status }: { status: RatioStatus }) {
 function ContractCard({ d }: { d: Deployment }) {
   const c = statusCfg(d.status);
   const tDeploy = useTranslations("deployments");
-  return (
-    <div className={`rounded-xl border ${c.cardBorder} bg-[#fbf6ec] hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col`}>
-      <div className="m-3 rounded-lg bg-white shadow-sm flex flex-col flex-1 overflow-hidden">
 
+  return (
+    <div
+      className={`rounded-xl border ${c.cardBorder} bg-[#fbf6ec] hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col`}
+    >
+      <div className="m-3 rounded-lg bg-white shadow-sm flex flex-col flex-1 overflow-hidden">
         {/* header */}
         <div className={`px-4 pt-4 pb-3 border-b border-[#efe2c9] ${c.headerBg}`}>
           {/* chain badge + status */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0 ${d.chainTextColor}`}
-                style={{ background: d.chainColor }}>
+              <div
+                className={`h-6 w-6 rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0 ${d.chainTextColor}`}
+                style={{ background: d.chainColor }}
+              >
                 {d.chainShort.slice(0, 3)}
               </div>
               <span className="text-xs text-gray-400">{d.chain}</span>
             </div>
             <StatusBadge status={d.status} />
           </div>
+
           {/* title line */}
-          <h3 className="text-base font-bold text-[#1a1a1a] leading-tight">{d.name}</h3>
+          <h3 className="text-base font-bold text-[#1a1a1a] leading-tight">
+            {d.name}
+          </h3>
+
           {/* subtitle: Backed by X · Pegged to Y */}
           <p className="text-xs text-gray-400 mt-0.5">
             Backed by {d.reserveAsset} · Pegged to {d.pegAsset}
@@ -83,15 +104,38 @@ function ContractCard({ d }: { d: Deployment }) {
 
         {/* stats — mentor's exact order */}
         <div className="px-4 py-3 flex flex-col flex-1">
-          {([
-            ["Reserve Ratio",   <span className={`font-bold ${c.tc}`} key="rr">{d.reserveRatio}%</span>],
-            ["Total Reserve",   d.totalReserve],
-            ["StableCoin Supply", d.stableSupply],
-            ["EquityCoin Supply", d.equitySupply],
-            ["EquityCoin Leverage", <span className="font-bold text-[#1a1a1a]" key="lev">{d.equityLeverage}</span>],
-            ["EquityCoin Yield", <span className="font-bold text-amber-600" key="y">{d.equityYield}%</span>],
-          ] as [string, React.ReactNode][]).map(([lbl, val]) => (
-            <div key={lbl} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0 text-sm">
+          {(
+            [
+              [
+                "Reserve Ratio",
+                <span className={`font-bold ${c.tc}`} key="rr">
+                  {d.reserveRatio}%
+                </span>,
+              ],
+              ["Total Reserve", d.totalReserve],
+              ["StableCoin Supply", d.stableSupply],
+              ["EquityCoin Supply", d.equitySupply],
+              [
+                "EquityCoin Leverage",
+                <span
+                  className="font-bold text-[#1a1a1a]"
+                  key="lev"
+                >
+                  {d.equityLeverage}
+                </span>,
+              ],
+              [
+                "EquityCoin Yield",
+                <span className="font-bold text-amber-600" key="y">
+                  {d.equityYield}%
+                </span>,
+              ],
+            ] as [string, React.ReactNode][]
+          ).map(([lbl, val]) => (
+            <div
+              key={lbl}
+              className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0 text-sm"
+            >
               <span className="text-gray-400">{lbl}</span>
               <span className="text-[#1a1a1a] font-medium">{val}</span>
             </div>
@@ -101,21 +145,28 @@ function ContractCard({ d }: { d: Deployment }) {
         {/* ratio bar */}
         <div className="px-4 pb-3">
           <div className="h-1.5 w-full rounded-full bg-[#efe2c9] overflow-hidden">
-            <div className={`h-1.5 rounded-full transition-all duration-700 ${c.barColor}`} style={{ width: pct(d.reserveRatio) }} />
+            <div
+              className={`h-1.5 rounded-full transition-all duration-700 ${c.barColor}`}
+              style={{ width: pct(d.reserveRatio) }}
+            />
           </div>
         </div>
 
         {/* action buttons */}
         <div className="px-4 py-3 border-t border-[#efe2c9] flex flex-col gap-2">
-          <Link href={`/deployments/${d.id}`}
-            className="block w-full py-2.5 rounded-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#1a1a1a] text-xs font-semibold transition text-center">
+          <Link
+            href={`/deployments/${d.id}`}
+            className="block w-full py-2.5 rounded-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#1a1a1a] text-xs font-semibold transition text-center"
+          >
             Open →
           </Link>
+
           {d.status === "warning" && (
             <p className="text-[10px] text-amber-600 text-center font-medium">
               {tDeploy("warningStatus")}
             </p>
           )}
+
           {d.status === "danger" && (
             <p className="text-[10px] text-red-500 text-center font-medium">
               {tDeploy("dangerStatus")}
@@ -132,37 +183,54 @@ function ContractCard({ d }: { d: Deployment }) {
 ───────────────────────────────────────────────────────────────────────────── */
 export default function DeploymentsPage() {
   const tDeploy = useTranslations("deployments");
-  const [activeChain,  setActiveChain]  = useState("all");
-  const [activePeg,    setActivePeg]    = useState("all");
-  const [search,       setSearch]       = useState("");
-  const [tvl,          setTvl]          = useState(0);
+  const [activeChain, setActiveChain] = useState("all");
+  const [activePeg, setActivePeg] = useState("all");
+  const [search, setSearch] = useState("");
+  const [tvl, setTvl] = useState(0);
   const countDone = useRef(false);
 
   useEffect(() => {
     if (countDone.current) return;
+
     countDone.current = true;
-    const target = 12.4, dur = 1800, s0 = performance.now();
+
+    const target = 12.4;
+    const dur = 1800;
+    const s0 = performance.now();
+
     let rafId: number;
+
     const tick = (now: number) => {
       const p = Math.min((now - s0) / dur, 1);
+
       setTvl(target * (1 - Math.pow(1 - p, 3)));
-      if (p < 1) rafId = requestAnimationFrame(tick);
+
+      if (p < 1) {
+        rafId = requestAnimationFrame(tick);
+      }
     };
+
     rafId = requestAnimationFrame(tick);
+
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
-  const filtered = DEPLOYMENTS.filter(d => {
+  const filtered = DEPLOYMENTS.filter((d) => {
     const mc = activeChain === "all" || d.chain === activeChain;
-    const mp = activePeg   === "all" || d.pegAsset === activePeg;
-    const ms = !search || [d.name, d.chain, d.stablecoin].some(v => v.toLowerCase().includes(search.toLowerCase()));
+    const mp = activePeg === "all" || d.pegAsset === activePeg;
+    const ms =
+      !search ||
+      [d.name, d.chain, d.stablecoin].some((v) =>
+        v.toLowerCase().includes(search.toLowerCase())
+      );
+
     return mc && mp && ms;
   });
 
-  const dangerList  = DEPLOYMENTS.filter(d => d.status === "danger");
-  const warningList = DEPLOYMENTS.filter(d => d.status === "warning");
+  const dangerList = DEPLOYMENTS.filter((d) => d.status === "danger");
+  const warningList = DEPLOYMENTS.filter((d) => d.status === "warning");
 
   return (
     <>
@@ -172,21 +240,31 @@ export default function DeploymentsPage() {
       <div className="pt-[68px] border-b border-[#e7dac4] bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex items-end justify-between flex-wrap gap-4">
           <div>
-            <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Overview</p>
-            <h1 className="text-2xl md:text-3xl font-bold text-[#1a1a1a]">Tectonic Coins</h1>
-            <p className="text-gray-500 text-sm mt-1">See live statistics and mint or redeem Tectonic coins on various blockchains.</p>
+            <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">
+              Overview
+            </p>
+            <h1 className="text-2xl md:text-3xl font-bold text-[#1a1a1a]">
+              Tectonic Coins
+            </h1>
+            <p className="text-gray-500 text-sm mt-1">
+              See live statistics and mint or redeem Tectonic coins on various
+              blockchains.
+            </p>
           </div>
+
           <div className="flex items-center gap-2 flex-wrap">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Live
             </span>
+
             {dangerList.length > 0 && (
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded-full px-3 py-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
                 {dangerList.length} Trigger Redemptions Active
               </span>
             )}
+
             {warningList.length > 0 && (
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-300 rounded-full px-3 py-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
@@ -200,65 +278,142 @@ export default function DeploymentsPage() {
       {/* ── main content — warm off-white background ─────────────────── */}
       <main className="min-h-screen bg-[#fbf6ec] pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-
-
           {/* ── SECTION 1: Deployments ─────────────────────────────────── */}
           <section className="py-6">
             <div className="mb-5">
-              <h2 className="text-lg font-bold text-[#1a1a1a]">Deployments</h2>
-              <p className="text-gray-500 text-xs mt-0.5">All active protocol contracts across EVM networks</p>
+              <h2 className="text-lg font-bold text-[#1a1a1a]">
+                Deployments
+              </h2>
+              <p className="text-gray-500 text-xs mt-0.5">
+                All active protocol contracts across EVM networks
+              </p>
             </div>
 
             {/* ── Filters ──────────────────────────────────────────────── */}
             <div className="mb-5 flex flex-wrap gap-3 items-center">
               {/* search */}
               <div className="relative">
-                <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" aria-hidden>
-                  <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <svg
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  aria-hidden
+                >
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="8"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M21 21l-4.35-4.35"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
                 </svg>
-                <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search…"
-                  className="w-44 rounded-lg border border-[#e7dac4] bg-white py-2 pl-8 pr-3 text-sm text-[#1a1a1a] focus:border-amber-400 focus:outline-none shadow-sm" />
+
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search…"
+                  className="w-44 rounded-lg border border-[#e7dac4] bg-white py-2 pl-8 pr-3 text-sm text-[#1a1a1a] focus:border-amber-400 focus:outline-none shadow-sm"
+                />
               </div>
 
               {/* network dropdown */}
               <div className="flex items-center gap-2">
-                <label className="text-xs font-semibold text-gray-400 whitespace-nowrap">Network</label>
-                <select value={activeChain} onChange={e => setActiveChain(e.target.value)}
+                <label
+                  htmlFor="network-filter"
+                  className="text-xs font-semibold text-gray-400 whitespace-nowrap"
+                >
+                  Network
+                </label>
+
+                <select
+                  id="network-filter"
+                  value={activeChain}
+                  onChange={(e) => setActiveChain(e.target.value)}
                   className="rounded-lg border border-[#e7dac4] bg-white py-2 pl-3 pr-8 text-sm text-[#1a1a1a] font-medium focus:border-amber-400 focus:outline-none shadow-sm cursor-pointer appearance-none"
-                  style={{ backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b8a99a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 10px center" }}>
-                  {CHAINS.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b8a99a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 10px center",
+                  }}
+                >
+                  {CHAINS.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               {/* peg asset dropdown */}
               <div className="flex items-center gap-2">
-                <label className="text-xs font-semibold text-gray-400 whitespace-nowrap">Peg Asset</label>
-                <select value={activePeg} onChange={e => setActivePeg(e.target.value)}
+                <label
+                  htmlFor="peg-asset-filter"
+                  className="text-xs font-semibold text-gray-400 whitespace-nowrap"
+                >
+                  Peg Asset
+                </label>
+
+                <select
+                  id="peg-asset-filter"
+                  value={activePeg}
+                  onChange={(e) => setActivePeg(e.target.value)}
                   className="rounded-lg border border-[#e7dac4] bg-white py-2 pl-3 pr-8 text-sm text-[#1a1a1a] font-medium focus:border-amber-400 focus:outline-none shadow-sm cursor-pointer appearance-none"
-                  style={{ backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b8a99a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 10px center" }}>
-                  {PEG_ASSETS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b8a99a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 10px center",
+                  }}
+                >
+                  {PEG_ASSETS.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               {/* active filter chips */}
               {(activeChain !== "all" || activePeg !== "all") && (
-                <button onClick={() => { setActiveChain("all"); setActivePeg("all"); }}
-                  className="text-xs font-semibold text-amber-600 hover:text-amber-800 transition flex items-center gap-1">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <button
+                  onClick={() => {
+                    setActiveChain("all");
+                    setActivePeg("all");
+                  }}
+                  className="text-xs font-semibold text-amber-600 hover:text-amber-800 transition flex items-center gap-1"
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    aria-hidden
+                  >
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
                   Clear filters
                 </button>
               )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-              {filtered.length === 0
-                ? <div className="col-span-full text-center py-16 text-gray-400 text-sm">No deployments found</div>
-                : filtered.map(d => <ContractCard key={d.id} d={d} />)
-              }
+              {filtered.length === 0 ? (
+                <div className="col-span-full text-center py-16 text-gray-400 text-sm">
+                  No deployments found
+                </div>
+              ) : (
+                filtered.map((d) => <ContractCard key={d.id} d={d} />)
+              )}
             </div>
           </section>
-
         </div>
       </main>
 
@@ -274,38 +429,92 @@ export default function DeploymentsPage() {
             <div className="max-w-sm flex flex-col items-start">
               <div className="flex flex-col items-center text-center">
                 <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
-                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
-                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`}
+                    alt="Tectonic logo"
+                    width={72}
+                    height={72}
+                    className="logo-hover-zoom h-16 w-auto object-contain"
+                  />
+                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">
+                    TECTONIC
+                  </span>
                 </div>
-                <p className="max-w-xs text-sm leading-6 text-slate-600">Next-generation stablecoin protocol.</p>
+                <p className="max-w-xs text-sm leading-6 text-slate-600">
+                  Next-generation stablecoin protocol.
+                </p>
               </div>
             </div>
 
             {/* Protocol */}
             <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Protocol</h4>
+              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">
+                Protocol
+              </h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                {["Docs","Contracts","GitHub"].map(l=>(
-                  <li key={l}><a href={l==="GitHub"?"https://github.com/StabilityNexus/Tectonic-EVM-WebUI":"#"} target={l==="GitHub"?"_blank":undefined} rel={l==="GitHub"?"noopener noreferrer":undefined} className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>
+                {["Docs", "Contracts", "GitHub"].map((l) => (
+                  <li key={l}>
+                    <a
+                      href={
+                        l === "GitHub"
+                          ? "https://github.com/StabilityNexus/Tectonic-EVM-WebUI"
+                          : "#"
+                      }
+                      target={l === "GitHub" ? "_blank" : undefined}
+                      rel={l === "GitHub" ? "noopener noreferrer" : undefined}
+                      className="transition hover:text-amber-700 hover:underline hover:underline-offset-4"
+                    >
+                      {l}
+                    </a>
+                  </li>
                 ))}
               </ul>
             </div>
 
             {/* Community */}
             <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Community</h4>
+              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">
+                Community
+              </h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                <li><a href="https://discord.gg/YzDKeEfWtS" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
-                <li><a href="https://t.me/StabilityNexus" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Telegram</a></li>
+                <li>
+                  <a
+                    href="https://discord.gg/YzDKeEfWtS"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition hover:text-amber-700 hover:underline hover:underline-offset-4"
+                  >
+                    Discord
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://t.me/StabilityNexus"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition hover:text-amber-700 hover:underline hover:underline-offset-4"
+                  >
+                    Telegram
+                  </a>
+                </li>
               </ul>
             </div>
 
             {/* Resources */}
             <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">Resources</h4>
+              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">
+                Resources
+              </h4>
               <ul className="space-y-3 text-sm text-slate-700">
-                {["Technical Paper", "KYA / Terms"].map(l=>(
-                  <li key={l}><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{l}</a></li>
+                {["Technical Paper", "KYA / Terms"].map((l) => (
+                  <li key={l}>
+                    <a
+                      href="#"
+                      className="transition hover:text-amber-700 hover:underline hover:underline-offset-4"
+                    >
+                      {l}
+                    </a>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -313,9 +522,23 @@ export default function DeploymentsPage() {
         </div>
 
         <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
-          <p className="text-sm text-slate-600 text-center md:text-left">© 2026 Tectonic Protocol. All rights reserved.</p>
-          <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
+          <p className="text-sm text-slate-600 text-center md:text-left">
+            © 2026 Tectonic Protocol. All rights reserved.
+          </p>
+          <a
+            href="https://stability.nexus/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block hover:opacity-90 transition-opacity"
+          >
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`}
+              alt="Stability Nexus Badge"
+              width={180}
+              height={50}
+              className="w-auto h-12 rounded-lg"
+              unoptimized
+            />
           </a>
         </div>
       </footer>
