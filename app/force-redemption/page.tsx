@@ -13,11 +13,17 @@ export default function ForceRedemptionPage() {
       title="Trigger Redemptions Monitor"
       subtitle="Tectonic's unique stability mechanism — when a deployment drops below 150% reserve ratio, equity minting halts and stablecoin holders can redeem 1:1 until health is restored."
       badge={
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1.5 self-start">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />Monitoring Active
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-3 py-1.5 self-start">
+          <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />Demo Data — Not Live
         </span>
       }
     >
+      <div className="rounded-2xl bg-amber-50 border border-amber-200 p-4 mb-4">
+        <p className="text-xs font-semibold text-amber-700">
+          Demo data: the summary metrics below are static examples for illustration only, not live protocol data. Deployment-level values are shown in the table below.
+        </p>
+      </div>
+
       {/* alert banners */}
       {dangerList.length > 0 && (
         <div className="rounded-2xl bg-red-50 border border-red-200 p-5 flex items-start gap-4 mb-4">
@@ -58,21 +64,26 @@ export default function ForceRedemptionPage() {
       </div>
 
       {/* reserve widgets */}
-      <h3 className="font-black text-slate-900 text-lg mb-4">Current Reserve Health</h3>
+      <div className="flex items-center gap-2 mb-4">
+        <h3 className="font-black text-slate-900 text-lg">Current Reserve Health</h3>
+        <span className="rounded-full border border-amber-200 bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-amber-700">
+          Demo
+        </span>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <ReserveWidget ratio={120} status="danger"  label="BSC — USDBN-BSC (Active)" />
+        <ReserveWidget ratio={120} status="danger"  label="BSC — USDBN-BSC (Demo)" />
         <div className="rounded-2xl bg-white border border-amber-100 p-5 shadow-sm flex flex-col gap-3">
           <div className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">Minimum Safe Ratio</div>
           <div className="text-4xl font-black text-amber-500">150%</div>
           <p className="text-xs text-slate-500">Below this level equity minting pauses and trigger redemptions begin.</p>
           <div className="text-xs text-slate-500 mt-auto">
-            Gap to safe ratio: <span className="text-red-600 font-bold">−30%</span>
+            Gap to safe ratio: <span className="text-red-600 font-bold">−30%</span> <span className="text-amber-600">(demo)</span>
           </div>
         </div>
         <div className="rounded-2xl bg-white border border-amber-100 p-5 shadow-sm flex flex-col gap-3">
           <div className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">Redemption Progress</div>
           <div className="text-4xl font-black text-amber-600">34%</div>
-          <div className="text-xs text-slate-500">of eligible USDBN redeemed</div>
+          <div className="text-xs text-slate-500">of eligible USDBN redeemed (demo)</div>
           <div className="h-2 w-full rounded-full bg-[#efe2c9] mt-auto overflow-hidden">
             <div className="h-2 bg-amber-400 rounded-full" style={{ width: "34%" }} />
           </div>
