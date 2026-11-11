@@ -4,12 +4,12 @@ import { useState } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import { statusCfg, pct } from "@/lib/deployments-ui";
 import { DEPLOYMENTS } from "@/lib/deployments-data";
 import type { Deployment } from "@/lib/deployments-data";
 import { useTranslations } from "@/lib/i18n";
 import { parseEther, formatEther } from "viem";
+import Footer from "@/components/Footer";
 import {
   useReadContract,
   useWriteContract,
@@ -26,7 +26,6 @@ const CONTRACT_ADDRESSES: Record<number, `0x${string}`> = {
   61: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Ethereum Classic (Placeholder)
   8453: "0x016eed9c27848d9ba152fe2d45dd2949f3f4780d", // Base Mainnet (Placeholder)
 };
-const FALLBACK_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
 
 function getContractAddress(chainId?: number): `0x${string}` | undefined {
   if (!chainId) return undefined;
@@ -388,8 +387,6 @@ function EquityCoinCard({
 /* ─── Main page ─── */
 export default function DeploymentDetailClient({ id }: { id: string }) {
   const tDetail = useTranslations("deploymentDetail");
-  const tFooter = useTranslations("footer");
-
   // Wagmi Read Contracts (MUST be called before any early returns)
   // Find deployment info BEFORE using wagmi hooks
   const d = DEPLOYMENTS.find(x => x.id === id);
@@ -574,56 +571,7 @@ export default function DeploymentDetailClient({ id }: { id: string }) {
 
         </div>
       </main>
-
-      {/* ── footer ── */}
-      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-6 pt-14 pb-4">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-80" />
-        <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl" />
-        <div className="pointer-events-none absolute right-0 top-10 h-44 w-44 rounded-full bg-orange-200/30 blur-3xl" />
-        <div className="relative mx-auto max-w-5xl px-2 pt-4 pb-0 md:px-6">
-          <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
-            <div className="max-w-sm flex flex-col items-start">
-              <div className="flex flex-col items-center text-center">
-                <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
-                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
-                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
-                </div>
-                <p className="max-w-xs text-sm leading-6 text-slate-600">{tFooter("desc")}</p>
-              </div>
-            </div>
-            {[
-              { title: tFooter("protocol"),  links: [["Docs","#"],["Contracts","#"],["GitHub","https://github.com/StabilityNexus/Tectonic-EVM-WebUI"]] },
-              { title: tFooter("community"), links: [["Discord","https://discord.gg/YzDKeEfWtS"],["Telegram","https://t.me/StabilityNexus"]] },
-              { title: tFooter("resources"), links: [[tFooter("technicalPaper"),"#"], ["KYA / Terms", "#"]] },
-            ].map(col => (
-              <div key={col.title}>
-                <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{col.title}</h4>
-                <ul className="space-y-3 text-sm text-slate-700">
-                  {col.links.map(([label, href]) => (
-                    <li key={label}>
-                      <a
-                        href={href}
-                        target={href.startsWith("http") ? "_blank" : undefined}
-                        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="transition hover:text-amber-700 hover:underline hover:underline-offset-4"
-                      >
-                        {label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          </div>
-
-        <div className="mt-16 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
-          <p className="text-sm text-slate-600 text-center md:text-left">{tFooter("rights")}</p>
-          <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
-          </a>
-        </div>
-      </footer>
+      <Footer maxWidth="5xl" />
     </>
   );
 }

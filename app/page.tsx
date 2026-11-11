@@ -2,9 +2,10 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { ComparisonTable } from "@/components/ComparisonTable";
-import Image from 'next/image';
-import Link from 'next/link';
-import type { CSSProperties } from 'react';
+import Footer from "@/components/Footer";
+import Image from "next/image";
+import Link from "next/link";
+import type { CSSProperties } from "react";
 import Navbar from "@/components/Navbar";
 import { useTranslations } from "@/lib/i18n";
 
@@ -136,35 +137,6 @@ export default function Home() {
   const tHome = useTranslations("home");
   const tCommon = useTranslations("common");
   const tDetail = useTranslations("deploymentDetail");
-  const tFooter = useTranslations("footer");
-
-  // Features data and reveal animation refs
-  const features = [
-    {
-      title: tHome("whyTectonicFeatures.triggerRedemptions.title"),
-      emoji: '⚡',
-      desc: tHome("whyTectonicFeatures.triggerRedemptions.desc"),
-      color: 'from-yellow-400 to-yellow-500'
-    },
-    {
-      title: tHome("whyTectonicFeatures.secureBaseLayer.title"),
-      emoji: '🔒',
-      desc: tHome("whyTectonicFeatures.secureBaseLayer.desc"),
-      color: 'from-indigo-400 to-indigo-600'
-    },
-    {
-      title: tHome("whyTectonicFeatures.evmCompatible.title"),
-      emoji: '🌐',
-      desc: tHome("whyTectonicFeatures.evmCompatible.desc"),
-      color: 'from-green-400 to-emerald-500'
-    },
-    {
-      title: tHome("whyTectonicFeatures.defiIntegration.title"),
-      emoji: '💱',
-      desc: tHome("whyTectonicFeatures.defiIntegration.desc"),
-      color: 'from-pink-400 to-pink-500'
-    }
-  ];
 
   const featureRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -581,63 +553,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-6 pt-14 pb-4">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-80"></div>
-        <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl"></div>
-        <div className="pointer-events-none absolute right-0 top-10 h-44 w-44 rounded-full bg-orange-200/30 blur-3xl"></div>
-
-        <div className="relative mx-auto max-w-7xl px-2 pt-4 pb-0 md:px-6">
-          <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
-            <div className="max-w-sm flex flex-col items-start">
-              <div className="flex flex-col items-center text-center">
-                <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
-                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
-                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">TECTONIC</span>
-                </div>
-                <p className="max-w-xs text-sm leading-6 text-slate-600">
-                  {tFooter("desc")}
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{tFooter("protocol")}</h4>
-              <ul className="space-y-3 text-sm text-slate-700">
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Docs</a></li>
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Contracts</a></li>
-                <li><a href="https://github.com/StabilityNexus/Tectonic-EVM-WebUI" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">GitHub</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{tFooter("community")}</h4>
-              <ul className="space-y-3 text-sm text-slate-700">
-                <li><a href="https://discord.gg/YzDKeEfWtS" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
-                <li><a href="https://t.me/StabilityNexus" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Telegram</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">{tFooter("resources")}</h4>
-              <ul className="space-y-3 text-sm text-slate-700">
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">{tFooter("technicalPaper")}</a></li>
-                <li><a href="#" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">KYA / Terms</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
-          <p className="text-sm text-slate-600 text-center md:text-left">
-            {tFooter("rights")}
-          </p>
-          <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
-          </a>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
