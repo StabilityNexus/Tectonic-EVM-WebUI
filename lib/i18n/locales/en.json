@@ -19,7 +19,8 @@
     "availableBalance": "Available Balance",
     "confirmInWallet": "Confirm in wallet...",
     "processing": "Processing...",
-    "transactionConfirmed": "Transaction confirmed!"
+    "transactionConfirmed": "Transaction confirmed!",
+    "invalidAmountPrecision": "Amount cannot have more than 18 decimal places."
   },
   "home": {
     "kicker": "Next Generation StableCoin Protocol",
