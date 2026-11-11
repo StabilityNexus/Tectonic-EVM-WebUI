@@ -2,9 +2,10 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import type { RatioStatus } from "@/lib/deployments-data";
+import Footer from "@/components/Footer";
+
 
 export const CHART_DATA = {
   reserveRatio: [290, 305, 315, 298, 312, 320, 308, 315, 325, 318, 312, 322],
@@ -176,89 +177,7 @@ export function PageShell({
       <main className="min-h-screen bg-[#fbf6ec] pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">{children}</div>
       </main>
-      {/* footer — identical to homepage */}
-      <footer className="relative overflow-hidden border-t border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 px-6 pt-14 pb-4">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent opacity-80" />
-        <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl" />
-        <div className="pointer-events-none absolute right-0 top-10 h-44 w-44 rounded-full bg-orange-200/30 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-2 pt-4 pb-0 md:px-6">
-          <div className="grid gap-10 md:grid-cols-[1.25fr_1fr_1fr_1fr] md:gap-12">
-            <div className="max-w-sm flex flex-col items-start">
-              <div className="flex flex-col items-center text-center">
-                <div className="logo-hover-wrap mb-4 flex flex-col items-center gap-3 text-slate-900">
-                  <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Logo.svg`} alt="Tectonic logo" width={72} height={72} className="logo-hover-zoom h-16 w-auto object-contain" />
-                  <span className="text-2xl font-black tracking-[0.04em] bg-gradient-to-b from-[#c38b44] to-[#7e4420] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] leading-none">
-                    TECTONIC
-                  </span>
-                </div>
-                <p className="max-w-xs text-sm leading-6 text-slate-600">
-                  Next-generation stablecoin protocol.
-                </p>
-              </div>
-            </div>
-            <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">
-                Protocol
-              </h4>
-              <ul className="space-y-3 text-sm text-slate-700">
-                {["Docs", "Contracts", "GitHub"].map((l) => (
-                  <li key={l}>
-                    <a
-                      href={
-                        l === "GitHub"
-                          ? "https://github.com/StabilityNexus/Tectonic-EVM-WebUI"
-                          : "#"
-                      }
-                      target={l === "GitHub" ? "_blank" : undefined}
-                      rel={
-                        l === "GitHub" ? "noopener noreferrer" : undefined
-                      }
-                      className="transition hover:text-amber-700 hover:underline hover:underline-offset-4"
-                    >
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">
-                Community
-              </h4>
-              <ul className="space-y-3 text-sm text-slate-700">
-                <li><a href="https://discord.gg/YzDKeEfWtS" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Discord</a></li>
-                <li><a href="https://t.me/StabilityNexus" target="_blank" rel="noopener noreferrer" className="transition hover:text-amber-700 hover:underline hover:underline-offset-4">Telegram</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-amber-700">
-                Resources
-              </h4>
-              <ul className="space-y-3 text-sm text-slate-700">
-                {["Technical Paper", "KYA / Terms"].map((l) => (
-                  <li key={l}>
-                    <a
-                      href="#"
-                      className="transition hover:text-amber-700 hover:underline hover:underline-offset-4"
-                    >
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-amber-200/80 pt-6 w-full">
-          <p className="text-sm text-slate-600 text-center md:text-left">
-            © 2026 Tectonic Protocol. All rights reserved.
-          </p>
-          <a href="https://stability.nexus/" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-animated.gif`} alt="Stability Nexus Badge" width={180} height={50} className="w-auto h-12 rounded-lg" unoptimized />
-          </a>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
