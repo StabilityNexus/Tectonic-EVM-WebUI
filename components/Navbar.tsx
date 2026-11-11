@@ -242,34 +242,81 @@ export default function Navbar() {
           </div>
 
           {/* hamburger */}
-          <button type="button" onClick={() => setMenuOpen(o => !o)}
+          <button
+            type="button"
+            onClick={() => setMenuOpen(o => !o)}
             className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 rounded-lg transition hover:bg-slate-100 md:hidden"
-            aria-label="Menu" aria-expanded={menuOpen}>
-            <span className={`block h-0.5 w-5 bg-slate-700 transition-all duration-200 ${menuOpen ? "translate-y-2 rotate-45" : ""}`}/>
-            <span className={`block h-0.5 w-5 bg-slate-700 transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`}/>
-            <span className={`block h-0.5 w-5 bg-slate-700 transition-all duration-200 ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`}/>
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+          >
+            <span className={`block h-0.5 w-5 bg-slate-700 transition-all duration-200 ${menuOpen ? "translate-y-2 rotate-45" : ""}`} />
+            <span className={`block h-0.5 w-5 bg-slate-700 transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`} />
+            <span className={`block h-0.5 w-5 bg-slate-700 transition-all duration-200 ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`} />
           </button>
+
         </div>
       </div>
 
       {/* mobile dropdown */}
       {menuOpen && (
-        <div className="border-t border-amber-100 bg-white/95 px-4 py-3 backdrop-blur-md md:hidden">
+        <div
+          id="mobile-navigation"
+          className="
+            max-h-[calc(100vh-68px)]
+            max-h-[calc(100dvh-68px)]
+            overflow-y-auto
+            overflow-x-hidden
+            overscroll-y-contain
+            touch-pan-y
+            border-t border-amber-100
+            bg-white/95
+            px-4 py-3
+            backdrop-blur-md
+            md:hidden
+          "
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
           <div className="flex flex-col gap-1">
             {NAV_ITEMS.map(item =>
               item.href.startsWith("#")
-                ? <a key={item.label} href={item.href} onClick={() => setMenuOpen(false)}
-                    className={`rounded-xl px-3 py-2.5 text-lg leading-none font-semibold transition ${isActive(item.href) ? "bg-amber-50 text-amber-700" : "text-slate-700 hover:bg-amber-50 hover:text-amber-700"}`}>
+                ? (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`rounded-xl px-3 py-2.5 text-lg leading-none font-semibold transition ${
+                      isActive(item.href)
+                        ? "bg-amber-50 text-amber-700"
+                        : "text-slate-700 hover:bg-amber-50 hover:text-amber-700"
+                    }`}
+                  >
                     {item.label}
                   </a>
-                : <Link key={item.label} href={item.href} onClick={() => setMenuOpen(false)}
-                    className={`rounded-xl px-3 py-2.5 text-lg leading-none font-semibold transition ${isActive(item.href) ? "bg-amber-50 text-amber-700" : "text-slate-700 hover:bg-amber-50 hover:text-amber-700"}`}>
+                )
+                : (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`rounded-xl px-3 py-2.5 text-lg leading-none font-semibold transition ${
+                      isActive(item.href)
+                        ? "bg-amber-50 text-amber-700"
+                        : "text-slate-700 hover:bg-amber-50 hover:text-amber-700"
+                    }`}
+                  >
                     {item.label}
                   </Link>
+                )
             )}
-            <a href="https://github.com/StabilityNexus/Tectonic-EVM-WebUI" target="_blank" rel="noopener noreferrer"
+
+            <a
+              href="https://github.com/StabilityNexus/Tectonic-EVM-WebUI"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMenuOpen(false)}
-              className="rounded-xl px-3 py-2.5 text-lg leading-none font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-700 transition">
+              className="rounded-xl px-3 py-2.5 text-lg leading-none font-semibold text-slate-700 transition hover:bg-amber-50 hover:text-amber-700"
+            >
               Github
             </a>
 

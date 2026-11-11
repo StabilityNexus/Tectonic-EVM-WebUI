@@ -648,8 +648,7 @@ body {
   box-shadow: 0 6px 18px rgba(15,23,42,0.06), 0 1px 0 rgba(255,255,255,0.6) inset;
   padding: 0; /* inner container supplies padding */
   min-height: auto;
-  display: flex;
-  align-items: center;
+  display: block;
 }
 
 /* Reduce the visual color area of primary buttons inside the navbar only */
@@ -691,7 +690,7 @@ body {
 }
 
 /* Ensure the inner nav container never allows wrapping and brand doesn't shrink */
-.glassy-navbar > div {
+.glassy-navbar > div:first-child {
   display: flex;
   flex-wrap: nowrap !important;
   align-items: center;
