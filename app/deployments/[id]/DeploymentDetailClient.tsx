@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
@@ -10,6 +9,7 @@ import { DEPLOYMENTS } from "@/lib/deployments-data";
 import type { Deployment } from "@/lib/deployments-data";
 import { useTranslations } from "@/lib/i18n";
 import { parseEther, formatEther } from "viem";
+import { notFound, useSearchParams } from "next/navigation";
 import {
   useReadContract,
   useWriteContract,
@@ -312,7 +312,11 @@ function EquityCoinCard({
   isPlaceholder?: boolean;
   isMismatch?: boolean;
 }) {
-  const [tab, setTab] = useState<"mint" | "redeem">("mint");
+  const searchParams = useSearchParams();
+
+  const [tab, setTab] = useState<"mint" | "redeem">(
+    searchParams.get("mode") === "redeem" ? "redeem" : "mint"
+  );
   const tCommon = useTranslations("common");
   const tDetail = useTranslations("deploymentDetail");
 
