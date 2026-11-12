@@ -278,6 +278,7 @@ function StableCoinCard({
 
         <div className="pb-6">
           <MintRedeemForm
+            key={tab}
             mode={tab}
             isEquity={false}
             inputAsset={tab === "mint" ? d.reserveAsset : d.stablecoin}
@@ -367,6 +368,7 @@ function EquityCoinCard({
 
         <div className="pb-6">
           <MintRedeemForm
+            key={tab}
             mode={tab}
             isEquity={true}
             inputAsset={tab === "mint" ? d.reserveAsset : d.equityCoin}
