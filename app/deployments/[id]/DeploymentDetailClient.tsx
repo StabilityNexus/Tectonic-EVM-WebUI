@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -46,6 +46,7 @@ function MintRedeemForm({
   ecPriceRedeem,
   isPlaceholder,
   isMismatch,
+  onBusy,
 }: {
   mode: "mint" | "redeem";
   isEquity: boolean;
@@ -58,6 +59,7 @@ function MintRedeemForm({
   ecPriceRedeem?: bigint;
   isPlaceholder?: boolean;
   isMismatch?: boolean;
+  onBusy?: (busy: boolean) => void;
 }) {
   const [amount, setAmount] = useState("");
   const isMint = mode === "mint";
@@ -90,6 +92,7 @@ function MintRedeemForm({
   // Wagmi hooks
   const { data: hash, writeContract, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
+  useEffect(() => onBusy?.(isPending || isConfirming), [isPending, isConfirming, onBusy]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -222,6 +225,7 @@ function StableCoinCard({
   isMismatch?: boolean;
 }) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
+  const [busy, setBusy] = useState(false);
   const c = statusCfg(d.status);
   const crashTolerance = Math.round(((d.reserveRatio - 100) / d.reserveRatio) * 100);
   const tCommon = useTranslations("common");
@@ -256,6 +260,7 @@ function StableCoinCard({
         <div className="flex rounded-xl border border-[#e7dac4] overflow-hidden mb-1">
           <button
             onClick={() => setTab("mint")}
+            disabled={busy}
             className={`flex-1 py-2.5 text-sm font-semibold transition ${
               tab === "mint"
                 ? "bg-amber-400 text-[#1a1a1a]"
@@ -266,6 +271,7 @@ function StableCoinCard({
           </button>
           <button
             onClick={() => setTab("redeem")}
+            disabled={busy}
             className={`flex-1 py-2.5 text-sm font-semibold transition border-l border-[#e7dac4] ${
               tab === "redeem"
                 ? "bg-amber-400 text-[#1a1a1a]"
@@ -278,7 +284,9 @@ function StableCoinCard({
 
         <div className="pb-6">
           <MintRedeemForm
+            key={tab}
             mode={tab}
+            onBusy={setBusy}
             isEquity={false}
             inputAsset={tab === "mint" ? d.reserveAsset : d.stablecoin}
             outputToken={tab === "mint" ? d.stablecoin : d.reserveAsset}
@@ -313,6 +321,7 @@ function EquityCoinCard({
   isMismatch?: boolean;
 }) {
   const [tab, setTab] = useState<"mint" | "redeem">("mint");
+  const [busy, setBusy] = useState(false);
   const tCommon = useTranslations("common");
   const tDetail = useTranslations("deploymentDetail");
 
@@ -345,6 +354,7 @@ function EquityCoinCard({
         <div className="flex rounded-xl border border-[#e7dac4] overflow-hidden mb-1">
           <button
             onClick={() => setTab("mint")}
+            disabled={busy}
             className={`flex-1 py-2.5 text-sm font-semibold transition ${
               tab === "mint"
                 ? "bg-amber-400 text-[#1a1a1a]"
@@ -355,6 +365,7 @@ function EquityCoinCard({
           </button>
           <button
             onClick={() => setTab("redeem")}
+            disabled={busy}
             className={`flex-1 py-2.5 text-sm font-semibold transition border-l border-[#e7dac4] ${
               tab === "redeem"
                 ? "bg-amber-400 text-[#1a1a1a]"
@@ -367,7 +378,9 @@ function EquityCoinCard({
 
         <div className="pb-6">
           <MintRedeemForm
+            key={tab}
             mode={tab}
+            onBusy={setBusy}
             isEquity={true}
             inputAsset={tab === "mint" ? d.reserveAsset : d.equityCoin}
             outputToken={tab === "mint" ? d.equityCoin : d.reserveAsset}
